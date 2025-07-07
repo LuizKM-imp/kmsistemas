@@ -194,7 +194,12 @@
             function getNomeBancoFinal(blocoConta) { const select = blocoConta.querySelector('[name="banco_nome_select"]'); const outroInput = blocoConta.querySelector('[name="banco_nome_outro"]'); if (select.value === 'outro') { return outroInput.value.trim() || 'Outro (não especificado)'; } return select.options[select.selectedIndex].text; }
             function aplicarMascaras(elementoPai) { elementoPai.querySelectorAll('.mask-cnpj').forEach(input => { input.addEventListener('input', (e) => e.target.value = mascaraCNPJ(e.target.value)); }); elementoPai.querySelectorAll('.mask-phone').forEach(input => { input.addEventListener('input', (e) => e.target.value = mascaraTelefone(e.target.value)); }); }
             function mascaraCNPJ(value) { return value.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1/$2').replace(/(\d{4})(\d{1,2})/, '$1-$2').replace(/(-\d{2})\d+?$/, '$1'); }
-            function mascaraTelefone(value) { return value.replace(/\D/g, '').replace(/(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d{4})/, '$1-$2').replace(/(\d{4})(\d{1,4})/, '$1-$2').replace(/(-\d{4})\d+?$/, '$1'); }
+                        function mascaraTelefone(value) {
+                value = value.replace(/\D/g, '');
+                value = value.replace(/^(\d{2})(\d)/, '($1) $2');
+                value = value.replace(/(\d{5})(\d{4})/, '$1-$2'); // Ajusta para números com 9 dígitos (celular)
+                return value.slice(0, 15); // Limita ao tamanho máximo (XX) XXXXX-XXXX
+            }
             function adicionarEmpresa() { empresaCount++; const novaEmpresaNode = templateEmpresa.content.cloneNode(true); const blocoEmpresa = novaEmpresaNode.querySelector('.empresa-bloco'); blocoEmpresa.querySelector('.empresa-titulo').textContent = `Empresa ${empresaCount}`; empresasContainer.appendChild(novaEmpresaNode); adicionarConta(blocoEmpresa.querySelector('.btn-add-conta')); aplicarMascaras(blocoEmpresa); }
             addEmpresaBtn.addEventListener('click', adicionarEmpresa);
             imprimirBtn.addEventListener('click', function() { if (gerarConteudoImpressao()) { window.print(); } else { alert('Adicione pelo menos uma empresa antes de imprimir.'); } });
