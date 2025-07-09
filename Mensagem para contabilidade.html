@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Mensagem - Implantação KM Sistemas</title>
+    <!-- Importando uma fonte do Google Fonts para um visual mais elegante -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- ESTILOS GERAIS (CSS) --- */
+        :root {
+            --cor-primaria: #007bff;
+            --cor-secundaria: #6c757d;
+            --cor-sucesso: #28a745;
+            --cor-fundo: #f0f2f5;
+            --cor-caixa: #ffffff;
+            --cor-texto: #343a40;
+            --sombra-suave: 0 4px 20px rgba(0, 0, 0, 0.07);
+            --borda-raio: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px; /* Aumentado para o novo layout */
+            background-color: var(--cor-caixa);
+            padding: 2.5rem;
+            border-radius: var(--borda-raio);
+            box-shadow: var(--sombra-suave);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 1.5rem;
+        }
+
+        h1 {
+            color: var(--cor-primaria);
+            font-weight: 600;
+        }
+
+        header p {
+            color: var(--cor-secundaria);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* NOVO: Layout em Grid */
+        main {
+            display: grid;
+            grid-template-columns: 320px 1fr; /* Coluna fixa para inputs, coluna flexível para a mensagem */
+            gap: 2.5rem;
+            align-items: start;
+        }
+
+        /* --- Seção dos controles --- */
+        .controls-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+
+        input[type="text"],
+        select {
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: var(--borda-raio);
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background-color: #fdfdff;
+            width: 100%;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--cor-primaria);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+        
+        /* --- Seção da Mensagem --- */
+        .message-section h2 {
+            font-size: 1.5rem;
+            color: var(--cor-texto);
+            margin-bottom: 1rem;
+        }
+
+        #mensagem-gerada {
+            background-color: #f8f9fa;
+            border: 1px dashed #ced4da;
+            padding: 1.5rem;
+            border-radius: var(--borda-raio);
+            white-space: pre-wrap; /* Essencial para manter as quebras de linha */
+            line-height: 1.7;
+            height: 400px; /* Altura fixa para alinhar com o form */
+            font-family: 'Menlo', 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: #212529;
+            overflow-y: auto;
+            resize: vertical;
+        }
+
+        /* --- Botão de Copiar --- */
+        .button-container {
+            text-align: right; /* Alinhado à direita */
+            margin-top: 1.5rem;
+        }
+
+        #btn-copiar {
+            background-color: var(--cor-primaria);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            border-radius: var(--borda-raio);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        #btn-copiar:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        #btn-copiar.sucesso {
+            background-color: var(--cor-sucesso);
+        }
+
+        /* NOVO: Responsividade para telas menores */
+        @media (max-width: 900px) {
+            main {
+                grid-template-columns: 1fr; /* Muda para uma coluna só */
+            }
+
+            #mensagem-gerada {
+                height: 300px; /* Reduz altura no mobile */
+            }
+            .button-container {
+                text-align: center; /* Centraliza o botão no mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Gerador de Mensagem de Implantação</h1>
+            <p>Preencha os dados e copie sua mensagem personalizada instantaneamente.</p>
+        </header>
+
+        <main>
+            <!-- Seção de Controles (Esquerda) -->
+            <section class="controls-section">
+                <h2>Dados Variáveis</h2>
+                <div class="input-group">
+                    <label for="seu-nome">Seu Nome</label>
+                    <select id="seu-nome">
+                        <option value="Luiz">Luiz</option>
+                        <option value="Everton">Everton</option>
+                        <option value="Abner">Abner</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="nome-cliente">Nome do Cliente</label>
+                    <input type="text" id="nome-cliente" placeholder="Ex: Contabilidade Exemplo">
+                </div>
+            </section>
+            
+            <!-- Seção da Mensagem Gerada (Direita) -->
+            <section class="message-section">
+                <h2>Mensagem Pronta</h2>
+                <pre id="mensagem-gerada"></pre>
+                
+                <div class="button-container">
+                    <button id="btn-copiar">
+                        <!-- Ícone SVG de prancheta -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+                          <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+                          <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Z"/>
+                          <path d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793 6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3Z"/>
+                        </svg>
+                        <span id="btn-texto">Copiar Mensagem</span>
+                    </button>
+                </div>
+            </section>
+        </main>
+        
+    </div>
+
+    <script>
+        // --- SCRIPT DE INTERATIVIDADE (JAVASCRIPT) ---
+
+        // 1. Seleciona os elementos do HTML que vamos manipular
+        const seuNomeSelect = document.getElementById('seu-nome');
+        const nomeClienteInput = document.getElementById('nome-cliente');
+        const mensagemGeradaPre = document.getElementById('mensagem-gerada');
+        const btnCopiar = document.getElementById('btn-copiar');
+        const btnTexto = document.getElementById('btn-texto');
+
+        // 2. Função que cria o template da mensagem
+        const gerarMensagem = () => {
+            const seuNome = seuNomeSelect.value;
+            // O nome da empresa agora é fixo
+            const suaEmpresa = 'KM Sistemas';
+            const nomeCliente = nomeClienteInput.value.trim() || '[Nome do Cliente]';
+
+            // Template literal para facilitar a inserção das variáveis
+            const mensagem = `Olá, tudo bem? Me chamo ${seuNome}, sou responsável pela implantação do sistema ERP da ${suaEmpresa} na empresa ${nomeCliente}.
+
+Estamos na fase de configuração da emissão de notas fiscais e gostaríamos de contar com o apoio de vocês para validar a tributação utilizada atualmente.
+
+Encaminhei em anexo alguns arquivos PDF e XML de notas fiscais recentes. Poderiam, por gentileza, verificar se os dados tributários (CFOP, CST, CSOSN, alíquotas, etc.) estão corretos e se há algo que precise de ajuste?
+
+Isso nos ajuda a garantir que o sistema seja configurado corretamente e evite qualquer problema na emissão de NF-e.
+
+Fico à disposição para qualquer dúvida. Desde já, agradeço a atenção e o suporte! 🙏
+
+Atenciosamente,
+${seuNome}
+Implantação KM Sistemas`;
+
+            return mensagem;
+        };
+        
+        // 3. Função para atualizar o campo de texto com a mensagem gerada
+        const atualizarVisualizacao = () => {
+            mensagemGeradaPre.textContent = gerarMensagem();
+        };
+
+        // 4. Lógica para copiar a mensagem para a área de transferência
+        const copiarMensagem = () => {
+            const textoParaCopiar = mensagemGeradaPre.textContent;
+            
+            navigator.clipboard.writeText(textoParaCopiar).then(() => {
+                // Feedback visual para o usuário
+                btnTexto.textContent = 'Copiado! ✅';
+                btnCopiar.classList.add('sucesso');
+                
+                // Retorna ao estado original após 2 segundos
+                setTimeout(() => {
+                    btnTexto.textContent = 'Copiar Mensagem';
+                    btnCopiar.classList.remove('sucesso');
+                }, 2000);
+
+            }).catch(err => {
+                console.error('Falha ao copiar a mensagem: ', err);
+                btnTexto.textContent = 'Erro ao copiar!';
+                alert('Não foi possível copiar a mensagem. Por favor, copie manualmente.');
+            });
+        };
+
+        // 5. Adiciona os "escutadores de eventos" aos elementos
+        seuNomeSelect.addEventListener('change', atualizarVisualizacao);
+        nomeClienteInput.addEventListener('input', atualizarVisualizacao);
+        btnCopiar.addEventListener('click', copiarMensagem);
+
+        // 6. Chama a função de atualizar na carga inicial da página
+        document.addEventListener('DOMContentLoaded', atualizarVisualizacao);
+    </script>
+
+</body>
+</html>
