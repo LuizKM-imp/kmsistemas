@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisador de XML de NF-e (Lote e Individual)</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #2980b9;
+            --background-color: #ecf0f1;
+            --card-background: #ffffff;
+            --text-color: #34495e;
+            --border-color: #bdc3c7;
+            --success-color: #27ae60;
+            --error-color: #c0392b;
+            --info-color: #3498db;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            margin: 0 0 10px 0;
+        }
+
+        /* --- Estilos das Abas --- */
+        .tab-nav {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 1.1em;
+            font-weight: 500;
+            color: var(--text-color);
+            position: relative;
+            bottom: -2px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn:hover {
+            background-color: #e8eaf6;
+        }
+
+        .tab-btn.active {
+            color: var(--secondary-color);
+            font-weight: bold;
+            border-bottom-color: var(--secondary-color);
+        }
+
+        .tab-content {
+            display: none;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .tab-content.active {
+            display: flex;
+        }
+        
+        /* --- Estilos Gerais para Componentes --- */
+        .upload-section, .summary-card, .results-section, .info-card {
+            background-color: var(--card-background);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .folder-label, .file-label {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        .folder-label:hover, .file-label:hover {
+            background-color: #2471a3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        thead tr {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* --- Estilos específicos da Análise em Lote --- */
+        #folderInput { display: none; }
+
+        .progress-section {
+            margin-top: 20px;
+            display: none;
+        }
+        
+        #progress-bar-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 25px;
+        }
+
+        #progress-bar {
+            width: 0%; height: 100%;
+            background-color: var(--success-color);
+            transition: width 0.4s ease;
+            text-align: center; line-height: 25px;
+            color: white; font-weight: bold;
+        }
+
+        #progress-text {
+            margin-top: 8px; font-style: italic; text-align: center;
+        }
+        
+        .summary-card {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px; text-align: center;
+        }
+
+        .summary-item {
+            background-color: var(--background-color); padding: 15px; border-radius: 5px;
+        }
+        
+        .summary-item .value { font-size: 2em; font-weight: bold; display: block; }
+        .summary-item .label { font-size: 0.9em; color: #7f8c8d; }
+        #summary-files .value { color: var(--info-color); }
+        #summary-valid .value { color: var(--success-color); }
+        #summary-ops .value { color: var(--primary-color); }
+        #summary-errors .value { color: var(--error-color); }
+
+        #export-csv, #clearButton {
+             color: white; padding: 10px 18px; border: none;
+             border-radius: 5px; cursor: pointer; font-weight: bold;
+             transition: background-color 0.3s ease;
+        }
+        #export-csv { background-color: var(--success-color); }
+        #export-csv:hover { background-color: #229954; }
+        #clearButton { background-color: var(--error-color); margin-left: 10px; vertical-align: middle; }
+        #clearButton:hover { background-color: #c0392b; }
+        
+        /* --- Estilos específicos da Análise Individual --- */
+        #xmlFile { display: none; }
+        #fileName { margin-top: 15px; font-style: italic; color: var(--primary-color); }
+
+        #results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        .info-card h3 {
+            color: var(--secondary-color); border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px; margin-top: 0; font-size: 1.1em;
+        }
+        .info-item {
+            display: flex; justify-content: space-between; padding: 8px 0;
+            border-bottom: 1px dashed var(--background-color); font-size: 0.95em;
+        }
+        .info-item:last-child { border-bottom: none; }
+        .info-item span:first-child { font-weight: bold; color: var(--primary-color); margin-right: 10px; }
+        .info-item span:last-child { text-align: right; color: var(--text-color); word-break: break-word; }
+        .full-width { grid-column: 1 / -1; }
+        .info-item.vertical { flex-direction: column; align-items: flex-start; }
+        .info-item.vertical span:last-child {
+            text-align: left; margin-top: 5px; background-color: var(--background-color);
+            padding: 8px; border-radius: 4px; width: 100%; box-sizing: border-box;
+        }
+        #error-message {
+            color: var(--error-color); background-color: #fadbd8;
+            border: 1px solid var(--error-color); padding: 15px; border-radius: 5px;
+            text-align: center; font-weight: bold; display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Analisador de XML de NF-e</h1>
+            <p>Selecione uma aba para analisar arquivos em lote ou individualmente.</p>
+        </header>
+
+        <nav class="tab-nav">
+            <button class="tab-btn active" data-tab="lote">Análise em Lote</button>
+            <button class="tab-btn" data-tab="individual">Análise Individual</button>
+        </nav>
+
+        <!-- Conteúdo da Aba de Análise em Lote -->
+        <div id="tab-lote" class="tab-content active">
+            <section class="upload-section">
+                <p>Selecione uma pasta com arquivos XML para identificar e consolidar todas as operações e suas tributações.</p>
+                <div style="text-align: center;">
+                    <label for="folderInput" class="folder-label">Selecionar Pasta com XMLs</label>
+                    <input type="file" id="folderInput" webkitdirectory directory multiple />
+                </div>
+                <div id="progress-section" class="progress-section">
+                    <div id="progress-bar-container">
+                        <div id="progress-bar">0%</div>
+                    </div>
+                    <p id="progress-text">Aguardando seleção...</p>
+                </div>
+            </section>
+            <section id="summary-card" class="summary-card">
+                 <div class="summary-item" id="summary-files"><span class="value">0</span><span class="label">Arquivos Lidos</span></div>
+                <div class="summary-item" id="summary-valid"><span class="value">0</span><span class="label">NF-es Válidas</span></div>
+                <div class="summary-item" id="summary-ops"><span class="value">0</span><span class="label">Operações Únicas</span></div>
+                <div class="summary-item" id="summary-errors"><span class="value">0</span><span class="label">Arquivos com Erro</span></div>
+            </section>
+            <main id="results-section" class="results-section" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Operações Identificadas</h2>
+                    <button id="export-csv">Exportar para CSV</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead><tr><th>Natureza da Operação</th><th>CFOP</th><th>CST/CSOSN ICMS</th><th>CST PIS/COFINS</th><th>CST IPI</th></tr></thead>
+                        <tbody id="results-table-body"></tbody>
+                    </table>
+                     <p id="no-results" style="display: none; text-align: center; padding: 40px; font-style: italic; color: #7f8c8d;">Nenhuma operação encontrada nos arquivos válidos.</p>
+                </div>
+            </main>
+        </div>
+
+        <!-- Conteúdo da Aba de Análise Individual -->
+        <div id="tab-individual" class="tab-content">
+            <div id="error-message"></div>
+            <section class="upload-section">
+                 <p>Selecione um único arquivo XML de uma Nota Fiscal Eletrônica para extrair as informações.</p>
+                <div style="text-align: center;">
+                    <label for="xmlFile" class="file-label">Selecionar arquivo XML</label>
+                    <input type="file" id="xmlFile" accept=".xml">
+                    <button id="clearButton" style="display: none;">Limpar Dados</button>
+                    <p id="fileName"></p>
+                </div>
+            </section>
+            <main id="results" style="display: none;">
+                <div class="info-card">
+                    <h3>Envolvidos na Operação</h3>
+                    <div class="info-item"><span>Emitente:</span><span id="emitente"></span></div>
+                    <div class="info-item"><span>CNPJ Emitente:</span><span id="cnpjEmitente"></span></div>
+                    <div class="info-item"><span>Destinatário:</span><span id="destinatario"></span></div>
+                    <div class="info-item"><span>CNPJ/CPF Dest.:</span><span id="cnpjDestinatario"></span></div>
+                </div>
+                <div class="info-card">
+                    <h3>Dados da Operação</h3>
+                    <div class="info-item"><span>Natureza:</span><span id="operacao"></span></div>
+                    <div class="info-item"><span>CFOP:</span><span id="cfop"></span></div>
+                </div>
+                <div class="info-card">
+                    <h3>Valores Totais</h3>
+                    <div class="info-item"><span>Total dos Itens:</span><span id="vProd"></span></div>
+                    <div class="info-item"><span>Frete:</span><span id="vFrete"></span></div>
+                    <div class="info-item"><span>Desp. Adicionais:</span><span id="vOutro"></span></div>
+                    <div class="info-item"><span style="font-size: 1.1em;"><strong>Valor Final:</strong></span><span id="vTotal" style="font-size: 1.1em; font-weight: bold;"></span></div>
+                </div>
+                <div class="info-card">
+                    <h3>Códigos de Tributação (CST/CSOSN)</h3>
+                    <div class="info-item"><span>ICMS:</span><span id="cstIcms"></span></div>
+                    <div class="info-item"><span>PIS/COFINS:</span><span id="cstPisCofins"></span></div>
+                    <div class="info-item"><span>IPI:</span><span id="cstIpi"></span></div>
+                    <div class="info-item"><span>Cód. Enq. IPI:</span><span id="cEnqIpi"></span></div>
+                </div>
+                <div class="info-card full-width">
+                    <h3>Outras Informações</h3>
+                    <div class="info-item vertical"><span>Informações Complementares ao Fisco:</span><span id="infCpl"></span></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        /*******************************************************************
+         * LÓGICA DE CONTROLE DAS ABAS
+         *******************************************************************/
+        const tabs = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.getAttribute('data-tab');
+
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === `tab-${targetTab}`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        /*******************************************************************
+         * FUNÇÕES AUXILIARES COMUNS
+         *******************************************************************/
+        const queryTagValue = (selector, parentNode, defaultValue = "N/A") => {
+            const element = parentNode.querySelector(selector);
+            return element ? element.textContent : defaultValue;
+        };
+
+        const formatCurrency = (value) => {
+            const number = parseFloat(value);
+            if (isNaN(number)) return "R$ 0,00";
+            return number.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        };
+
+        const readFileAsText = (file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = event => resolve(event.target.result);
+                reader.onerror = error => reject(error);
+                reader.readAsText(file, 'UTF-8');
+            });
+        };
+        
+        /*******************************************************************
+         * LÓGICA DA ANÁLISE EM LOTE
+         *******************************************************************/
+        const folderInput = document.getElementById('folderInput');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const progressSection = document.getElementById('progress-section');
+        const summaryCard = document.getElementById('summary-card');
+        const resultsSection = document.getElementById('results-section');
+        const resultsTableBody = document.getElementById('results-table-body');
+        const exportCsvButton = document.getElementById('export-csv');
+        
+        let uniqueOperations = new Map();
+
+        folderInput.addEventListener('change', handleFolderSelect);
+        exportCsvButton.addEventListener('click', exportToCsv);
+
+        function resetUI_Lote() {
+            progressSection.style.display = 'block';
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0%';
+            progressText.textContent = 'Iniciando...';
+            summaryCard.style.display = 'none';
+            resultsSection.style.display = 'none';
+            resultsTableBody.innerHTML = '';
+            uniqueOperations.clear();
+        }
+
+        async function handleFolderSelect(event) {
+            const files = event.target.files;
+            if (files.length === 0) {
+                progressText.textContent = 'Nenhuma pasta selecionada.';
+                return;
+            }
+
+            resetUI_Lote();
+
+            const xmlFiles = Array.from(files).filter(file => file.name.toLowerCase().endsWith('.xml'));
+            if (xmlFiles.length === 0) {
+                progressText.textContent = 'Nenhum arquivo .xml encontrado na pasta selecionada.';
+                return;
+            }
+
+            let processedCount = 0, validNFeCount = 0, errorCount = 0;
+
+            for (const file of xmlFiles) {
+                try {
+                    const fileContent = await readFileAsText(file);
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(fileContent, "application/xml");
+
+                    if (xmlDoc.getElementsByTagName("parsererror").length > 0) throw new Error("XML mal formatado.");
+                    
+                    const nfeNode = xmlDoc.querySelector('infNFe');
+                    if (!nfeNode) throw new Error("Não é uma NF-e (tag <infNFe> não encontrada).");
+                    
+                    extractOperations(nfeNode);
+                    validNFeCount++;
+                } catch (error) {
+                    console.error(`Erro ao processar ${file.name}:`, error.message);
+                    errorCount++;
+                }
+                
+                processedCount++;
+                const percentage = Math.round((processedCount / xmlFiles.length) * 100);
+                progressBar.style.width = `${percentage}%`;
+                progressBar.textContent = `${percentage}%`;
+                progressText.textContent = `Processando ${processedCount} de ${xmlFiles.length}: ${file.name}`;
+            }
+            
+            displayResults_Lote(xmlFiles.length, validNFeCount, errorCount);
+        }
+
+        function extractOperations(nfeNode) {
+            const natOp = queryTagValue('ide > natOp', nfeNode);
+            const products = nfeNode.querySelectorAll('det');
+
+            for (const product of products) {
+                const cfop = queryTagValue('prod > CFOP', product);
+                const impostoNode = product.querySelector('imposto');
+                
+                let cstIcms = 'N/A', cstPisCofins = 'N/A', cstIpi = 'N/A';
+
+                if (impostoNode) {
+                    const icmsNode = impostoNode.querySelector('ICMS');
+                    if(icmsNode && icmsNode.children[0]) {
+                        cstIcms = queryTagValue('CST', icmsNode.children[0], null) || queryTagValue('CSOSN', icmsNode.children[0], 'N/A');
+                    }
+                    const pisNode = impostoNode.querySelector('PIS');
+                    if (pisNode && pisNode.children[0]) {
+                        cstPisCofins = queryTagValue('CST', pisNode.children[0], 'N/A');
+                    }
+                    const ipiNode = impostoNode.querySelector('IPI');
+                    if (ipiNode) {
+                       cstIpi = queryTagValue('IPITrib > CST', ipiNode, null) || queryTagValue('IPINT > CST', ipiNode, 'N/A');
+                    }
+                }
+                
+                const operationKey = `${natOp}|${cfop}|${cstIcms}|${cstPisCofins}|${cstIpi}`;
+                if (!uniqueOperations.has(operationKey)) {
+                    uniqueOperations.set(operationKey, { natOp, cfop, cstIcms, cstPisCofins, cstIpi });
+                }
+            }
+        }
+
+        function displayResults_Lote(totalFiles, validCount, errorCount) {
+            progressText.textContent = `Análise concluída! ${uniqueOperations.size} combinações de operações encontradas.`;
+            
+            summaryCard.style.display = 'grid';
+            document.querySelector('#summary-files .value').textContent = totalFiles;
+            document.querySelector('#summary-valid .value').textContent = validCount;
+            document.querySelector('#summary-ops .value').textContent = uniqueOperations.size;
+            document.querySelector('#summary-errors .value').textContent = errorCount;
+            
+            resultsSection.style.display = 'block';
+            if (uniqueOperations.size === 0) {
+                 document.getElementById('no-results').style.display = 'block';
+                 exportCsvButton.style.display = 'none';
+                 return;
+            }
+            
+            document.getElementById('no-results').style.display = 'none';
+            exportCsvButton.style.display = 'inline-block';
+
+            const sortedOperations = Array.from(uniqueOperations.values()).sort((a,b) => {
+                return (a.natOp + a.cfop).localeCompare(b.natOp + b.cfop);
+            });
+            
+            sortedOperations.forEach(op => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${op.natOp}</td><td>${op.cfop}</td><td>${op.cstIcms}</td><td>${op.cstPisCofins}</td><td>${op.cstIpi}</td>`;
+                resultsTableBody.appendChild(row);
+            });
+        }
+        
+        function exportToCsv() {
+            if (uniqueOperations.size === 0) return;
+            const headers = ["Natureza da Operação", "CFOP", "CST/CSOSN ICMS", "CST PIS/COFINS", "CST IPI"];
+            const csvRows = [headers.join(',')];
+            for (const op of uniqueOperations.values()) {
+                const values = [op.natOp, op.cfop, op.cstIcms, op.cstPisCofins, op.cstIpi].map(val => {
+                    const strVal = String(val);
+                    return (strVal.includes(',') || strVal.includes('"')) ? `"${strVal.replace(/"/g, '""')}"` : strVal;
+                });
+                csvRows.push(values.join(','));
+            }
+            const blob = new Blob([`\uFEFF${csvRows.join('\n')}`], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'analise_operacoes_nfe.csv';
+            link.click();
+        }
+
+        /*******************************************************************
+         * LÓGICA DA ANÁLISE INDIVIDUAL
+         *******************************************************************/
+        const xmlFileInput = document.getElementById('xmlFile');
+        const clearButton = document.getElementById('clearButton');
+
+        xmlFileInput.addEventListener('change', handleFileSelect_Individual);
+        clearButton.addEventListener('click', () => clearData_Individual());
+
+        async function handleFileSelect_Individual(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            clearData_Individual(true);
+            document.getElementById('fileName').textContent = `Arquivo: ${file.name}`;
+            document.getElementById('clearButton').style.display = 'inline-block';
+
+            if (!file.name.toLowerCase().endsWith(".xml")) {
+                showError_Individual("O arquivo selecionado não parece ser um XML.");
+                return;
+            }
+
+            try {
+                const xmlString = await readFileAsText(file);
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlString, "application/xml");
+                
+                if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+                   throw new Error("O arquivo está mal formatado ou não é um XML válido.");
+                }
+                const nfeNode = xmlDoc.querySelector('infNFe');
+                if (!nfeNode) {
+                    throw new Error("Este XML não parece ser uma NF-e (tag <infNFe> não encontrada).");
+                }
+                
+                extractAndDisplayData_Individual(nfeNode);
+                document.getElementById('results').style.display = 'grid';
+                document.getElementById('error-message').style.display = 'none';
+            } catch (error) {
+                showError_Individual(error.message);
+            }
+        };
+
+        const extractAndDisplayData_Individual = (nfeNode) => {
+            document.getElementById('emitente').textContent = queryTagValue('emit > xNome', nfeNode);
+            document.getElementById('cnpjEmitente').textContent = queryTagValue('emit > CNPJ', nfeNode);
+            document.getElementById('destinatario').textContent = queryTagValue('dest > xNome', nfeNode);
+            document.getElementById('cnpjDestinatario').textContent = queryTagValue('dest > CNPJ', nfeNode, queryTagValue('dest > CPF', nfeNode));
+            document.getElementById('operacao').textContent = queryTagValue('ide > natOp', nfeNode);
+            
+            const icmsTotNode = nfeNode.querySelector('total > ICMSTot');
+            if (icmsTotNode) {
+                document.getElementById('vProd').textContent = formatCurrency(queryTagValue('vProd', icmsTotNode, '0'));
+                document.getElementById('vFrete').textContent = formatCurrency(queryTagValue('vFrete', icmsTotNode, '0'));
+                document.getElementById('vOutro').textContent = formatCurrency(queryTagValue('vOutro', icmsTotNode, '0'));
+                document.getElementById('vTotal').textContent = formatCurrency(queryTagValue('vNF', icmsTotNode, '0'));
+            }
+
+            const products = nfeNode.querySelectorAll('det');
+            const cfopSet = new Set(), cstIcmsSet = new Set(), cstPisCofinsSet = new Set(), cstIpiSet = new Set(), cEnqIpiSet = new Set();
+            
+            const mainCfop = queryTagValue('ide > CFOP', nfeNode, null);
+            if (mainCfop) cfopSet.add(mainCfop);
+
+            for (const product of products) {
+                const prodCfop = queryTagValue('prod > CFOP', product, null);
+                if (prodCfop) cfopSet.add(prodCfop);
+                const impostoNode = product.querySelector('imposto');
+                if (!impostoNode) continue;
+                const icmsNode = impostoNode.querySelector('ICMS');
+                if(icmsNode && icmsNode.children[0]) {
+                    const cst = queryTagValue('CST', icmsNode.children[0], null) || queryTagValue('CSOSN', icmsNode.children[0], null);
+                    if(cst) cstIcmsSet.add(cst);
+                }
+                const pisCst = queryTagValue('PIS > * > CST', impostoNode, null);
+                if (pisCst) cstPisCofinsSet.add(pisCst);
+                const cofinsCst = queryTagValue('COFINS > * > CST', impostoNode, null);
+                if (cofinsCst) cstPisCofinsSet.add(cofinsCst);
+                const ipiNode = impostoNode.querySelector('IPI');
+                if (ipiNode) {
+                    const ipiCst = queryTagValue('IPITrib > CST', ipiNode, null) || queryTagValue('IPINT > CST', ipiNode, null);
+                    if (ipiCst) cstIpiSet.add(ipiCst);
+                    const cEnq = queryTagValue('cEnq', ipiNode, null);
+                    if (cEnq && cEnq !== '999') cEnqIpiSet.add(cEnq);
+                }
+            }
+            
+            document.getElementById('cfop').textContent = [...cfopSet].join(', ') || 'N/A';
+            document.getElementById('cstIcms').textContent = [...cstIcmsSet].join(', ') || 'N/A';
+            document.getElementById('cstPisCofins').textContent = [...cstPisCofinsSet].join(', ') || 'N/A';
+            document.getElementById('cstIpi').textContent = [...cstIpiSet].join(', ') || 'N/A';
+            document.getElementById('cEnqIpi').textContent = [...cEnqIpiSet].join(', ') || 'N/A';
+            document.getElementById('infCpl').textContent = queryTagValue('infAdic > infCpl', nfeNode, "Sem informações complementares.");
+        };
+
+        const showError_Individual = (message) => {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = `Erro: ${message}`;
+            errorDiv.style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+        };
+
+        const clearData_Individual = (keepFileName = false) => {
+            if (!keepFileName) {
+                xmlFileInput.value = '';
+                document.getElementById('fileName').textContent = '';
+                clearButton.style.display = 'none';
+            }
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('error-message').style.display = 'none';
+        };
+    </script>
+</body>
+</html>
