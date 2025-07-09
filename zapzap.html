@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador Rápido de Link WhatsApp</title>
+    <style>
+        /* Estilos para deixar a página mais agradável */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 {
+            color: #128C7E; /* Cor principal do WhatsApp */
+            margin-top: 0;
+        }
+        p {
+            color: #555;
+            margin-bottom: 25px;
+        }
+        input[type="tel"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.2rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        input[type="tel"]:focus {
+            border-color: #25D366; /* Cor secundária do WhatsApp */
+            outline: none;
+        }
+        .result-area {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #888;
+            word-wrap: break-word; /* Para quebrar links longos */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Abrir no WhatsApp</h1>
+        <p>Cole o número de celular abaixo e a conversa será aberta automaticamente.</p>
+        
+        <!-- Campo para colar o número de telefone -->
+        <input type="tel" id="phoneNumberInput" placeholder="(11) 99999-9999">
+        
+        <!-- Área para mostrar o link gerado (feedback opcional) -->
+        <div id="result-area" class="result-area"></div>
+    </div>
+
+    <script>
+        // Função principal que faz a mágica acontecer
+        function formatAndOpenWhatsApp() {
+            const inputElement = document.getElementById('phoneNumberInput');
+            const resultArea = document.getElementById('result-area');
+            const rawValue = inputElement.value;
+
+            // 1. Limpa o número, removendo tudo que não for dígito
+            const cleanedNumber = rawValue.replace(/\D/g, '');
+
+            // Se não houver número após a limpeza, não faz nada
+            if (cleanedNumber.length < 10) {
+                resultArea.textContent = 'Aguardando um número válido...';
+                return;
+            }
+
+            let finalNumber;
+
+            // 2. Adiciona o código do Brasil (55) se não estiver presente
+            // Um número de celular no Brasil tem 11 dígitos (DDD + 9 + número)
+            if (cleanedNumber.length === 10 || cleanedNumber.length === 11) {
+                finalNumber = '55' + cleanedNumber;
+            } else if (cleanedNumber.startsWith('55') && (cleanedNumber.length === 12 || cleanedNumber.length === 13)) {
+                // Se o usuário já colou o número com 55, usamos ele
+                finalNumber = cleanedNumber;
+            } else {
+                resultArea.textContent = 'Número parece estar em um formato inválido.';
+                return; // Para a execução se o formato não for reconhecido
+            }
+
+            // 3. Monta o link final do WhatsApp
+            const whatsappUrl = `https://wa.me/${finalNumber}`;
+
+            // 4. Mostra o link gerado como feedback para o usuário
+            resultArea.textContent = `Redirecionando para: ${whatsappUrl}`;
+            
+            // 5. Abre o link em uma nova aba
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Adiciona um "ouvinte de evento" ao campo de input
+        const phoneInput = document.getElementById('phoneNumberInput');
+
+        // Dispara a função sempre que algo for colado no campo
+        phoneInput.addEventListener('paste', () => {
+            // Usamos setTimeout(..., 0) para garantir que o valor colado já esteja no campo
+            // antes de tentarmos lê-lo e formatá-lo.
+            setTimeout(formatAndOpenWhatsApp, 0);
+        });
+        
+        // BÔNUS: Dispara também ao pressionar Enter
+        phoneInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                formatAndOpenWhatsApp();
+            }
+        });
+    </script>
+
+</body>
+</html>
