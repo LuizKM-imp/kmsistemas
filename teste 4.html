@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Formulários - Mentor Soft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #04ab5c; --success-color: #2ecc71; --danger-color: #e74c3c;
+            --secondary-color: #a9cf44; --dark-color: #2c3e50; --light-color: #ecf0f1;
+            --white-color: #ffffff; --gray-color: #bdc3c7; --text-color: #34495e;
+            --border-radius: 6px; --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #FAF0E6; color: var(--text-color); margin: 0; padding: 2rem 1rem; }
+        .container { max-width: 950px; margin: 0 auto; background-color: var(--white-color); padding: 2.5rem; border-radius: var(--border-radius); box-shadow: var(--shadow); }
+        .header-logo { text-align: center; margin-bottom: 2rem; }
+        .header-logo img { max-width: 200px; max-height: 80px; }
+        h1, h2, h3 { color: var(--dark-color); }
+        h1 { text-align: center; margin-bottom: 2rem; font-weight: 600; font-size: 1.8rem;}
+
+        /* Estilos para a Navegação por Abas */
+        .tab-navigation {
+            display: flex;
+            border-bottom: 2px solid var(--light-color);
+            margin-bottom: 2rem;
+        }
+        .tab-button {
+            padding: 1rem 1.5rem;
+            border: none;
+            background-color: transparent;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-color);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .tab-button:hover { color: var(--primary-color); }
+        .tab-button.active {
+            color: var(--dark-color);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        /* Estilos do Formulário de Homologação */
+        .empresa-bloco { border: 1px solid var(--gray-color); border-radius: var(--border-radius); margin-bottom: 2rem; }
+        .bloco-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background-color: #fdfdfd; border-bottom: 1px solid var(--light-color); }
+        .bloco-header h2 { margin: 0; }
+        .empresa-body { padding: 1.5rem; }
+        .conta-bloco { border: 1px dashed var(--gray-color); border-radius: var(--border-radius); padding: 1.5rem; margin-top: 1rem; position: relative; }
+        .banco-group { display: flex; align-items: flex-start; gap: 1rem; }
+        .banco-group .form-group { flex-grow: 1; }
+        .banco-logo { width: 40px; height: 40px; margin-top: 2rem; background-size: contain; background-repeat: no-repeat; background-position: center; border: 1px solid var(--light-color); border-radius: var(--border-radius); background-color: #f8f9fa; }
+        .resultado-wrapper { margin-top: 1rem; }
+        #resultado, #resultadoCnpj { width: 100%; height: 250px; margin-top: 1rem; padding: 1rem; font-family: 'Courier New', Courier, monospace; border: 1px solid var(--gray-color); background-color: #f4f6f8; resize: vertical; box-sizing: border-box;}
+        .btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+        /* Estilos do Formulário de CNPJ */
+        .section-block { border: 1px solid var(--gray-color); border-radius: var(--border-radius); margin-bottom: 1.5rem; overflow: hidden; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1.5rem; background-color: #f0f3f5; border-bottom: 1px solid var(--light-color); font-weight: 600; text-transform: uppercase;}
+        .section-body { padding: 1.5rem; }
+
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
+        input[type="text"], input[type="tel"], input[type="email"], input[type="date"], select, textarea { width: 100%; padding: 0.75rem; border: 1px solid var(--gray-color); border-radius: var(--border-radius); box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        textarea { resize: vertical; min-height: 80px; }
+        
+        .form-row { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+        .form-group.col { flex: 1 1 0; min-width: 250px; }
+        .form-group label { color: #555; }
+        .checkbox-group, .radio-group { display: flex; align-items: center; gap: 1.5rem; margin-top: 1rem; }
+        .checkbox-group label, .radio-group label { font-weight: normal; display: flex; align-items: center; gap: 0.5rem;}
+        
+        .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; border: none; border-radius: var(--border-radius); cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--white-color); transition: all 0.2s ease; }
+        .botoes-acao { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .hidden { display: none !important; }
+        #print-output { display: none; }
+
+        .cnpj-status {
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            height: 1em;
+            color: var(--secondary-color);
+            transition: color 0.3s;
+        }
+        .cnpj-status.error {
+            color: var(--danger-color);
+        }
+
+        /* Estilos de Impressão */
+        @media print {
+            @page { size: A4; margin: 0.5in; }
+            body > *:not(#print-output) { display: none !important; }
+            #print-output { display: block !important; font-family: 'Inter', sans-serif; color: #000; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .print-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; padding-bottom: 0.8rem; margin-bottom: 1.5rem; }
+            .print-header img { max-width: 160px; max-height: 60px; object-fit: contain; }
+            .print-title h1 { margin: 0; font-size: 18pt; font-weight: 600; color: #000; }
+            .print-title p { margin: 4px 0 0; font-size: 9pt; color: #555; }
+            .print-content { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem 2%; }
+            .print-empresa { border: 1px solid #ccc; border-radius: 6px; padding: 1rem; flex-basis: 48%; box-sizing: border-box; margin-bottom: 1rem; }
+            .print-empresa h2 { margin-top: 0; padding-bottom: 0.5rem; border-bottom: 1px solid #eee; font-size: 13pt; }
+            .print-empresa p { font-size: 10pt; line-height: 1.5; margin: 0.4rem 0; }
+            .print-empresa strong { font-weight: bold; min-width: 100px; }
+            .print-conta { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed #ddd; break-inside: avoid; }
+            .print-conta h3 { font-size: 11pt; margin-bottom: 0.8rem; }
+            .print-banco-info { display: flex; align-items: center; gap: 15px; padding: 10px; background-color: #f9f9f9; border-radius: 6px; margin-bottom: 1rem; }
+            .print-banco-info img { height: 64px; width: auto; max-width: 100px; object-fit: contain; }
+            .print-banco-info span { font-size: 12pt; font-weight: 600; }
+            .print-footer { display: none; }
+            .print-cnpj-wrapper { font-size: 10pt; line-height: 1.5; }
+            .print-cnpj-content { width: 100%; }
+            .print-cnpj-section { border: 1px solid #ccc; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; break-inside: avoid; }
+            .print-cnpj-section h2 { margin-top: 0; font-size: 13pt; padding-bottom: 0.5rem; border-bottom: 1px solid #eee; margin-bottom: 1rem; color: #000; }
+            .print-cnpj-section p { margin: 0.4rem 0; }
+            .print-cnpj-section strong { font-weight: bold; display: inline-block; min-width: 150px; }
+            .print-cnpj-section em { color: #888; font-style: italic; }
+            .print-field-group { display: flex; flex-wrap: wrap; gap: 0 1.5rem; }
+            .print-field-group p { flex-grow: 1; flex-basis: 40%; }
+            .print-obs { white-space: pre-wrap; word-break: break-word; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-logo">
+             <img id="mainLogo" src="https://raw.githubusercontent.com/LuizKM-imp/kmsistemas/refs/heads/main/km.png" alt="Logomarca da Empresa" style="max-height: 90px;">
+        </div>
+        <div class="tab-navigation">
+            <button id="btnTabHomologacao" class="tab-button active">Homologação de Boletos</button>
+            <button id="btnTabCnpj" class="tab-button">Adição de CNPJ</button>
+        </div>
+
+        <!-- ABA DE HOMOLOGAÇÃO (MODIFICADA) -->
+        <div id="homologacao-container">
+            <h1>Homologação de Boletos</h1>
+
+            <!-- [NOVO] CAMPO SOLICITANTE KM FORA DAS EMPRESAS -->
+            <div class="form-group">
+                <label for="solicitante_km_geral">Solicitante KM</label>
+                <input type="text" id="solicitante_km_geral" name="solicitante_km_geral" placeholder="Digite o nome do solicitante">
+            </div>
+            <hr style="margin: 1rem 0 2rem 0; border: none; border-top: 1px solid var(--light-color);">
+
+            <div id="empresasContainer"></div>
+            <button type="button" class="btn btn-add-empresa" id="addEmpresa" style="background-color: var(--primary-color);">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
+                Adicionar Empresa
+            </button>
+            <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--light-color);">
+            <div class="botoes-acao">
+                <button type="button" class="btn" id="gerarTexto" style="background-color: var(--success-color);">Gerar Texto</button>
+                <button type="button" class="btn" id="btnImprimir" style="background-color: var(--dark-color);">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"></path></svg>
+                    Imprimir / Salvar PDF
+                </button>
+                <button type="button" class="btn" id="btnLimpar" style="background-color: var(--danger-color);">Limpar Formulário</button>
+            </div>
+            <div class="resultado-wrapper">
+                <h2 style="margin-top: 2rem;">Texto para Copiar</h2>
+                <textarea id="resultado" readonly placeholder="O texto formatado para copiar aparecerá aqui..."></textarea>
+            </div>
+        </div>
+
+        <!-- ABA DE ADIÇÃO DE CNPJ -->
+        <div id="cnpj-container" class="hidden">
+            <h1>Informativo de Adição de CNPJ</h1>
+            <div class="section-block">
+                <div class="section-header">RELACIONAMENTO</div>
+                <div class="section-body">
+                    <div class="form-row">
+                        <div class="form-group col"><label>Data</label><input type="date" id="cnpj_rel_data"></div>
+                        <div class="form-group col"><label>Prazo de entrega</label><input type="text" id="cnpj_rel_prazo"></div>
+                        <div class="form-group col"><label>Horas para implantação</label><input type="text" id="cnpj_rel_horas"></div>
+                    </div>
+                    <div class="form-row">
+                         <div class="form-group col"><label>Cliente</label><input type="text" id="cnpj_rel_cliente"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col"><label>Patrocinador</label><input type="text" id="cnpj_rel_patrocinador"></div>
+                        <div class="form-group col"><label>Telefone (Patrocinador)</label><input type="tel" id="cnpj_rel_telefone_patrocinador" class="mask-phone"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col"><label>Contato</label><input type="text" id="cnpj_rel_contato"></div>
+                        <div class="form-group col"><label>Telefone (Contato)</label><input type="tel" id="cnpj_rel_telefone_contato" class="mask-phone"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-block">
+                <div class="section-header">INFORMAÇÕES PARA INCLUSÃO</div>
+                <div class="section-body">
+                    <div class="form-group checkbox-group">
+                        <label><input type="checkbox" id="cnpj_inc_dados_ok"> DADOS DA EMPRESA OK</label>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col"><label>Razão Social</label><input type="text" id="cnpj_inc_razao_social"></div>
+                        <div class="form-group col"><label>Nome Fantasia</label><input type="text" id="cnpj_inc_nome_fantasia"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label>CNPJ</label><input type="text" id="cnpj_inc_cnpj" class="mask-cnpj">
+                            <div class="cnpj-status"></div>
+                        </div>
+                        <div class="form-group col"><label>Inscrição Estadual</label><input type="text" id="cnpj_inc_insc_est"></div>
+                    </div>
+                     <div class="form-row">
+                        <div class="form-group col"><label>Regime Tributário</label><input type="text" id="cnpj_inc_regime"></div>
+                    </div>
+                    <hr style="margin: 1rem 0; border: none; border-top: 1px solid var(--light-color);">
+                    <div class="form-group">
+                        <label>Observações</label>
+                        <textarea id="cnpj_inc_observacoes"></textarea>
+                    </div>
+                </div>
+            </div>
+             <div class="botoes-acao">
+                <button type="button" class="btn" id="btnGerarRelatorioCnpj" style="background-color: var(--success-color);">Gerar Relatório</button>
+                <button type="button" class="btn" id="btnImprimirCnpj" style="background-color: var(--dark-color);">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"></path></svg>
+                    Imprimir / Salvar PDF
+                </button>
+            </div>
+             <div class="resultado-wrapper" style="margin-top: 1rem;"><textarea id="resultadoCnpj" readonly></textarea></div>
+        </div>
+    </div>
+
+    <!-- Conteúdo de Impressão e Templates ocultos -->
+    <div id="print-output"></div>
+    <!-- [MODIFICADO] TEMPLATE DE EMPRESA SEM O CAMPO SOLICITANTE -->
+    <template id="template-empresa"><div class="empresa-bloco"><div class="bloco-header"><h2 class="empresa-titulo">Empresa</h2><div class="bloco-header-actions"><button type="button" class="btn btn-remover btn-remover-empresa" title="Remover Empresa" style="background:transparent; color: var(--danger-color)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></svg></button></div></div><div class="empresa-body"><div class="form-group"><label>Nome da empresa</label><input type="text" name="empresa_nome" required></div><div class="form-group"><label>CNPJ da empresa</label><input type="text" name="empresa_cnpj" class="mask-cnpj" required><div class="cnpj-status"></div></div><div class="form-group"><label>Nome do responsável</label><input type="text" name="empresa_responsavel"></div><div class="form-group"><label>Telefone do responsável</label><input type="tel" name="empresa_telefone" class="mask-phone"></div><h3>Contas Bancárias</h3><div class="contas-container-interno"></div><button type="button" class="btn btn-add-conta" style="background-color: var(--secondary-color);"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>Adicionar Conta</button></div></div></template>
+    <template id="template-conta"><div class="conta-bloco"><button type="button" class="btn btn-remover btn-remover-conta" style="background:transparent;color:var(--danger-color);position:absolute;top:0.5rem;right:0.5rem;" title="Remover Conta"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></svg></button><div class="banco-group"><div class="form-group"><label>Banco</label><select name="banco_nome_select" required></select></div><div class="banco-logo"></div></div><div class="form-group hidden outro-banco-wrapper"><label>Qual banco?</label><input type="text" name="banco_nome_outro" placeholder="Digite o nome do banco"></div><div class="form-group"><label>Agência</label><input type="text" name="banco_agencia" required></div><div class="form-group"><label>Conta</label><input type="text" name="banco_conta" required></div><div class="form-group"><label>Tipo de Integração</label><select name="integracao_tipo"><option value="API">API</option><option value="Remessa e Retorno">Remessa e Retorno</option></select></div><div class="form-group"><label>Nome do gerente</label><input type="text" name="banco_gerente"></div><div class="form-group"><label>Telefone do gerente</label><input type="tel" name="banco_telefone" class="mask-phone"></div><div class="form-group"><label>E-mail do gerente</label><input type="email" name="banco_email"></div></div></template>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // ===== LÓGICA DAS ABAS =====
+        const btnTabHomologacao = document.getElementById('btnTabHomologacao');
+        const btnTabCnpj = document.getElementById('btnTabCnpj');
+        const homologacaoContainer = document.getElementById('homologacao-container');
+        const cnpjContainer = document.getElementById('cnpj-container');
+        function switchTab(activeTab, inactiveTab, activeContainer, inactiveContainer) {
+            activeTab.classList.add('active');
+            inactiveTab.classList.remove('active');
+            activeContainer.classList.remove('hidden');
+            inactiveContainer.classList.add('hidden');
+        }
+        btnTabHomologacao.addEventListener('click', () => switchTab(btnTabHomologacao, btnTabCnpj, homologacaoContainer, cnpjContainer));
+        btnTabCnpj.addEventListener('click', () => switchTab(btnTabCnpj, btnTabHomologacao, cnpjContainer, homologacaoContainer));
+        
+        // ===== CÓDIGO PARA FORMULÁRIO DE HOMOLOGAÇÃO DE CONTAS =====
+        const empresasContainer = document.getElementById('empresasContainer');
+        const templateEmpresa = document.getElementById('template-empresa');
+        const templateConta = document.getElementById('template-conta');
+        const addEmpresaBtn = document.getElementById('addEmpresa');
+        const imprimirBtn = document.getElementById('btnImprimir');
+        let empresaCount = 0;
+        const logosBancos = { 'Banco do Brasil': 'https://raw.githubusercontent.com/LuizKM-imp/kmsistemas/refs/heads/main/bancodobrasil.png', 'Bradesco': 'https://raw.githubusercontent.com/LuizKM-imp/kmsistemas/refs/heads/main/bradesco.jpg', 'Caixa': 'https://raw.githubusercontent.com/LuizKM-imp/kmsistemas/refs/heads/main/caixa.png', 'Credifoz': 'https://raw.githubusercontent.com/LuizKM-imp/kmsistemas/refs/heads/main/credifoz.png', 'Itaú': 'https://raw.githubusercontent.com/LuizKM-imp/kmsistemas/refs/heads/main/itau.png', 'Santander': 'https://raw.githubusercontent.com/LuizKM-imp/kmsistemas/refs/heads/main/santander.png', 'Sicoob': 'https://raw.githubusercontent.com/LuizKM-imp/kmsistemas/refs/heads/main/sicoob.png', 'Sicredi': 'https://raw.githubusercontent.com/LuizKM-imp/kmsistemas/refs/heads/main/sicredi.png', 'default': 'https://raw.githubusercontent.com/kamark-br/Gerador_Formulario_Homologacao/main/assets/bank-solid.svg' };
+        function atualizarLogoBanco(contaBloco) { const select = contaBloco.querySelector('[name="banco_nome_select"]'); const logoDiv = contaBloco.querySelector('.banco-logo'); const selectedValue = select.value; const logoKey = (selectedValue === 'outro' || selectedValue === '') ? 'default' : selectedValue; const logoUrl = logosBancos[logoKey] || logosBancos.default; logoDiv.style.backgroundImage = `url('${logoUrl}')`; }
+        function adicionarConta(botaoAcionador) { const contasContainer = botaoAcionador.closest('.empresa-body').querySelector('.contas-container-interno'); const novaContaNode = templateConta.content.cloneNode(true); const selectBanco = novaContaNode.querySelector('[name="banco_nome_select"]'); const outroBancoWrapper = novaContaNode.querySelector('.outro-banco-wrapper'); selectBanco.innerHTML = '<option value="" disabled selected>Selecione um banco...</option>'; for (const key in logosBancos) { if (key === 'default' || key === 'itaú') continue; const option = document.createElement('option'); option.value = key; option.textContent = key.charAt(0).toUpperCase() + key.slice(1).replace('banco do brasil', 'Banco do Brasil'); selectBanco.appendChild(option); } selectBanco.insertAdjacentHTML('beforeend', '<option value="outro">Outro...</option>'); selectBanco.addEventListener('change', (e) => { const contaBloco = e.target.closest('.conta-bloco'); outroBancoWrapper.classList.toggle('hidden', e.target.value !== 'outro'); if(e.target.value !== 'outro') outroBancoWrapper.querySelector('input').value = ''; atualizarLogoBanco(contaBloco); }); contasContainer.appendChild(novaContaNode); const ultimoAdicionado = contasContainer.lastElementChild; aplicarMascaras(ultimoAdicionado); atualizarLogoBanco(ultimoAdicionado); }
+        function getNomeBancoFinal(blocoConta) { const select = blocoConta.querySelector('[name="banco_nome_select"]'); const outroInput = blocoConta.querySelector('[name="banco_nome_outro"]'); if (select.value === 'outro') { return outroInput.value.trim() || 'Outro (não especificado)'; } return select.options[select.selectedIndex].text; }
+        function aplicarMascaras(elementoPai) { elementoPai.querySelectorAll('.mask-cnpj').forEach(input => { input.addEventListener('input', (e) => e.target.value = mascaraCNPJ(e.target.value)); }); elementoPai.querySelectorAll('.mask-phone').forEach(input => { input.addEventListener('input', (e) => e.target.value = mascaraTelefone(e.target.value)); }); }
+        function mascaraCNPJ(value) { return value.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1/$2').replace(/(\d{4})(\d{1,2})/, '$1-$2').replace(/(-\d{2})\d+?$/, '$1'); }
+        function mascaraTelefone(value) { value = value.replace(/\D/g, ''); value = value.replace(/^(\d{2})(\d)/, '($1) $2'); value = value.replace(/(\d{5})(\d{4})/, '$1-$2'); return value.slice(0, 15); }
+        function adicionarEmpresa() { empresaCount++; const novaEmpresaNode = templateEmpresa.content.cloneNode(true); const blocoEmpresa = novaEmpresaNode.querySelector('.empresa-bloco'); blocoEmpresa.querySelector('.empresa-titulo').textContent = `Empresa ${empresaCount}`; empresasContainer.appendChild(novaEmpresaNode); adicionarConta(blocoEmpresa.querySelector('.btn-add-conta')); aplicarMascaras(blocoEmpresa); }
+        addEmpresaBtn.addEventListener('click', adicionarEmpresa);
+        imprimirBtn.addEventListener('click', function() { if (gerarConteudoImpressao()) { window.print(); } else { alert('Adicione pelo menos uma empresa antes de imprimir.'); } });
+        empresasContainer.addEventListener('click', function(e) { const btn = e.target.closest('button'); if (!btn) return; if (btn.classList.contains('btn-add-conta')) adicionarConta(btn); if (btn.classList.contains('btn-remover-empresa') && confirm('Remover esta empresa?')) btn.closest('.empresa-bloco').remove(); if (btn.classList.contains('btn-remover-conta')) btn.closest('.conta-bloco').remove(); });
+        
+        // [MODIFICADO] Função Limpar agora limpa também o solicitante
+        document.getElementById('btnLimpar').addEventListener('click', function() { 
+            if (confirm('Deseja limpar todos os dados do formulário?')) { 
+                empresasContainer.innerHTML = ''; 
+                empresaCount = 0; 
+                document.getElementById('resultado').value = ''; 
+                document.getElementById('solicitante_km_geral').value = ''; // Limpa o campo do solicitante
+                adicionarEmpresa(); 
+            } 
+        });
+        
+        // [MODIFICADO] GERADOR DE TEXTO COM CAMPO SOLICITANTE GERAL
+        function gerarTexto() { 
+            const solicitanteGeral = document.getElementById('solicitante_km_geral').value.trim() || 'Não preenchido';
+            let textoFinal = `SOLICITANTE KM: ${solicitanteGeral}\n`;
+            
+            const todosBlocosEmpresa = document.querySelectorAll('#homologacao-container .empresa-bloco'); 
+            if (todosBlocosEmpresa.length === 0) { 
+                document.getElementById('resultado').value = 'Nenhuma empresa adicionada.'; 
+                return; 
+            } 
+
+            todosBlocosEmpresa.forEach((blocoEmpresa, empresaIndex) => { 
+                textoFinal += '\n' + '='.repeat(40) + '\n\n'; 
+                const getVal = (name) => blocoEmpresa.querySelector(`[name="${name}"]`)?.value.trim() || 'Não preenchido'; 
+                textoFinal += `--- EMPRESA ${empresaIndex + 1} ---\nNome da Empresa: ${getVal('empresa_nome')}\nCNPJ: ${getVal('empresa_cnpj')}\nResponsável: ${getVal('empresa_responsavel')}\nTelefone: ${getVal('empresa_telefone')}\n`; 
+                blocoEmpresa.querySelectorAll('.conta-bloco').forEach((blocoConta, contaIndex) => { 
+                    const getContaVal = (name) => blocoConta.querySelector(`[name="${name}"]`)?.value.trim() || 'Não preenchido'; 
+                    textoFinal += `\n  --- Conta ${contaIndex + 1} ---\n`; 
+                    textoFinal += `  Banco: ${getNomeBancoFinal(blocoConta)}\n`; 
+                    textoFinal += `  Agência: ${getContaVal('banco_agencia')}\n  Conta: ${getContaVal('banco_conta')}\n  Integração: ${getContaVal('integracao_tipo')}\n  Gerente: ${getContaVal('banco_gerente')}\n  Telefone Gerente: ${getContaVal('banco_telefone')}\n  E-mail Gerente: ${getContaVal('banco_email')}\n`; 
+                }); 
+            }); 
+            document.getElementById('resultado').value = textoFinal; 
+        }
+        document.getElementById('gerarTexto').addEventListener('click', gerarTexto);
+        
+        // [MODIFICADO] GERADOR DE IMPRESSÃO COM CAMPO SOLICITANTE GERAL
+        function gerarConteudoImpressao() { 
+            const container = document.getElementById('print-output'); 
+            const todosBlocosEmpresa = document.querySelectorAll('#homologacao-container .empresa-bloco'); 
+            if (todosBlocosEmpresa.length === 0) return false; 
+            
+            const dataAtual = new Date().toLocaleString('pt-BR', { dateStyle: 'long', timeStyle: 'short' }); 
+            const logoUrl = document.getElementById('mainLogo').src; 
+            const solicitanteGeral = document.getElementById('solicitante_km_geral').value.trim() || '<em>Não preenchido</em>';
+            
+            let html = `<div class="print-header"><img src="${logoUrl}" alt="Logo"><div class="print-title"><h1>Homologação de Boletos</h1><p>Emitido em: ${dataAtual}</p><p><strong>Solicitante KM:</strong> ${solicitanteGeral}</p></div></div><div class="print-content">`; 
+            
+            todosBlocosEmpresa.forEach((bloco, index) => { 
+                const getVal = (name) => bloco.querySelector(`[name="${name}"]`)?.value.trim() || '<em>Não preenchido</em>'; 
+                html += `<div class="print-empresa"><h2>EMPRESA ${index + 1}: ${getVal('empresa_nome')}</h2><p><strong>CNPJ:</strong> ${getVal('empresa_cnpj')}</p><p><strong>Responsável:</strong> ${getVal('empresa_responsavel')}</p><p><strong>Telefone:</strong> ${getVal('empresa_telefone')}</p>`;
+                bloco.querySelectorAll('.conta-bloco').forEach((blocoConta, contaIndex) => { 
+                    const getContaVal = (name) => blocoConta.querySelector(`[name="${name}"]`)?.value.trim() || '<em>Não preenchido</em>'; 
+                    const logoUrlBanco = window.getComputedStyle(blocoConta.querySelector('.banco-logo')).backgroundImage.slice(5, -2); 
+                    html += `<div class="print-conta"><h3>Conta Bancária ${contaIndex + 1}</h3><div class="print-banco-info"><img src="${logoUrlBanco}" alt="Logo do Banco"><span>${getNomeBancoFinal(blocoConta)}</span></div><p><strong>Agência:</strong> ${getContaVal('banco_agencia')}</p><p><strong>Conta:</strong> ${getContaVal('banco_conta')}</p><p><strong>Integração:</strong> ${getContaVal('integracao_tipo')}</p><p><strong>Gerente:</strong> ${getContaVal('banco_gerente')}</p><p><strong>Tel. Gerente:</strong> ${getContaVal('banco_telefone')}</p><p><strong>Email Gerente:</strong> ${getContaVal('banco_email')}</p></div>`; 
+                }); 
+                html += `</div>`; 
+            }); 
+            html += `</div>`; 
+            container.innerHTML = html; 
+            return true; 
+        }
+        adicionarEmpresa();
+        
+        // ===== LÓGICA PARA O FORMULÁRIO DE ADIÇÃO DE CNPJ (INALTERADO) =====
+        const btnGerarRelatorioCnpj = document.getElementById('btnGerarRelatorioCnpj');
+        function getValCnpj(id) { return document.getElementById(id)?.value.trim() || 'N/A'; }
+        function getChecked(id) { return document.getElementById(id)?.checked ? '[X]' : '[ ]'; }
+        btnGerarRelatorioCnpj.addEventListener('click', function() {
+            let texto = 'INFORMATIVO DE ADIÇÃO DE CNPJ\n';
+            texto += '=======================================\n\n';
+            texto += '-- RELACIONAMENTO --\n';
+            texto += `Data: ${getValCnpj('cnpj_rel_data')}\n`;
+            texto += `Prazo de entrega: ${getValCnpj('cnpj_rel_prazo')}\n`;
+            texto += `Horas para implantação: ${getValCnpj('cnpj_rel_horas')}\n`;
+            texto += `Cliente: ${getValCnpj('cnpj_rel_cliente')}\n`;
+            texto += `Patrocinador: ${getValCnpj('cnpj_rel_patrocinador')}\n`;
+            texto += `Telefone (Patrocinador): ${getValCnpj('cnpj_rel_telefone_patrocinador')}\n`;
+            texto += `Contato: ${getValCnpj('cnpj_rel_contato')}\n`;
+            texto += `Telefone (Contato): ${getValCnpj('cnpj_rel_telefone_contato')}\n\n`;
+            texto += '-- INFORMAÇÕES PARA INCLUSÃO --\n';
+            texto += `Dados da empresa ok: ${getChecked('cnpj_inc_dados_ok')}\n`;
+            texto += `Razão Social: ${getValCnpj('cnpj_inc_razao_social')}\n`;
+            texto += `Nome Fantasia: ${getValCnpj('cnpj_inc_nome_fantasia')}\n`;
+            texto += `CNPJ: ${getValCnpj('cnpj_inc_cnpj')}\n`;
+            texto += `Inscrição Estadual: ${getValCnpj('cnpj_inc_insc_est')}\n`;
+            texto += `Regime Tributário: ${getValCnpj('cnpj_inc_regime')}\n\n`;
+            texto += `Observações: \n${getValCnpj('cnpj_inc_observacoes')}\n`;
+            document.getElementById('resultadoCnpj').value = texto;
+        });
+        const btnImprimirCnpj = document.getElementById('btnImprimirCnpj');
+        function gerarConteudoImpressaoCnpj() {
+            const container = document.getElementById('print-output');
+            const getPrintVal = (id) => { const el = document.getElementById(id); if (!el) return '<em>Campo não encontrado</em>'; if (el.type === 'date' && el.value) { const [y, m, d] = el.value.split('-'); if(y && m && d) return `${d}/${m}/${y}`; } const value = el.value.trim(); return value ? value.replace(/\n/g, '<br>') : '<em>Não preenchido</em>'; };
+            const getPrintChecked = (id) => document.getElementById(id)?.checked ? 'Sim' : 'Não';
+            const dataAtual = new Date().toLocaleString('pt-BR', { dateStyle: 'long', timeStyle: 'short' });
+            const logoUrl = document.getElementById('mainLogo').src;
+            let html = `<div class="print-cnpj-wrapper"><div class="print-header"><img src="${logoUrl}" alt="Logo"><div class="print-title"><h1>Informativo de Adição de CNPJ</h1><p>Emitido em: ${dataAtual}</p></div></div><div class="print-cnpj-content"><div class="print-cnpj-section"><h2>RELACIONAMENTO</h2><div class="print-field-group"><p><strong>Data:</strong> ${getPrintVal('cnpj_rel_data')}</p><p><strong>Prazo de entrega:</strong> ${getPrintVal('cnpj_rel_prazo')}</p></div><p><strong>Horas para implantação:</strong> ${getPrintVal('cnpj_rel_horas')}</p><p><strong>Cliente:</strong> ${getPrintVal('cnpj_rel_cliente')}</p><div class="print-field-group"><p><strong>Patrocinador:</strong> ${getPrintVal('cnpj_rel_patrocinador')}</p><p><strong>Telefone (Patrocinador):</strong> ${getPrintVal('cnpj_rel_telefone_patrocinador')}</p></div><div class="print-field-group"><p><strong>Contato:</strong> ${getPrintVal('cnpj_rel_contato')}</p><p><strong>Telefone (Contato):</strong> ${getPrintVal('cnpj_rel_telefone_contato')}</p></div></div><div class="print-cnpj-section"><h2>INFORMAÇÕES PARA INCLUSÃO</h2><p><strong>Dados da empresa ok:</strong> ${getPrintChecked('cnpj_inc_dados_ok')}</p>
+                                    <div class="print-field-group">
+                                        <p><strong>Razão Social:</strong> ${getPrintVal('cnpj_inc_razao_social')}</p>
+                                        <p><strong>Nome Fantasia:</strong> ${getPrintVal('cnpj_inc_nome_fantasia')}</p>
+                                    </div>
+                                    <div class="print-field-group">
+                                        <p><strong>CNPJ:</strong> ${getPrintVal('cnpj_inc_cnpj')}</p>
+                                        <p><strong>Inscrição Estadual:</strong> ${getPrintVal('cnpj_inc_insc_est')}</p>
+                                    </div>
+                                    <p><strong>Regime Tributário:</strong> ${getPrintVal('cnpj_inc_regime')}</p>
+                                    <hr><p><strong>Observações:</strong></p><p class="print-obs">${getPrintVal('cnpj_inc_observacoes')}</p></div></div></div>`;
+            container.innerHTML = html;
+            return true;
+        }
+        btnImprimirCnpj.addEventListener('click', function() { if (gerarConteudoImpressaoCnpj()) { window.print(); } });
+        aplicarMascaras(document.getElementById('cnpj-container'));
+        
+        // ===== LÓGICA DE BUSCA DE CNPJ (INALTERADO) =====
+        async function buscarDadosCNPJ(cnpjInput) {
+            const cnpj = cnpjInput.value.replace(/\D/g, '');
+            const formGroup = cnpjInput.closest('.form-group');
+            const statusEl = formGroup.querySelector('.cnpj-status');
+            if (!statusEl) return;
+            const homologacaoBlock = cnpjInput.closest('.empresa-bloco');
+            const adicaoCnpjBlock = cnpjInput.closest('#cnpj-container');
+            statusEl.textContent = 'Buscando...';
+            statusEl.className = 'cnpj-status';
+            try {
+                const response = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`);
+                if (!response.ok) throw new Error('CNPJ não encontrado ou inválido.');
+                const data = await response.json();
+                if (homologacaoBlock) {
+                    const nomeInput = homologacaoBlock.querySelector('[name="empresa_nome"]');
+                    const respInput = homologacaoBlock.querySelector('[name="empresa_responsavel"]');
+                    const telInput = homologacaoBlock.querySelector('[name="empresa_telefone"]');
+                    if (nomeInput) nomeInput.value = data.nome_fantasia || data.razao_social || '';
+                    if (telInput) telInput.value = mascaraTelefone(data.ddd_telefone_1 || '');
+                    if (respInput && data.qsa && data.qsa.length > 0) { const admin = data.qsa.find(s => s.qualificacao_socio.includes('Administrador')) || data.qsa[0]; respInput.value = admin.nome_socio || ''; }
+                } else if (adicaoCnpjBlock) {
+                    const razaoSocialInput = adicaoCnpjBlock.querySelector('#cnpj_inc_razao_social');
+                    const nomeFantasiaInput = adicaoCnpjBlock.querySelector('#cnpj_inc_nome_fantasia');
+                    const clienteInput = adicaoCnpjBlock.querySelector('#cnpj_rel_cliente');
+                    if (razaoSocialInput) razaoSocialInput.value = data.razao_social || '';
+                    if (nomeFantasiaInput) nomeFantasiaInput.value = data.nome_fantasia || '';
+                    if (clienteInput) clienteInput.value = data.nome_fantasia || data.razao_social || '';
+                }
+                statusEl.textContent = 'Dados preenchidos!';
+                setTimeout(() => statusEl.textContent = '', 3000);
+            } catch (error) {
+                statusEl.textContent = error.message;
+                statusEl.classList.add('error');
+            }
+        }
+        document.addEventListener('blur', function(e) {
+            if (e.target && e.target.classList.contains('mask-cnpj')) {
+                const cnpj = e.target.value.replace(/\D/g, '');
+                if (cnpj.length === 14) {
+                    buscarDadosCNPJ(e.target);
+                } else if (cnpj.length > 0) {
+                    const statusEl = e.target.closest('.form-group').querySelector('.cnpj-status');
+                    if (statusEl) { statusEl.textContent = 'CNPJ precisa ter 14 dígitos.'; statusEl.className = 'cnpj-status error'; }
+                }
+            }
+        }, true);
+    });
+</script>
+
+</body>
+</html>
