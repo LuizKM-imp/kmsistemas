@@ -111,7 +111,7 @@
             }
         });
 
-        // Lógica para gerar PDF (inalterada)
+        // Lógica para gerar PDF (Com a correção)
         async function gerarPdf() {
             const generateButton = document.getElementById('generate-btn');
             if (generateButton.disabled) return;
@@ -136,8 +136,8 @@
             const checkPageBreak = (neededHeight = 10) => {
                 if (cursorY + neededHeight > PAGE_HEIGHT - MARGIN) {
                     doc.addPage();
-                    cursorY = MARGIN;
-                    addHeader();
+                    cursorY = MARGIN; // Isto define a margem superior na nova página
+                    // MODIFICAÇÃO: A chamada para addHeader() foi removida daqui para não repetir nas outras páginas.
                 }
             };
             
@@ -204,9 +204,13 @@
             const getData = (id) => document.getElementById(id).value;
             const getChecked = (containerId) => Array.from(document.querySelectorAll(`#${containerId} input:checked`)).map(cb => cb.value).join(', ') || "Nenhum";
 
+            // INÍCIO DA GERAÇÃO DO PDF
+            
+            // Adiciona o cabeçalho apenas uma vez, no início do documento.
             addHeader();
-            cursorY = 30;
-            doc.setFontSize(16).setFont('helvetica', 'bold').text('Relatório de Passagem de Cliente', PAGE_WIDTH / 2, cursorY, { align: 'center' });
+            cursorY = 30; // Desce o cursor para depois do cabeçalho
+            
+            doc.setFontSize(16).setFont('helvetica', 'bold').text('Documento de passagem ao Suporte', PAGE_WIDTH / 2, cursorY, { align: 'center' });
             cursorY += 5;
             
             addSectionTitle('Dados Gerais');
