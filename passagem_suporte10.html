@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Relatório PDF - KM Sistemas</title>
+    <style>
+        :root { --c-green-dark: #04ab5c; --c-green-light: #a9cf44; --c-bg-cream: #fdf5e6; --c-text-dark: #333; --c-text-light: #888; --c-white: #ffffff; --c-border: #ccc; --c-red: #ea4335; --c-red-bg: #fce8e6;}
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--c-bg-cream); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: var(--c-text-dark); padding: 2rem; }
+        .container { max-width: 850px; margin: 0 auto; background-color: var(--c-white); padding: 2rem 3rem; border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+        .logo-container { display: flex; justify-content: space-between; align-items: center; gap: 2rem; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #eee;}
+        .km-logo img { max-width: 170px; }
+        #client-logo-area { border: 2px dashed var(--c-green-light); border-radius: 8px; padding: 10px; width: 250px; height: 120px; display: flex; justify-content: center; align-items: center; cursor: pointer; text-align: center; color: var(--c-text-light); transition: background-color 0.3s, border-color 0.3s; }
+        #client-logo-area:hover { background-color: #fafff0; border-color: var(--c-green-dark); }
+        #client-logo-area img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        h1 { color: var(--c-green-dark); text-align: center; font-size: 2rem; margin-bottom: 2.5rem; font-weight: 700; }
+        h2 { color: var(--c-green-dark); border-bottom: 2px solid var(--c-green-light); padding-bottom: 0.5rem; margin-top: 2.5rem; margin-bottom: 1.5rem; font-size: 1.5rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 1rem; }
+        input[type="text"], textarea { width: 100%; padding: 12px 15px; border: 1px solid var(--c-border); border-radius: 6px; font-size: 1rem; font-family: inherit; transition: border-color 0.3s, box-shadow 0.3s; }
+        input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--c-green-dark); box-shadow: 0 0 0 3px rgba(4, 171, 92, 0.15); }
+        textarea { resize: vertical; min-height: 80px;}
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+        .checkbox-group label { display: flex; align-items: center; font-weight: normal; cursor: pointer; }
+        .checkbox-group input { margin-right: 0.5rem; width: 1.2em; height: 1.2em; cursor: pointer; }
+        .user-block { padding: 1.5rem; border: 1px solid #e0e0e0; border-radius: 8px; margin-top: 1rem; background-color: #f9f9f9; position: relative; }
+        .button-group { text-align: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid #eee; }
+        button { cursor: pointer; border: none; border-radius: 6px; padding: 12px 28px; font-size: 1.1rem; font-weight: 700; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
+        #generate-btn { background-color: var(--c-green-dark); color: white; }
+        #generate-btn:hover:not(:disabled) { background-color: #038a49; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }
+        .add-user-btn { background-color: var(--c-white); color: var(--c-green-dark); border: 2px solid var(--c-green-light); }
+        .add-user-btn:hover { background-color: var(--c-green-light); color: var(--c-text-dark); }
+        .remove-btn { position: absolute; top: 10px; right: 10px; background-color: var(--c-red-bg); color: var(--c-red); border: 1px solid #f6cccb; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
+        #generate-btn:disabled { background-color: #aaa; cursor: wait; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <div class="km-logo">
+                <!-- URL da sua logo foi inserida aqui -->
+                <img id="km-logo-img" src="https://raw.githubusercontent.com/LuizKM-imp/kmsistemas/refs/heads/main/km.png" alt="Logo KM Sistemas" crossorigin="anonymous">
+            </div>
+            <div id="client-logo-area">
+                <span id="client-logo-placeholder">Clique aqui e cole (Ctrl+V) a logo do cliente</span>
+                <img id="client-logo-pasted" src="" alt="Logo do Cliente" style="display:none;">
+            </div>
+        </div>
+        <h1>Formulário de Passagem de Cliente</h1>
+        <!-- Restante do Formulário (inalterado) -->
+        <h2>Dados Gerais</h2>
+        <div class="form-group"><label for="razaoSocial">Razão Social:</label><input type="text" id="razaoSocial" placeholder="Ex: Tecnologia LTDA"></div>
+        <div class="form-group"><label for="nomeFantasia">Nome Fantasia:</label><input type="text" id="nomeFantasia" placeholder="Ex: Super Tech"></div>
+        <div class="form-group"><label for="qtdCnpj">Quantidade de CNPJ:</label><input type="text" id="qtdCnpj"></div>
+        <div class="form-group"><label for="patrocinador">Patrocinador:</label><input type="text" id="patrocinador"></div>
+        <div class="form-group"><label for="admProjeto">Adm(s) do Projeto:</label><input type="text" id="admProjeto"></div>
+        <div class="form-group"><label for="consultor">Consultor de Implantação:</label><input type="text" id="consultor"></div>
+        <h2>Configuração do Sistema</h2>
+        <div class="form-group"><label>Módulos contratados:</label><div class="checkbox-group" id="modulosContratados"><label><input type="checkbox" value="Comercial">Comercial</label><label><input type="checkbox" value="Estoque">Estoque</label><label><input type="checkbox" value="Industrial">Industrial</label><label><input type="checkbox" value="Faturamento">Faturamento</label><label><input type="checkbox" value="Pagar">Pagar</label><label><input type="checkbox" value="Receber">Receber</label><label><input type="checkbox" value="Tesouraria">Tesouraria</label></div></div>
+        <div class="form-group"><label>Documentos Fiscais:</label><div class="checkbox-group" id="documentosFiscais"><label><input type="checkbox" value="NFe">NFe</label><label><input type="checkbox" value="NFCe">NFCe</label><label><input type="checkbox" value="SPED">SPED</label><label><input type="checkbox" value="CTe">CTe</label><label><input type="checkbox" value="MDFe">MDFe</label></div></div>
+        <div class="form-group"><label for="ferramentasAdicionais">Ferramentas adicionais:</label><textarea id="ferramentasAdicionais"></textarea></div>
+        <h2>Detalhes da Implantação</h2>
+        <div class="form-group"><label for="capacitacaoUsuarios">Capacitação dos usuários:</label><textarea id="capacitacaoUsuarios"></textarea></div>
+        <div class="form-group"><label for="pedidosHomologacao">Tipos de Pedido emitidos em homologação:</label><textarea id="pedidosHomologacao"></textarea></div>
+        <div class="form-group"><label for="pedidosProducao">Tipos de Pedido emitidos em produção:</label><textarea id="pedidosProducao"></textarea></div>
+        <div class="form-group"><label for="envioCiencia">Envio de ciência (dados fiscais para contabilidade):</label><textarea id="envioCiencia"></textarea></div>
+        <div class="form-group"><label for="boletos">Detalhes sobre Boletos:</label><textarea id="boletos"></textarea></div>
+        <h2>Perfil dos Usuários</h2>
+        <div id="usuarios-container"></div>
+        <div class="form-group"><button type="button" class="add-user-btn" onclick="adicionarUsuario()">+ Adicionar Usuário</button></div>
+        <h2>Considerações Finais</h2>
+        <div class="form-group"><label for="resumoCliente">Resumo do cliente (principais pontos de atenção para o Suporte):</label><textarea id="resumoCliente"></textarea></div>
+    </div>
+    <div class="button-group">
+        <button id="generate-btn" onclick="gerarPdf()">Gerar PDF</button>
+    </div>
+
+    <!-- BIBLIOTECA JSPDF COMPLETA E EMBUTIDA -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+
+    <script>
+        // Funções UI (inalteradas)
+        function adicionarUsuario() {
+            const container = document.getElementById('usuarios-container');
+            const userBlock = document.createElement('div');
+            userBlock.className = 'user-block';
+            const blockId = 'user_block_' + Date.now();
+            userBlock.id = blockId;
+            userBlock.innerHTML = `<button class="remove-btn" onclick="removerUsuario('${blockId}')">Remover</button><div class="form-group"><label>Nome do Usuário:</label><input type="text" class="user-name" placeholder="Nome completo"></div><div class="form-group"><label>Perfil Profissional:</label><textarea class="user-profile" rows="3" placeholder="Cargo, responsabilidades..."></textarea></div>`;
+            container.appendChild(userBlock);
+        }
+        function removerUsuario(blockId) { document.getElementById(blockId).remove(); }
+        document.getElementById('client-logo-area').addEventListener('paste', function (event) {
+            event.preventDefault();
+            const items = (event.clipboardData || window.clipboardData).items;
+            for (let item of items) {
+                if (item.kind === 'file' && item.type.startsWith('image/')) {
+                    const file = item.getAsFile();
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.getElementById('client-logo-pasted');
+                        img.src = e.target.result;
+                        img.style.display = 'block';
+                        document.getElementById('client-logo-placeholder').style.display = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                    break;
+                }
+            }
+        });
+
+        // Lógica para gerar PDF (inalterada)
+        async function gerarPdf() {
+            const generateButton = document.getElementById('generate-btn');
+            if (generateButton.disabled) return;
+            if (typeof window.jspdf === 'undefined') {
+                alert("ERRO: Biblioteca jsPDF não foi encontrada. O arquivo pode estar corrompido.");
+                return;
+            }
+            generateButton.innerText = 'Gerando...';
+            generateButton.disabled = true;
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            const MARGIN = 15;
+            const PAGE_WIDTH = doc.internal.pageSize.getWidth();
+            const PAGE_HEIGHT = doc.internal.pageSize.getHeight();
+            const CONTENT_WIDTH = PAGE_WIDTH - MARGIN * 2;
+            const COL1_X = MARGIN;
+            const COL2_X = MARGIN + 95;
+            const LINE_HEIGHT = 4.5;
+            let cursorY = MARGIN;
+
+            const checkPageBreak = (neededHeight = 10) => {
+                if (cursorY + neededHeight > PAGE_HEIGHT - MARGIN) {
+                    doc.addPage();
+                    cursorY = MARGIN;
+                    addHeader();
+                }
+            };
+            
+            const addImageWithRatio = (imgEl, x, y, maxWidth, maxHeight) => {
+                 if (!imgEl.src || !imgEl.complete || imgEl.naturalWidth === 0) return;
+                const imgRatio = imgEl.naturalWidth / imgEl.naturalHeight;
+                let newWidth = maxWidth;
+                let newHeight = newWidth / imgRatio;
+                if (newHeight > maxHeight) {
+                    newHeight = maxHeight;
+                    newWidth = newHeight * imgRatio;
+                }
+                try { doc.addImage(imgEl, 'PNG', x, y, newWidth, newHeight, '', 'FAST'); } 
+                catch(e) { console.error("Erro adicionando imagem:", e); }
+            };
+            
+            const addHeader = () => {
+                const kmLogoImg = document.getElementById('km-logo-img');
+                const clientLogoImg = document.getElementById('client-logo-pasted');
+                addImageWithRatio(kmLogoImg, MARGIN, 8, 40, 20);
+                addImageWithRatio(clientLogoImg, PAGE_WIDTH - MARGIN - 40, 8, 40, 20);
+            };
+
+            const addSectionTitle = (title) => {
+                checkPageBreak(15);
+                cursorY += 8;
+                doc.setFontSize(12).setFont('helvetica', 'bold').setTextColor('#04ab5c');
+                doc.text(title, MARGIN, cursorY);
+                cursorY += 1;
+                doc.setDrawColor('#a9cf44').setLineWidth(0.5).line(MARGIN, cursorY, PAGE_WIDTH - MARGIN, cursorY);
+                cursorY += 6;
+                doc.setFontSize(10).setTextColor('#333333');
+            };
+
+            const addFieldPair = (label1, value1, label2, value2) => {
+                if (!value1 && !value2) return;
+                checkPageBreak(12);
+                doc.setFont('helvetica', 'bold');
+                doc.text(label1, COL1_X, cursorY);
+                if (label2) doc.text(label2, COL2_X, cursorY);
+                
+                doc.setFont('helvetica', 'normal');
+                const text1 = value1 ? doc.splitTextToSize(value1, 80) : [''];
+                const text2 = value2 ? doc.splitTextToSize(value2, 80) : [''];
+                doc.text(text1, COL1_X + 2, cursorY + LINE_HEIGHT);
+                if (value2) doc.text(text2, COL2_X + 2, cursorY + LINE_HEIGHT);
+                
+                cursorY += (Math.max(text1.length, text2.length) * LINE_HEIGHT) + 4;
+            };
+            
+            const addLongTextField = (label, value) => {
+                if (!value) return;
+                checkPageBreak(15);
+                doc.setFont('helvetica', 'bold');
+                doc.text(label, MARGIN, cursorY);
+                cursorY += 5;
+                doc.setFont('helvetica', 'normal').setTextColor('#555555');
+                const splitText = doc.splitTextToSize(value, CONTENT_WIDTH);
+                doc.text(splitText, MARGIN, cursorY);
+                cursorY += (splitText.length * LINE_HEIGHT) + 2;
+                doc.setTextColor('#333333');
+            };
+
+            const getData = (id) => document.getElementById(id).value;
+            const getChecked = (containerId) => Array.from(document.querySelectorAll(`#${containerId} input:checked`)).map(cb => cb.value).join(', ') || "Nenhum";
+
+            addHeader();
+            cursorY = 30;
+            doc.setFontSize(16).setFont('helvetica', 'bold').text('Relatório de Passagem de Cliente', PAGE_WIDTH / 2, cursorY, { align: 'center' });
+            cursorY += 5;
+            
+            addSectionTitle('Dados Gerais');
+            addFieldPair('Razão Social:', getData('razaoSocial'), 'Nome Fantasia:', getData('nomeFantasia'));
+            addFieldPair('CNPJs:', getData('qtdCnpj'), 'Patrocinador:', getData('patrocinador'));
+            addFieldPair('Adm(s) do Projeto:', getData('admProjeto'), 'Consultor:', getData('consultor'));
+            
+            addSectionTitle('Configuração do Sistema');
+            addLongTextField('Módulos Contratados:', getChecked('modulosContratados'));
+            addLongTextField('Documentos Fiscais:', getChecked('documentosFiscais'));
+            addLongTextField('Ferramentas Adicionais:', getData('ferramentasAdicionais'));
+
+            addSectionTitle('Detalhes da Implantação');
+            addLongTextField('Capacitação dos usuários:', getData('capacitacaoUsuarios'));
+            addLongTextField('Pedidos (Homologação):', getData('pedidosHomologacao'));
+            addLongTextField('Pedidos (Produção):', getData('pedidosProducao'));
+            addLongTextField('Envio de Dados Fiscais:', getData('envioCiencia'));
+            addLongTextField('Boletos:', getData('boletos'));
+            
+            addSectionTitle('Perfil dos Usuários');
+            const userBlocks = document.querySelectorAll('.user-block');
+            if (userBlocks.length === 0) {
+                 doc.setFont('helvetica', 'italic').setTextColor('#888').text('Nenhum usuário cadastrado.', MARGIN, cursorY);
+                 cursorY += 8;
+            } else {
+                 userBlocks.forEach(block => {
+                    const nome = block.querySelector('.user-name').value;
+                    const perfil = block.querySelector('.user-profile').value;
+                    if(nome){
+                        checkPageBreak(15);
+                        doc.setFontSize(10).setFont('helvetica', 'bold').text(nome, MARGIN, cursorY);
+                        cursorY += 5;
+                        doc.setFontSize(9).setFont('helvetica', 'normal').setTextColor('#555555');
+                        const splitText = doc.splitTextToSize(perfil, CONTENT_WIDTH);
+                        doc.text(splitText, MARGIN, cursorY);
+                        cursorY += (splitText.length * (LINE_HEIGHT - 0.5)) + 4;
+                        doc.setTextColor('#333333');
+                    }
+                });
+            }
+
+            addSectionTitle('Considerações Finais');
+            addLongTextField('Resumo do Cliente (Pontos de atenção para o Suporte):', getData('resumoCliente'));
+
+            const fileName = `Passagem_Suporte_${getData('nomeFantasia').replace(/[^a-z0-9]/gi, '_') || "Cliente"}.pdf`;
+            doc.save(fileName);
+            
+            generateButton.innerText = 'Gerar PDF';
+            generateButton.disabled = false;
+        }
+    </script>
+</body>
+</html>
