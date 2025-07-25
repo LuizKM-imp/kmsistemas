@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário Pós-Treinamento</title>
+    <style>
+        :root {
+            --primary-color: #04ab5c; /* Verde escuro */
+            --accent-color: #a9cf44;  /* Verde claro */
+            --bg-color: #fdfaf6;      /* Creme bem clarinho (Light) */
+            --form-bg-color: #ffffff; /* (Light) */
+            --text-color: #333333;    /* (Light) */
+            --border-color: #e0e0e0;  /* (Light) */
+            --output-bg-color: #f7f7f7; /* (Light) */
+        }
+
+        /* Tema Escuro (Dark Mode) */
+        body.dark-mode {
+            --bg-color: #1e1e1e;
+            --form-bg-color: #2d2d2d;
+            --text-color: #e2e2e2;
+            --border-color: #444444;
+            --output-bg-color: #252525;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 850px; /* Largura aumentada */
+            margin: 20px auto;
+            background-color: var(--form-bg-color);
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.07);
+            position: relative;
+            transition: background-color 0.3s;
+        }
+        #theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            max-width: 180px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        header h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+        }
+        input[type="text"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--form-bg-color);
+            color: var(--text-color);
+            transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s, color 0.3s;
+        }
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(4, 171, 92, 0.15);
+        }
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .output-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        .output-box {
+            background-color: var(--output-bg-color);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            position: relative;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .output-box h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        .output-box pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: inherit;
+            margin: 0;
+            font-size: 0.95rem;
+            padding-bottom: 50px; /* Espaço para o botão não sobrepor o texto */
+        }
+        .copy-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+        .copy-btn:hover {
+            opacity: 0.85;
+        }
+        .copy-btn.copied {
+            background-color: var(--accent-color);
+            color: #333;
+        }
+        
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .container { padding: 20px; margin-top: 10px; }
+            header h1 { font-size: 1.5rem; }
+            .logo { max-width: 140px; }
+            #theme-toggle { top: 15px; right: 15px; padding: 6px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <button id="theme-toggle">Alternar Tema</button>
+        <header>
+            <img src="https://raw.githubusercontent.com/LuizKM-imp/kmsistemas/refs/heads/main/km.png" alt="Logo da KM Sistemas" class="logo">
+            <h1>Registro de Treinamento</h1>
+        </header>
+
+        <form id="training-form">
+            <div class="form-group">
+                <label for="cliente">Nome do cliente</label>
+                <input type="text" id="cliente" name="cliente" required placeholder="Digite o nome ou a razão social">
+            </div>
+
+            <div class="form-group">
+                <label for="data">Data do treinamento</label>
+                <input type="date" id="data" name="data" readonly tabindex="-1">
+            </div>
+
+            <div class="form-group">
+                <label for="participantes">Participantes</label>
+                <input type="text" id="participantes" name="participantes" placeholder="Ex: João, Maria, José">
+            </div>
+            
+            <div class="form-group">
+                <label for="assuntos">Assuntos abordados</label>
+                <textarea id="assuntos" name="assuntos" placeholder="Descreva os principais pontos abordados..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="observacoes">Observações (opcional)</label>
+                <textarea id="observacoes" name="observacoes" placeholder="Feedback do cliente, próximos passos, etc."></textarea>
+            </div>
+        </form>
+
+        <section class="output-section">
+            <div class="output-box">
+                <h3>Texto Unificado para Envio</h3>
+                <pre id="unified-output">Preencha o formulário para gerar o texto.</pre>
+                <button class="copy-btn" onclick="copyToClipboard(this, 'unified-output')">Copiar Texto</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // -- Lógica do Tema (Dark Mode) --
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const currentTheme = localStorage.getItem('theme');
+
+            if (currentTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                let theme = 'light';
+                if (document.body.classList.contains('dark-mode')) {
+                    theme = 'dark';
+                }
+                localStorage.setItem('theme', theme);
+            });
+
+            // -- Lógica do Formulário --
+            const dateField = document.getElementById('data');
+            const today = new Date();
+            dateField.value = today.toISOString().split('T')[0];
+            
+            const form = document.getElementById('training-form');
+            form.addEventListener('input', generateOutputs);
+
+            generateOutputs(); // Gerar saída inicial
+        });
+
+        function generateOutputs() {
+            const dataISO = document.getElementById('data').value;
+            const dataObj = new Date(dataISO);
+            const dataFormatada = dataISO ? new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' }).format(dataObj) : '[Data não informada]';
+            
+            const participantes = document.getElementById('participantes').value.trim() || 'Não informado';
+            const assuntos = document.getElementById('assuntos').value.trim() || 'Não informado';
+            const observacoes = document.getElementById('observacoes').value.trim();
+
+            // Gerar texto unificado
+            let unifiedText = `Treinamento ${dataFormatada}\nParticipantes: ${participantes}\nAssuntos abordados: ${assuntos}`;
+            
+            if (observacoes) {
+                unifiedText += `\n\nObservações: ${observacoes}`;
+            }
+            
+            document.getElementById('unified-output').textContent = unifiedText;
+        }
+
+        function copyToClipboard(button, elementId) {
+            const textToCopy = document.getElementById(elementId).textContent;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copiado!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Falha ao copiar: ', err);
+                alert('Ocorreu um erro ao copiar o texto.');
+            });
+        }
+    </script>
+
+</body>
+</html>
