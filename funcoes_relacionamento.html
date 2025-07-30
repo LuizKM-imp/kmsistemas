@@ -1,0 +1,1008 @@
+<html lang="pt-BR"><head><script>(function(firebaseConfig, initialAuthToken, appId) {
+        window.__firebase_config = firebaseConfig;
+        window.__initial_auth_token = initialAuthToken;
+        window.__app_id = appId;
+            })("\n{\n  \"apiKey\": \"AIzaSyCqyCcs2R2e7AegGjvFAwG98wlamtbHvZY\",\n  \"authDomain\": \"bard-frontend.firebaseapp.com\",\n  \"projectId\": \"bard-frontend\",\n  \"storageBucket\": \"bard-frontend.firebasestorage.app\",\n  \"messagingSenderId\": \"175205271074\",\n  \"appId\": \"1:175205271074:web:2b7bd4d34d33bf38e6ec7b\"\n}\n","eyJhbGciOiJSUzI1NiIsImtpZCI6IjliNTYzZWFkZTM5OGI3ZWRjOTg2YThhYjM3YzNlMTY3ZjgyOGRhZGUiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay1mYnN2Y0BiYXJkLWZyb250ZW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiaHR0cHM6XC9cL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbVwvZ29vZ2xlLmlkZW50aXR5LmlkZW50aXR5dG9vbGtpdC52MS5JZGVudGl0eVRvb2xraXQiLCJ1aWQiOiIxODQyNzM2MjIwODYzNTY1MzEwNCIsImlzcyI6ImZpcmViYXNlLWFkbWluc2RrLWZic3ZjQGJhcmQtZnJvbnRlbmQuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJjbGFpbXMiOnsiYXBwSWQiOiJjXzg1NmMyMmM5NTAxZTg3Y2ZfZnVuY29lcy1yZXNwb25zYWJpbGlkYWRlcy1yZWxhY2lvbmFtZW50by04NDYifSwiZXhwIjoxNzUzODg4OTE2LCJpYXQiOjE3NTM4ODUzMTYsImFsZyI6IlJTMjU2In0.NfodcRihNJGNgvUcGsGgLq7x2ZaM8lSYoYLa84OUAf4hmzvqyauRVF2_3MiuLbpip_mmCxCVBDQBkMi-frqPKQCQ-H--k9V3rKKNlHFtdaYnrqjJA-vU5ri3f_J_8YtyzL-eNNGR2r92PJR96zXiNp6PN4IjTesHSyIgnbAEuDRAxCW-RUBBlXPUlEwLwB-AF2WVhPX85aP1FCSmjAiUOIFd_iiKcE4JxPRptpmE45uliVKBKnI5PuYtFAO0f0LP8M5x_zDAH_NwwRvPalCTO9OHa0hNklbzky_5PFf9FDIDeuWSFRzUiUaGHp36-RIgRxtsnMAriv-DVYcYiPyE1A","c_856c22c9501e87cf_funcoes-responsabilidades-relacionamento-846")</script><script>(function() {
+  // Ensure this script is executed only once
+  if (window.firebaseAuthBridgeScriptLoaded) {
+    return;
+  }
+  window.firebaseAuthBridgeScriptLoaded = true;
+
+  let nextTokenPromiseId = 0;
+
+  // Stores { resolve, reject } for ongoing token requests
+  const pendingTokenPromises = {};
+
+  // Listen for messages from the Host Application
+  window.addEventListener('message', function(event) {
+
+    const messageData = event.data;
+
+  if (messageData && messageData.type === 'RESOLVE_NEW_FIREBASE_TOKEN') {
+      const { success, token, error, promiseId } = messageData ?? {};
+      if (pendingTokenPromises[promiseId]) {
+        if (success) {
+          pendingTokenPromises[promiseId].resolve(token);
+        } else {
+          pendingTokenPromises[promiseId].reject(new Error(error || 'Token refresh failed from host.'));
+        }
+        delete pendingTokenPromises[promiseId];
+      }
+    }
+  });
+
+  // Expose a function for the Generated App to request a new Firebase token
+  window.requestNewFirebaseToken = function() {
+    const currentPromiseId = nextTokenPromiseId++;
+    const promise = new Promise((resolve, reject) => {
+      pendingTokenPromises[currentPromiseId] = { resolve, reject };
+    });
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'REQUEST_NEW_FIREBASE_TOKEN',
+        promiseId: currentPromiseId
+      }, '*');
+    } else {
+      pendingTokenPromises[currentPromiseId].reject(new Error('No parent window to request token from.'));
+      delete pendingTokenPromises[currentPromiseId];
+    }
+    return promise;
+  };
+})();</script><script>
+let realOriginalGetUserMedia = null;
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  realOriginalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+}
+
+(function() {
+  if (navigator.mediaDevices && navigator.mediaDevices.__proto__) {
+    try {
+      Object.defineProperty(navigator.mediaDevices.__proto__, 'getUserMedia', {
+        get: function() {
+          return undefined; // Or throw an error
+        },
+        configurable: false
+      });
+    } catch (error) {
+      console.error("Error defining prototype getter:", error);
+    }
+  }
+})();
+
+(function() {
+  const pendingMediaResolvers = {};
+  let nextMediaPromiseId = 0;
+
+  function requestMediaPermissions(constraints) {
+    const mediaPromiseId = nextMediaPromiseId++;
+    const promise = new Promise((resolve, reject) => {
+      pendingMediaResolvers[mediaPromiseId] = (granted) => {
+        delete pendingMediaResolvers[mediaPromiseId];
+        resolve(granted);
+      };
+    });
+
+    window.parent.postMessage({
+      type: 'requestMediaPermission',
+      constraints: constraints,
+      promiseId: mediaPromiseId,
+    }, '*');
+
+    return promise;
+  }
+
+  let originalGetUserMedia = realOriginalGetUserMedia;
+
+  function interceptGetUserMedia() {
+    if (navigator.mediaDevices) {
+      Object.defineProperty(navigator.mediaDevices, 'getUserMedia', {
+        value: function(constraints) {
+          return requestMediaPermissions(constraints).then((granted) => {
+            if (granted) {
+              if (originalGetUserMedia) {
+                return originalGetUserMedia(constraints);
+              } else {
+                throw new Error("Original getUserMedia not available.");
+              }
+            } else {
+              throw new DOMException('Permission denied', 'NotAllowedError');
+            }
+          });
+        },
+        writable: false,
+        configurable: false
+      });
+    }
+  }
+
+  interceptGetUserMedia();
+
+  const observer = new MutationObserver(function(mutationsList, observer) {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'reconfigured' && mutation.name === 'getUserMedia' && mutation.object === navigator.mediaDevices) {
+        interceptGetUserMedia();
+      } else if (mutation.type === 'attributes' && mutation.attributeName === 'getUserMedia' && mutation.target === navigator.mediaDevices) {
+        interceptGetUserMedia();
+      } else if (mutation.type === 'childList' && mutation.addedNodes) {
+        mutation.addedNodes.forEach(node => {
+          if (node === navigator.mediaDevices) {
+            interceptGetUserMedia();
+          }
+        });
+      }
+    }
+  });
+
+  function interceptSpeechRecognition() {
+    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+      return;
+    }
+
+    const OriginalSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const SpeechRecognitionWrapper = function(...args) {
+      const recognizer = new OriginalSpeechRecognition(...args);
+      const originalStart = recognizer.start.bind(recognizer);
+
+      recognizer.start = function() {
+        requestMediaPermissions({ audio: true }).then(granted => {
+          if (granted) {
+            originalStart();
+          } else {
+            const errorEvent = new SpeechRecognitionErrorEvent('error');
+            errorEvent.error = 'not-allowed'; // This is the standard error for permission denial.
+            recognizer.dispatchEvent(errorEvent);
+          }
+        });
+      };
+
+      return recognizer;
+    };
+
+    SpeechRecognitionWrapper.prototype = OriginalSpeechRecognition.prototype;
+    SpeechRecognitionWrapper.prototype.constructor = SpeechRecognitionWrapper;
+
+    if (window.SpeechRecognition) {
+      window.SpeechRecognition = SpeechRecognitionWrapper;
+    }
+    if (window.webkitSpeechRecognition) {
+      window.webkitSpeechRecognition = SpeechRecognitionWrapper;
+    }
+  }
+
+  interceptSpeechRecognition();
+
+  window.addEventListener('message', function(event) {
+    if (event.data) {
+      if (event.data.type === 'resolveMediaPermission') {
+        const { promiseId, granted } = event.data;
+        if (pendingMediaResolvers[promiseId]) {
+          pendingMediaResolvers[promiseId](granted);
+        }
+      }
+    }
+  });
+
+})();</script><script>((function(modelInformation) {
+  const originalFetch = window.fetch;
+  // TODO: b/421908508 - Move these out of the script and match all generative AI model calls.
+  let googleLlmBaseApiUrls = [
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':streamGenerateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predict',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predictLongRunning',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageEditModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predict',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predictLongRunning',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.ttsModelName + ':generateContent',
+  ];
+  modelInformation.deprecatedTextModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+    );
+  });
+
+  const pendingFetchResolvers = {};
+  let nextPromiseId = 0;
+
+  function handleStringInput(input, optionsArgument) {
+    const actualUrl = input;
+    const fetchCallArgs = [actualUrl, optionsArgument];
+    const effectiveOptions = optionsArgument || {};
+    const bodyForApiKeyCheck = effectiveOptions.body;
+    const bodyForPostMessage = effectiveOptions.body;
+    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
+  }
+
+  function handleRequestInput(input, optionsArgument) {
+    const actualUrl = input.url;
+    const fetchCallArgs = [input, optionsArgument];
+    const effectiveOptions = { method: input.method, headers: new Headers(input.headers) };
+    let bodyForApiKeyCheck;
+    let bodyForPostMessage;
+
+    if (optionsArgument) {
+      if (optionsArgument.method) effectiveOptions.method = optionsArgument.method;
+      if (optionsArgument.headers) effectiveOptions.headers = new Headers(optionsArgument.headers);
+      if ('body' in optionsArgument) {
+        bodyForApiKeyCheck = optionsArgument.body;
+        bodyForPostMessage = optionsArgument.body;
+      } else {
+        bodyForApiKeyCheck = undefined;
+        bodyForPostMessage = input.body;
+      }
+    } else {
+      bodyForApiKeyCheck = undefined;
+      bodyForPostMessage = input.body;
+    }
+    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
+  }
+
+  window.fetch = function(input, optionsArgument) {
+    let actualUrl;
+    let fetchCallArgs;
+    let effectiveOptions = {};
+    let bodyForApiKeyCheck;
+    let bodyForPostMessage;
+
+    if (typeof input === 'string') {
+      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleStringInput(input, optionsArgument));
+    } else if (input instanceof Request) {
+      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleRequestInput(input, optionsArgument));
+    } else {
+      return originalFetch.apply(window, [input, optionsArgument]);
+    }
+
+    effectiveOptions.method = effectiveOptions.method || 'GET';
+    if (!effectiveOptions.headers) {
+      effectiveOptions.headers = new Headers();
+    }
+
+
+    if (typeof actualUrl === 'string' && googleLlmBaseApiUrls.some((url) => actualUrl.startsWith(url))) {
+      let apiKeyIsNull = true;
+
+      const regex = new RegExp("models/([^:]+)");
+      const modelNameMatch = actualUrl.match(regex);
+      const modelName = modelNameMatch ? modelNameMatch[1] : 'unspecified';
+
+
+      try {
+        const urlObject = new URL(actualUrl);  // Use URL object for robust parsing
+        const apiKeyParam = urlObject.searchParams.get('key');
+        if (apiKeyParam) {
+          apiKeyIsNull = false;
+        }
+      } catch (e) {
+        // Continue checks even if URL parsing fails
+      }
+
+      if (apiKeyIsNull && effectiveOptions.headers) {
+        const h = new Headers(effectiveOptions.headers);
+        const apiKeyHeaderValue = h.get('X-API-Key') || h.get('x-api-key');
+        if (apiKeyHeaderValue) {
+          apiKeyIsNull = false;
+          return originalFetch.apply(window, fetchCallArgs);
+        }
+      }
+
+      if (apiKeyIsNull && effectiveOptions.method && ['POST', 'PUT', 'PATCH'].includes(effectiveOptions.method.toUpperCase()) && typeof bodyForApiKeyCheck === 'string') {
+        try {
+          const bodyData = JSON.parse(bodyForApiKeyCheck);
+          if (bodyData && bodyData.apiKey) {
+            apiKeyIsNull = false;
+            return originalFetch.apply(window, fetchCallArgs);
+          }
+        } catch (e) {
+          // Ignore JSON parsing errors
+        }
+      }
+
+      if(apiKeyIsNull) {
+        const promiseId = nextPromiseId++;
+        const promise = new Promise((resolve) => {
+          pendingFetchResolvers[promiseId] = (resolvedResponse) => {
+            delete pendingFetchResolvers[promiseId];
+            resolve(resolvedResponse);
+          };
+        });
+
+        let serializedBodyForPostMessage;
+        if (typeof bodyForPostMessage === 'string' || bodyForPostMessage == null) {
+            serializedBodyForPostMessage = bodyForPostMessage;
+        } else if (bodyForPostMessage instanceof ReadableStream) {
+            serializedBodyForPostMessage = null;
+        } else {
+            try {
+                serializedBodyForPostMessage = JSON.stringify(bodyForPostMessage);
+            } catch (e) {
+                serializedBodyForPostMessage = null;
+            }
+        }
+
+        const messageOptions = {
+            method: effectiveOptions.method,
+            headers: Object.fromEntries(new Headers(effectiveOptions.headers).entries()),
+            body: serializedBodyForPostMessage
+        };
+
+        window.parent.postMessage({
+          type: 'requestFetch',
+          url: actualUrl,
+          modelName: modelName,
+          options: messageOptions,
+          promiseId: promiseId,
+        }, '*');
+
+        return promise;
+      }
+      return originalFetch.apply(window, fetchCallArgs);
+    }
+    return originalFetch.apply(window, fetchCallArgs);
+  };
+
+  window.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'resolveFetch') {
+      const { promiseId, response } = event.data;
+      if (pendingFetchResolvers[promiseId]) {
+        try {
+          const reconstructedResponse = new Response(response.body, {
+            status: response.status,
+            statusText: response.statusText,
+            headers: new Headers(response.headers),
+          });
+          pendingFetchResolvers[promiseId](reconstructedResponse);
+        } catch (error) {
+          pendingFetchResolvers[promiseId](new Response(null, { status: 500, statusText: "Interceptor Response Reconstruction Error" }));
+        }
+      }
+    }
+  });
+
+}))({"textModelName":"gemini-2.5-flash-preview-05-20","imageModelName":"imagen-3.0-generate-002","imageEditModelName":"gemini-2.0-flash-preview-image-generation","videoModelName":"veo-2.0-generate-001","ttsModelName":"gemini-2.5-flash-preview-tts","deprecatedTextModelNames":["gemini-2.0-flash","gemini-2.5-flash-preview-04-17"]})</script><script>(function() {
+  const originalConsoleLog = console.log;
+  const originalConsoleError = console.error;
+
+    /**
+   * Normalizes an error event or a promise rejection reason into a structured error object.
+   * @param {*} errorEventOrReason The error object or reason.
+   * @return {object} Structured error data { message, name, stack }.
+   */
+  function getErrorObject(errorEventOrReason) {
+    if (errorEventOrReason instanceof Error) {
+      return {
+        message: errorEventOrReason.message,
+        name: errorEventOrReason.name,
+        stack: errorEventOrReason.stack,
+      };
+    }
+    // Fallback for non-Error objects.
+    try {
+      return {
+        message: JSON.stringify(errorEventOrReason),
+        name: 'UnknownErrorType',
+        stack: null,
+      };
+    } catch (e) {
+      return {
+        message: String(errorEventOrReason),
+        name: 'UnknownErrorTypeNonStringifiable',
+        stack: null,
+      };
+    }
+  }
+
+  /**
+   * Converts an array of arguments (from log/error) into a single string.
+   * Handles Error objects specially to include their message and stack.
+   * @param {Array<*>} args - Arguments passed to console methods.
+   * @return {string} A string representation of the arguments.
+   */
+  function stringifyArgs(args) {
+    return args
+      .map((arg) => {
+        if (arg instanceof Error) {
+          const {message, stack} = arg;
+          return `Error: ${message}${stack ? ('\nStack: ' + stack) : ''}`;
+        }
+        if (typeof arg === 'object' && arg !== null) {
+          try {
+            return JSON.stringify(arg);
+          } catch (error) {
+            return '[Circular Object]';
+          }
+        } else {
+          return String(arg);
+        }
+      })
+      .join(' ');
+  }
+
+  console.log = function(...args) {
+    const logString = stringifyArgs(args);
+    window.parent.postMessage({ type: 'log', message: logString }, '*');
+    originalConsoleLog.apply(console, args);
+  };
+
+  console.error = function(...args) {
+    let errorData;
+    if (args.length > 0 && args[0] instanceof Error) {
+      const err = args[0];
+      // If the first arg is an Error, capture its details.
+      errorData = {
+        type: 'error',
+        source: 'CONSOLE_ERROR',
+        ...getErrorObject(err),
+        rawArgsString: stringifyArgs(args.slice(1)),
+        timestamp: new Date().toISOString(),
+      };
+    } else {
+      // If not an Error object, treat all args as a general error message.
+      errorData = {
+        type: 'error',
+        source: 'CONSOLE_ERROR',
+        message: stringifyArgs(args),
+        name: 'ConsoleLoggedError',
+        stack: null,
+        timestamp: new Date().toISOString(),
+      };
+    }
+    window.parent.postMessage(errorData, '*');
+    originalConsoleError.apply(console, args);
+  };
+
+  // Listen for global unhandled synchronous errors.
+  window.addEventListener('error', function(event) {
+    const errorDetails = event.error ? getErrorObject(event.error) : {
+      message: event.message,
+      name: 'GlobalError',
+      stack: null,
+      filename: event.filename,
+      lineno: event.lineno,
+      colno: event.colno,
+    };
+
+    window.parent.postMessage({
+      type: 'error',
+      source: 'global',
+      ...errorDetails,
+      message: errorDetails.message || event.message,
+      timestamp: new Date().toISOString(),
+    }, '*');
+  });
+
+  // Listen for unhandled promise rejections (asynchronous errors).
+  window.addEventListener('unhandledrejection', function(event) {
+    const errorDetails = getErrorObject(event.reason);
+
+    window.parent.postMessage({
+      type: 'error',
+      source: 'unhandledrejection',
+      ...errorDetails,
+      message: errorDetails.message || 'Unhandled Promise Rejection',
+      timestamp: new Date().toISOString(),
+    }, '*');
+  });
+
+})();</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funções e Responsabilidades - Setor de Relacionamento e Pós-Vendas</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #e0e6ea;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            font-size: 1.6em;
+        }
+        h3 {
+            color: #28a745; /* Cor verde para subtítulos */
+            margin-top: 25px;
+            font-size: 1.2em;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            background: #e6ffe6; /* Fundo verde claro para itens de lista */
+            margin-bottom: 8px;
+            padding: 12px 15px;
+            border-left: 5px solid #28a745; /* Borda verde para itens de lista */
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+        ul li strong {
+            color: #2c3e50;
+        }
+        .section-intro {
+            background-color: #e6ffe6; /* Fundo verde claro para introdução */
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 6px solid #28a745; /* Borda verde para introdução */
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #2c3e50;
+        }
+        .toggle-button {
+            background-color: #28a745; /* Cor verde para o botão */
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-left: 10px;
+            float: right;
+            transition: background-color 0.2s ease;
+        }
+        .toggle-button:hover {
+            background-color: #229a55; /* Tom mais escuro de verde no hover */
+        }
+        .content {
+            display: none;
+            margin-top: 15px;
+            padding-left: 10px;
+            border-left: 3px solid #eee;
+        }
+        .active .content {
+            display: block;
+        }
+        .task-list {
+            list-style: decimal;
+            padding-left: 20px;
+        }
+        .task-list li {
+            background: none;
+            border: none;
+            padding: 5px 0;
+            margin-bottom: 5px;
+            border-left: none;
+        }
+        .highlight-box {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .note {
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        /* Estilos para os botões de ação (salvar/gerar pdf) */
+        .action-buttons {
+            text-align: right; /* Alinha os botões à direita */
+            margin-bottom: 20px;
+        }
+        .action-buttons button {
+            background-color: #28a745; /* Cor verde para os botões de ação */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-left: 10px;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .action-buttons button:hover {
+            background-color: #229a55; /* Tom mais escuro no hover */
+        }
+        /* Estilos para impressão */
+        @media print {
+            .toggle-button, .action-buttons {
+                display: none; /* Oculta botões na impressão */
+            }
+            .content {
+                display: block !important; /* Garante que todo o conteúdo seja visível na impressão */
+            }
+            body {
+                background-color: #fff; /* Fundo branco para impressão */
+                padding: 0;
+                margin: 0;
+            }
+            .container {
+                box-shadow: none; /* Remove sombra na impressão */
+                margin: 0;
+                padding: 0;
+                max-width: 100%;
+            }
+            h2 {
+                border-bottom: 1px solid #ccc; /* Linha mais fina para impressão */
+            }
+            ul li {
+                background: none;
+                border-left: 3px solid #ccc; /* Borda mais discreta */
+            }
+            .section-intro {
+                box-shadow: none;
+                background-color: #fff;
+                border-left: 3px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="action-buttons">
+            <button onclick="saveAsHtml()">Salvar como HTML</button>
+            <button onclick="generatePdf()">Gerar PDF</button>
+        </div>
+
+        <h1>Funções e Responsabilidades</h1>
+        <h2>Setor de Relacionamento e Pós-Vendas</h2>
+
+        <p class="section-intro">
+            O setor de Relacionamento e Pós-Vendas desempenha um papel crucial na sustentação e no crescimento da carteira de clientes. As funções aqui detalhadas visam **manter a satisfação do cliente**, **garantir a saúde financeira da base**, **identificar oportunidades de crescimento** e **atuar como ponte estratégica** entre o cliente e os demais setores da empresa.
+        </p>
+
+        <section id="relacionamento-ativo">
+            <h2>
+                1. Relacionamento Ativo com Clientes
+                <button class="toggle-button" onclick="toggleContent('relacionamento-ativo')">Ver Detalhes</button>
+            </h2>
+            <div class="content">
+                <p>Este é o <strong>trabalho principal do setor</strong>, focado em manter um vínculo contínuo e proativo com o cliente. Através do contato direto, é possível monitorar o uso do sistema, identificar dificuldades e, principalmente, coletar feedbacks que servem como base para acionar os setores internos (implantação, suporte, técnico, financeiro, etc.) e garantir a resolução das demandas.</p>
+
+                <h3>Principais Atividades:</h3>
+                <ul>
+                    <li><strong>Atendimento Direto ao Cliente:</strong> Responder a contatos via WhatsApp, telefone e e-mail com **escuta empática**, buscando compreender o contexto e a real necessidade do cliente, e registrando os pontos mais importantes.</li>
+                    <li><strong>Análise e Interpretação de Feedbacks:</strong> Discernir entre opiniões, reclamações, dificuldades técnicas e sugestões, avaliando o impacto real sobre o cliente e o uso do sistema.</li>
+                    <li><strong>Abertura de Demandas Internas:</strong> Acionar os setores responsáveis, intermediando as conversas e mantendo o cliente informado sobre o andamento das resoluções.</li>
+                    <li><strong>Registro do Histórico:</strong> Documentar todo contato em CRM, sistema ou planilha, detalhando o que foi dito, feito e acordado.</li>
+                    <li><strong>Acompanhamento da Resolução:</strong> Garantir que o cliente receba o retorno esperado, validar se o problema foi resolvido e, se necessário, agendar um novo contato para follow-up.</li>
+                </ul>
+
+                <h3>Postura Esperada:</h3>
+                <ul>
+                    <li>Escuta ativa e sem julgamento.</li>
+                    <li>Empatia e paciência.</li>
+                    <li>Clareza na comunicação.</li>
+                    <li>Agilidade em acionar os responsáveis.</li>
+                    <li>Foco em solução, não apenas em resposta.</li>
+                    <li>Representar o cliente dentro da empresa.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="cobranca-atrasos">
+            <h2>
+                2. Verificações de Cobrança / Atrasos
+                <button class="toggle-button" onclick="toggleContent('cobranca-atrasos')">Ver Detalhes</button>
+            </h2>
+            <div class="content">
+                <p>Embora o setor Financeiro seja o responsável pela emissão de cobranças, o Relacionamento atua de forma **estratégica e preventiva**, fazendo a ponte entre cliente e financeiro para manter o relacionamento saudável e evitar interrupções no serviço.</p>
+
+                <h3>Responsabilidades:</h3>
+                <ul>
+                    <li><strong>Monitoramento de Clientes em Atraso:</strong> Acompanhar relatórios de inadimplência, priorizando clientes com maior tempo de atraso ou histórico de reincidência.</li>
+                    <li><strong>Contato Humanizado:</strong> Entrar em contato para entender o motivo do atraso, alinhar datas de pagamento, renegociação ou reenvio de boletos, sempre com um tom de parceria.</li>
+                    <li><strong>Encaminhamento ao Financeiro:</strong> Acionar o financeiro para envio de boletos atualizados, segunda via de nota ou renegociação, intermediando o contato quando necessário.</li>
+                    <li><strong>Identificação de Risco de Cancelamento:</strong> Detectar sinais de insatisfação por trás da inadimplência (ex: "não vale o que paguei") e, se necessário, acionar outros setores para evitar a perda do cliente.</li>
+                    <li><strong>Registro e Acompanhamento:</strong> Atualizar o status de cada cliente contatado, registrar acordos feitos e datas de retorno, mantendo o histórico atualizado.</li>
+                </ul>
+
+                <h3>Postura Esperada:</h3>
+                <ul>
+                    <li>Comunicação clara e respeitosa, sem pressão.</li>
+                    <li>Atenção ao tom de voz e escrita.</li>
+                    <li>Capacidade de ouvir e identificar oportunidades de recuperação.</li>
+                    <li>Foco em preservar o relacionamento, mesmo diante do não pagamento.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="satisfacao-usabilidade">
+            <h2>
+                3. Satisfação e Usabilidade do Cliente
+                <button class="toggle-button" onclick="toggleContent('satisfacao-usabilidade')">Ver Detalhes</button>
+            </h2>
+            <div class="content">
+                <p>Esta função visa **monitorar a satisfação do cliente** e **avaliar se ele está utilizando o sistema de forma correta e proveitosa**. A partir dessa análise, é possível identificar riscos, dificuldades e oportunidades de melhoria, agindo preventivamente para manter o cliente engajado.</p>
+
+                <h3>Como é Feito:</h3>
+                <ul>
+                    <li>O acompanhamento ocorre durante os contatos diários, especialmente em conversas espontâneas (elogios, reclamações, perguntas repetidas, uso incorreto).</li>
+                    <li>Pode ser feito proativamente, com visitas, ligações ou mensagens para verificar o status do cliente.</li>
+                </ul>
+
+                <h3>Pontos Observados:</h3>
+                <ul>
+                    <li>Utilização de todas as funções contratadas.</li>
+                    <li>Frequência de dúvidas ou mau uso da ferramenta.</li>
+                    <li>Reclamações recorrentes ou "sinais de desânimo".</li>
+                    <li>Demonstrações de satisfação, insatisfação ou apatia.</li>
+                </ul>
+
+                <h3>Ações Realizadas:</h3>
+                <ul>
+                    <li><strong>Registro de Percepções:</strong> Documentar em planilhas, CRM ou ferramenta interna, classificando o status do cliente (promotor, neutro, em risco).</li>
+                    <li><strong>Sugestão de Ações de Melhoria:</strong> Indicar reforço de treinamento, recursos não utilizados ou envio de material de apoio.</li>
+                    <li><strong>Sinalização de Riscos Internos:</strong> Acionar a equipe necessária (implantação, suporte, comercial) caso o cliente esteja insatisfeito, mal utilizando o sistema ou com alto risco de cancelamento.</li>
+                    <li><strong>Acompanhamento da Evolução:</strong> Monitorar mudanças após as ações e reavaliar periodicamente.</li>
+                </ul>
+
+                <h3>Postura Esperada:</h3>
+                <ul>
+                    <li>Ser observador e proativo.</li>
+                    <li>Ter escuta qualificada (perceber o que o cliente não diz diretamente).</li>
+                    <li>Agir com empatia e compromisso com a melhoria contínua.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="venda-pacotes">
+            <h2>
+                4. Venda e Gestão de Pacotes de Horas / Produtos Adicionais
+                <button class="toggle-button" onclick="toggleContent('venda-pacotes')">Ver Detalhes</button>
+            </h2>
+            <div class="content">
+                <p>Mais do que apenas vender, o setor de Relacionamento é responsável por **avaliar a real necessidade do cliente**, iniciar o processo interno, acompanhar as etapas de análise e negociação, e garantir que a entrega final seja feita corretamente e com a expectativa alinhada.</p>
+
+                <h3>Fluxo Padrão da Solicitação:</h3>
+                <ol class="task-list">
+                    <li><strong>Identificação da Demanda:</strong> O cliente entra em contato com uma necessidade (melhoria, treinamento, novo recurso, etc.). Avaliar se já está no contrato ou será uma nova contratação.</li>
+                    <li><strong>Abertura de Solicitação:</strong> Cadastrar a solicitação na ferramenta interna com descrição detalhada e status "Pré-Análise".</li>
+                    <li><strong>Análise pelo Setor de Desenvolvimento:</strong> Aguardar retorno técnico sobre viabilidade, escopo, número de horas ou complexidade. Alterar status para "Aguardando Aprovação Comercial".</li>
+                    <li><strong>Elaboração da Proposta:</strong> Criar orçamento no Sistema Mentor Financeiro com base na análise técnica, especificando tipo de pacote, condições de pagamento, prazo e descrição.</li>
+                    <li><strong>Negociação com o Cliente:</strong> Enviar a proposta, negociar valores, forma de pagamento e cronograma, alinhando expectativas.</li>
+                    <li><strong>Aprovação do Cliente:</strong> Após aceite formal, atualizar status para "To Do" e comunicar os setores responsáveis sobre o início da execução.</li>
+                    <li><strong>Acompanhamento da Execução:</strong> Monitorar o andamento do desenvolvimento/entrega, fazendo a ponte entre cliente e equipe interna, e garantindo que o cliente receba o retorno conforme combinado.</li>
+                    <li><strong>Venda de Horas para Renovação de Certificado Digital PJA1:</strong>
+                        <ul>
+                            <li>O cliente entra em contato solicitando a renovação do certificado digital (PJA1).</li>
+                            <li>Verificamos com a certificadora as datas disponíveis para agendamento.</li>
+                            <li>Enviamos ao cliente a chave Pix (modelo "copiar e colar") para pagamento à vista.</li>
+                            <li>Após a confirmação do pagamento, realizamos:
+                                <ul>
+                                    <li>Criação do Pedido no Sistema Mentor Financeiro com valor, descrição e dados do cliente.</li>
+                                    <li>Envio de e-mail interno ao setor Financeiro com as informações da venda e confirmação do Pix.</li>
+                                </ul>
+                            </li>
+                            <li>Confirmamos o agendamento com o cliente e, em seguida:
+                                <ul>
+                                    <li>Enviamos à certificadora os dados do cliente (CNPJ e contato).</li>
+                                </ul>
+                            </li>
+                            <li>A certificadora assume o atendimento diretamente com o cliente.</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3>Produtos e Serviços Vendidos:</h3>
+                <ul>
+                    <li>Horas de Desenvolvimento, Treinamento e Consultoria.</li>
+                    <li>Homologação de Boletos, Configuração e Homologação de CNPJ.</li>
+                    <li>Usuários e Módulos Adicionais.</li>
+                    <li>Apps KM Vendas e KM Industrial.</li>
+                    <li>Emissão de CT-e e MDF-e.</li>
+                    <li>Integrações com sistemas externos, entre outros sob demanda.</li>
+                </ul>
+
+                <h3>Postura Esperada:</h3>
+                <ul>
+                    <li>Clareza ao explicar a diferença entre suporte, consultoria e desenvolvimento.</li>
+                    <li>Comprometimento com a transparência durante a análise e execução.</li>
+                    <li>Organização para acompanhar múltiplas solicitações simultâneas.</li>
+                    <li>Comunicação clara entre cliente e equipe interna.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="apoio-financeiro">
+            <h2>
+                5. Apoio ao Financeiro
+                <button class="toggle-button" onclick="toggleContent('apoio-financeiro')">Ver Detalhes</button>
+            </h2>
+            <div class="content">
+                <p>O setor de Relacionamento atua de forma **rápida e estratégica** nas questões financeiras que envolvem o cliente, resolvendo pequenas demandas e intermediando as mais complexas para manter o bom relacionamento.</p>
+
+                <h3>Rotina Diária:</h3>
+                <ul>
+                    <li><strong>Verificação de Títulos em Aberto:</strong> Retirar relatório diário com clientes com mensalidades vencidas, identificando atrasos recentes, inadimplência superior a 15 dias ou acordos em acompanhamento.</li>
+                    <li><strong>Bloqueio de Acesso ao Sistema:</strong> Aplicado em casos de inadimplência superior a 15 dias, com comunicação prévia ao cliente. Exceções são avaliadas para clientes em tratativa ativa ou com aprovação da diretoria.</li>
+                </ul>
+
+                <h3>Outras Atividades Comuns:</h3>
+                <ul>
+                    <li><strong>Reenvio de Boletos e Notas Fiscais:</strong> Enviar rapidamente via WhatsApp ou e-mail, solicitando ao financeiro quando necessário.</li>
+                    <li><strong>Atualização de Dados Cadastrais:</strong> Corrigir e validar e-mails de cobrança, razão social, CNPJ, etc.</li>
+                    <li><strong>Intermediação de Renegociações:</strong> Entender a situação do cliente e solicitar/acompanhar a resposta do financeiro.</li>
+                    <li><strong>Resolução de Pendências Financeiras:</strong> Atuar com empatia e foco em solução para erros de cobrança, pagamentos em duplicidade ou dúvidas sobre valores.</li>
+                </ul>
+
+                <h3>Postura Esperada:</h3>
+                <ul>
+                    <li>Agilidade na resolução de demandas simples.</li>
+                    <li>Clareza ao lidar com assuntos financeiros.</li>
+                    <li>Rigor com inadimplência, mas com empatia e bom senso.</li>
+                    <li>Capacidade de avaliar quando aplicar bloqueio e quando segurar pela tratativa ativa.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="gestao-documentacao">
+            <h2>
+                6. Gestão de Documentação (Aditivos e Ajustes Contratuais)
+                <button class="toggle-button" onclick="toggleContent('gestao-documentacao')">Ver Detalhes</button>
+            </h2>
+            <div class="content">
+                <p>Responsável por **identificar, registrar e encaminhar alterações contratuais**, como inclusão ou redução de usuários, módulos ou outros serviços. O setor atualiza as informações no sistema interno e comunica os setores envolvidos, especialmente o Financeiro.</p>
+
+                <h3>Atividades Realizadas:</h3>
+                <ul>
+                    <li><strong>Atualização de Dados no Sistema Interno (KM Prime):</strong> Alterar quantidade de usuários contratados, ativar/desativar módulos e serviços, incluir ou remover informações relevantes conforme o novo acordo.</li>
+                    <li><strong>Comunicação com o Financeiro:</strong> Enviar e-mail com as alterações realizadas, informando se é um aditivo, redução de escopo ou novo pacote contratado, e detalhando o que deve ser ajustado na cobrança.</li>
+                    <li><strong>Pedido no Sistema Mentor Financeiro:</strong> Lançar o novo produto ou serviço (horas, módulos, etc.), especificando prazos, condições comerciais e valores, garantindo o vínculo correto à solicitação.</li>
+                    <li><strong>Acompanhamento do Processo:</strong> Confirmar que o financeiro entendeu e processou corretamente a alteração, garantindo que o cliente receba o boleto atualizado ou nova condição contratada.</li>
+                </ul>
+
+                <h3>Postura Esperada:</h3>
+                <ul>
+                    <li>Atenção ao digitar e atualizar os dados no sistema.</li>
+                    <li>Clareza e objetividade na comunicação com o Financeiro.</li>
+                    <li>Cuidado com prazos e impacto financeiro das alterações.</li>
+                    <li>Registro do histórico de cada mudança (quem pediu, quando, o que mudou).</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="apoio-estrutura-fisica">
+            <h2>
+                7. Apoio à Estrutura Física do Cliente (Servidor e Conectividade)
+                <button class="toggle-button" onclick="toggleContent('apoio-estrutura-fisica')">Ver Detalhes</button>
+            </h2>
+            <div class="content">
+                <p>Atuar como **ponte entre o cliente e os setores técnicos da empresa** em assuntos relacionados à estrutura física e tecnológica, especialmente para clientes com servidor local. O setor de Relacionamento não realiza configurações, mas orienta, organiza e acompanha as ações necessárias junto ao cliente e equipe técnica.</p>
+
+                <h3>Atividades e Situações Comuns:</h3>
+                <ul>
+                    <li><strong>Clientes Recém-Fechados (IFC):</strong> Após receber o IFC, o setor agenda com o cliente a instalação inicial do banco de dados com nossa equipe técnica. Confirma se o cliente possui:
+                        <ul>
+                            <li>Equipamento adequado (servidor dedicado).</li>
+                            <li>Sistema operacional compatível (preferencialmente Windows Server atualizado).</li>
+                            <li>Rede cabeada (evitar Wi-Fi).</li>
+                            <li>Acesso administrativo para execução da instalação.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Reuniões de Kickoff:</strong> Logo após a equipe técnica concluir a instalação do Banco de Dados do sistema, agendamos com a implantação e o cliente um horário disponível para a reunião de Kickoff.</li>
+                    <li><strong>Agendamento com a Equipe Técnica:</strong> Contatar o cliente para alinhar data e horário, agendando o atendimento com o time técnico e garantindo que ambas as partes estejam preparadas.</li>
+                    <li><strong>Apoio em Reinstalações do Banco de Dados:</strong> Em casos de problemas no servidor, orientar o cliente e intermediar a reinstalação, alinhando com o suporte/implantação para um processo rápido e documentado.</li>
+                    <li><strong>Problemas de Conectividade / Estrutura:</strong> Quando falhas de uso (lentidão, travamentos) são diagnosticadas na estrutura do cliente e há resistência, o setor de Relacionamento reforça o diagnóstico para o cliente, evitando conflito com o suporte.</li>
+                </ul>
+
+                <h3>Responsabilidades:</h3>
+                <ul>
+                    <li>Garantir que o cliente receba as orientações técnicas corretas.</li>
+                    <li>Organizar o agendamento com a equipe interna.</li>
+                    <li>Evitar ruídos técnicos com o cliente.</li>
+                    <li>Auxiliar o cliente a compreender e adequar sua estrutura quando necessário.</li>
+                    <li>Registrar interações e problemas recorrentes no histórico do cliente.</li>
+                </ul>
+
+                <h3>Postura Esperada:</h3>
+                <ul>
+                    <li>Boa comunicação entre áreas.</li>
+                    <li>Firmeza e clareza ao explicar questões técnicas.</li>
+                    <li>Empatia com clientes que têm estrutura limitada.</li>
+                    <li>Organização e registro de todos os agendamentos e orientações.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="visitas-videoconferencias">
+            <h2>
+                8. Visitas Presenciais e Videoconferências com Clientes
+                <button class="toggle-button" onclick="toggleContent('visitas-videoconferencias')">Ver Detalhes</button>
+            </h2>
+            <div class="content">
+                <p>Manter o **relacionamento próximo com os clientes** através de visitas presenciais (quando viável) e reuniões por videoconferência, com foco em acompanhamento, identificação de oportunidades, resolução de insatisfações e orientações estratégicas.</p>
+
+                <h3>Modalidades de Atendimento:</h3>
+                <ul>
+                    <li><strong>Visitas Presenciais:</strong> Realizadas com clientes da região ou em deslocamentos autorizações. Servem para reforçar vínculo, diagnosticar dificuldades/oportunidades, apresentar novos recursos e acompanhar o pós-venda.</li>
+                    <li><strong>Videoconferências:</strong> Usadas para clientes de fora da região ou quando a presença física não é necessária. Agendadas previamente para avaliação de uso, retornos de solicitações, reuniões estratégicas ou diagnóstico de problemas.</li>
+                </ul>
+
+                <h3>Agendamento e Condução:</h3>
+                <ul>
+                    <li>Combinar previamente data e horário com o cliente.</li>
+                    <li>Registrar o agendamento em agenda interna e enviar link (se for videoconferência).</li>
+                    <li>Ter pauta definida e clareza sobre o objetivo da reunião.</li>
+                    <li>Registrar o resultado da visita ou reunião e encaminhar desdobramentos.</li>
+                </ul>
+
+                <h3>Meta do Setor:</h3>
+                <ul>
+                    <li><strong>Meta Trimestral:</strong> Garantir que 100% da base ativa tenha ao menos um contato estratégico (visita ou vídeo) a cada 3 meses, priorizando clientes com maior volume, histórico de solicitações ou em risco de cancelamento.</li>
+                </ul>
+
+                <h3>Postura Esperada:</h3>
+                <ul>
+                    <li>Organização e pontualidade.</li>
+                    <li>Clareza e objetividade nas abordagens.</li>
+                    <li>Capacidade de ouvir e propor soluções.</li>
+                    <li>Foco em gerar valor ao cliente em cada contato.</li>
+                </ul>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        function toggleContent(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.classList.toggle('active');
+            const button = section.querySelector('.toggle-button');
+            if (section.classList.contains('active')) {
+                button.textContent = 'Ocultar Detalhes';
+            } else {
+                button.textContent = 'Ver Detalhes';
+            }
+        }
+
+        // Função para salvar o documento como HTML
+        function saveAsHtml() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Funcoes_Responsabilidades_Relacionamento.html';
+            document.body.appendChild(a);
+            a.click();
+
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Função para gerar PDF (usando a função de impressão do navegador)
+        function generatePdf() {
+            window.print();
+        }
+
+        // Initialize all sections as collapsed
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                section.classList.remove('active'); // Ensure they start collapsed
+                const button = section.querySelector('.toggle-button');
+                if (button) {
+                    button.textContent = 'Ver Detalhes';
+                }
+            });
+        });
+    </script>
+
+
+</body></html>

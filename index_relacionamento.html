@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage de Ferramentas</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header img {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #1c1e21;
+        }
+        .botoes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .botao {
+            display: block;
+            background-color: #00a958;
+            color: white;
+            padding: 25px 20px;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .botao:hover {
+            background-color: #a9cf44;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* == CSS PARA O BOTÃO SECRETO == */
+        #botao-secreto {
+            position: fixed; /* Mantém o botão fixo na tela, mesmo com rolagem */
+            bottom: 0;       /* Alinha na parte inferior da tela */
+            right: 0;        /* Alinha na parte direita da tela */
+            width: 50px;     /* Define uma largura para a área clicável */
+            height: 50px;    /* Define uma altura para a área clicável */
+            cursor: pointer; /* Mostra a "mãozinha" ao passar o mouse para indicar que é clicável */
+            z-index: 999;    /* Garante que o botão fique acima de outros elementos da página */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header class="header">
+            <img src="https://raw.githubusercontent.com/LuizKM-imp/kmsistemas/refs/heads/main/km.png" alt="Logo da KM Sistemas">
+            <h1>Relacionamento</h1>
+        </header>
+
+        <main class="botoes-grid">
+
+            <!-- =================================================================== -->
+            <!-- == PARA ADICIONAR/EDITAR, MUDE O href E O TEXTO ABAIXO == -->
+            <!-- =================================================================== -->
+            
+            <!-- Botão 1: Exemplo -->
+            <!-- O link "href" deve ser exatamente o nome do seu outro arquivo HTML -->
+            <a href="fluxo_fechamento.html" class="botao">
+                Fluxo cliente
+            </a>
+
+            <!-- Botão 2: Exemplo -->
+            <a href="funcoes_relacionamento.html" class="botao">
+                Procedimentos Relacionamento
+            </a>
+
+        
+
+            <!-- PARA ADICIONAR UM NOVO BOTÃO, BASTA COPIAR E COLAR UMA DAS LINHAS <A> ACIMA E ALTERAR O ARQUIVO E O TEXTO. -->
+            
+
+        </main>
+
+    </div>
+
+    <!-- == BOTÃO SECRETO INVISÍVEL == -->
+    <!-- Altere o href para o arquivo que você quer abrir -->
+    <a href="seu-arquivo-secreto.html" id="botao-secreto"></a>
+
+</body>
+</html>
