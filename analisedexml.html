@@ -130,6 +130,26 @@
             color: white;
         }
 
+        /* --- Estilos de Ordenação --- */
+        th {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+        th:hover {
+            background-color: #038a4a;
+        }
+        th::after {
+            content: ' \21F5'; /* Seta dupla */
+            opacity: 0.4;
+            font-size: 0.8em;
+            margin-left: 5px;
+            float: right;
+        }
+        th.asc::after { content: ' \2191'; opacity: 1; } /* Seta cima */
+        th.desc::after { content: ' \2193'; opacity: 1; } /* Seta baixo */
+
+
         /* --- Estilos específicos da Análise em Lote --- */
         #folderInput { display: none; }
 
@@ -170,6 +190,10 @@
         
         .summary-item .value { font-size: 2em; font-weight: bold; display: block; }
         .summary-item .label { font-size: 0.9em; color: #7f8c8d; }
+        
+        /* Ajuste de fonte para as datas */
+        #summary-min-date .value, #summary-max-date .value { font-size: 1.2em; line-height: 1.6em; padding-top: 5px; }
+
         #summary-files .value { color: var(--info-color); }
         #summary-valid .value { color: var(--success-color); }
         #summary-ops .value { color: var(--primary-color); }
@@ -250,6 +274,8 @@
                 <div class="summary-item" id="summary-valid"><span class="value">0</span><span class="label">NF-es Válidas</span></div>
                 <div class="summary-item" id="summary-ops"><span class="value">0</span><span class="label">Operações Únicas</span></div>
                 <div class="summary-item" id="summary-errors"><span class="value">0</span><span class="label">Arquivos com Erro</span></div>
+                <div class="summary-item" id="summary-min-date"><span class="value">-</span><span class="label">Primeira Emissão</span></div>
+                <div class="summary-item" id="summary-max-date"><span class="value">-</span><span class="label">Última Emissão</span></div>
             </section>
             <main id="results-section" class="results-section" style="display: none;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -257,8 +283,19 @@
                     <button id="export-csv">Exportar para CSV</button>
                 </div>
                 <div style="overflow-x: auto;">
-                    <table>
-                        <thead><tr><th>Natureza da Operação</th><th>CFOP</th><th>CST/CSOSN ICMS</th><th>CST PIS/COFINS</th><th>CST IPI</th><th>Qtd</th><th>%</th></tr></thead>
+                    <table id="results-table">
+                        <thead>
+                            <tr>
+                                <th data-col="0">Natureza da Operação</th>
+                                <th data-col="1">CFOP</th>
+                                <th data-col="2">CST/CSOSN ICMS</th>
+                                <th data-col="3">CST PIS/COFINS</th>
+                                <th data-col="4">CST IPI</th>
+                                <th data-col="5">Qtd</th>
+                                <th data-col="6">%</th>
+                                <th data-col="7">Última Utilização</th>
+                            </tr>
+                        </thead>
                         <tbody id="results-table-body"></tbody>
                     </table>
                      <p id="no-results" style="display: none; text-align: center; padding: 40px; font-style: italic; color: #7f8c8d;">Nenhuma operação encontrada nos arquivos válidos.</p>
@@ -373,9 +410,24 @@
         
         let uniqueOperations = new Map();
         let totalItemsProcessed = 0;
+        
+        // Variáveis de data e ordenação
+        let minDate = null;
+        let maxDate = null;
+        let currentTableData = [];
+        let currentSortCol = -1;
+        let isAscending = true;
 
         folderInput.addEventListener('change', handleFolderSelect);
         exportCsvButton.addEventListener('click', exportToCsv);
+
+        // Adiciona listeners para os cabeçalhos da tabela
+        document.querySelectorAll('#results-table th').forEach(th => {
+            th.addEventListener('click', () => {
+                const colIndex = parseInt(th.getAttribute('data-col'));
+                sortTable(colIndex);
+            });
+        });
 
         function resetUI_Lote() {
             progressSection.style.display = 'block';
@@ -387,6 +439,14 @@
             resultsTableBody.innerHTML = '';
             uniqueOperations.clear();
             totalItemsProcessed = 0;
+            minDate = null;
+            maxDate = null;
+            currentTableData = [];
+            
+            // Reseta ícones de ordenação
+            document.querySelectorAll('#results-table th').forEach(th => {
+                th.classList.remove('asc', 'desc');
+            });
         }
 
         async function handleFolderSelect(event) {
@@ -417,7 +477,24 @@
                     const nfeNode = xmlDoc.querySelector('infNFe');
                     if (!nfeNode) throw new Error("Não é uma NF-e (tag <infNFe> não encontrada).");
                     
-                    extractOperations(nfeNode);
+                    // Extração de Data do Arquivo
+                    let dhEmi = queryTagValue('ide > dhEmi', nfeNode, null);
+                    if (!dhEmi) {
+                         dhEmi = queryTagValue('ide > dEmi', nfeNode, null);
+                    }
+                    
+                    let fileDate = null;
+                    if (dhEmi) {
+                        const dateObj = new Date(dhEmi);
+                        if (!isNaN(dateObj)) {
+                            fileDate = dateObj;
+                            if (!minDate || dateObj < minDate) minDate = dateObj;
+                            if (!maxDate || dateObj > maxDate) maxDate = dateObj;
+                        }
+                    }
+
+                    // Passamos a data do arquivo para a extração
+                    extractOperations(nfeNode, fileDate);
                     validNFeCount++;
                 } catch (error) {
                     console.error(`Erro ao processar ${file.name}:`, error.message);
@@ -434,7 +511,7 @@
             displayResults_Lote(xmlFiles.length, validNFeCount, errorCount);
         }
 
-        function extractOperations(nfeNode) {
+        function extractOperations(nfeNode, fileDate) {
             const natOp = queryTagValue('ide > natOp', nfeNode);
             const products = nfeNode.querySelectorAll('det');
 
@@ -461,11 +538,23 @@
                 }
                 
                 const operationKey = `${natOp}|${cfop}|${cstIcms}|${cstPisCofins}|${cstIpi}`;
+                
                 if (!uniqueOperations.has(operationKey)) {
-                    uniqueOperations.set(operationKey, { natOp, cfop, cstIcms, cstPisCofins, cstIpi, count: 1 });
+                    // Se nova operação, adiciona com a data atual deste arquivo
+                    uniqueOperations.set(operationKey, { 
+                        natOp, cfop, cstIcms, cstPisCofins, cstIpi, 
+                        count: 1, 
+                        lastUsage: fileDate 
+                    });
                 } else {
                     const op = uniqueOperations.get(operationKey);
                     op.count++;
+                    // Se a operação já existe, verificamos se a data deste arquivo é mais recente
+                    if (fileDate) {
+                        if (!op.lastUsage || fileDate > op.lastUsage) {
+                            op.lastUsage = fileDate;
+                        }
+                    }
                 }
             }
         }
@@ -479,6 +568,9 @@
             document.querySelector('#summary-ops .value').textContent = uniqueOperations.size;
             document.querySelector('#summary-errors .value').textContent = errorCount;
             
+            document.querySelector('#summary-min-date .value').textContent = minDate ? minDate.toLocaleDateString('pt-BR') : '-';
+            document.querySelector('#summary-max-date .value').textContent = maxDate ? maxDate.toLocaleDateString('pt-BR') : '-';
+            
             resultsSection.style.display = 'block';
             if (uniqueOperations.size === 0) {
                  document.getElementById('no-results').style.display = 'block';
@@ -489,25 +581,86 @@
             document.getElementById('no-results').style.display = 'none';
             exportCsvButton.style.display = 'inline-block';
 
-            const sortedOperations = Array.from(uniqueOperations.values()).sort((a,b) => {
-                return (a.natOp + a.cfop).localeCompare(b.natOp + b.cfop);
+            currentTableData = Array.from(uniqueOperations.values()).map(op => {
+                const percentage = totalItemsProcessed > 0 ? ((op.count / totalItemsProcessed) * 100) : 0;
+                return {
+                    natOp: op.natOp,
+                    cfop: op.cfop,
+                    cstIcms: op.cstIcms,
+                    cstPisCofins: op.cstPisCofins,
+                    cstIpi: op.cstIpi,
+                    count: op.count,
+                    percentage: percentage,
+                    percentageStr: percentage.toFixed(2) + '%',
+                    lastUsage: op.lastUsage, // Objeto Date para ordenação
+                    lastUsageStr: op.lastUsage ? op.lastUsage.toLocaleDateString('pt-BR') : '-' // String para exibição
+                };
             });
+
+            // Ordenação padrão (alfabética por NatOp + CFOP)
+            currentTableData.sort((a,b) => (a.natOp + a.cfop).localeCompare(b.natOp + b.cfop));
             
-            sortedOperations.forEach(op => {
-                const percentage = totalItemsProcessed > 0 ? ((op.count / totalItemsProcessed) * 100).toFixed(2) + '%' : '0%';
+            renderTable(currentTableData);
+        }
+
+        function renderTable(data) {
+            resultsTableBody.innerHTML = '';
+            data.forEach(op => {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td>${op.natOp}</td><td>${op.cfop}</td><td>${op.cstIcms}</td><td>${op.cstPisCofins}</td><td>${op.cstIpi}</td><td>${op.count}</td><td>${percentage}</td>`;
+                row.innerHTML = `<td>${op.natOp}</td><td>${op.cfop}</td><td>${op.cstIcms}</td><td>${op.cstPisCofins}</td><td>${op.cstIpi}</td><td>${op.count}</td><td>${op.percentageStr}</td><td>${op.lastUsageStr}</td>`;
                 resultsTableBody.appendChild(row);
             });
+        }
+
+        function sortTable(colIndex) {
+            if (currentSortCol === colIndex) {
+                isAscending = !isAscending;
+            } else {
+                currentSortCol = colIndex;
+                isAscending = true;
+            }
+
+            document.querySelectorAll('#results-table th').forEach((th, index) => {
+                th.classList.remove('asc', 'desc');
+                if (index === colIndex) {
+                    th.classList.add(isAscending ? 'asc' : 'desc');
+                }
+            });
+
+            currentTableData.sort((a, b) => {
+                let valA, valB;
+
+                switch(colIndex) {
+                    case 0: valA = a.natOp; valB = b.natOp; break;
+                    case 1: valA = a.cfop; valB = b.cfop; break;
+                    case 2: valA = a.cstIcms; valB = b.cstIcms; break;
+                    case 3: valA = a.cstPisCofins; valB = b.cstPisCofins; break;
+                    case 4: valA = a.cstIpi; valB = b.cstIpi; break;
+                    case 5: valA = a.count; valB = b.count; break;
+                    case 6: valA = a.percentage; valB = b.percentage; break;
+                    case 7: 
+                        // Ordenação especial para data (trata null como menor valor)
+                        valA = a.lastUsage ? a.lastUsage.getTime() : 0; 
+                        valB = b.lastUsage ? b.lastUsage.getTime() : 0; 
+                        break;
+                    default: return 0;
+                }
+
+                if (valA < valB) return isAscending ? -1 : 1;
+                if (valA > valB) return isAscending ? 1 : -1;
+                return 0;
+            });
+
+            renderTable(currentTableData);
         }
         
         function exportToCsv() {
             if (uniqueOperations.size === 0) return;
-            const headers = ["Natureza da Operação", "CFOP", "CST/CSOSN ICMS", "CST PIS/COFINS", "CST IPI", "Qtd", "% Total"];
+            const headers = ["Natureza da Operação", "CFOP", "CST/CSOSN ICMS", "CST PIS/COFINS", "CST IPI", "Qtd", "% Total", "Última Utilização"];
             const csvRows = [headers.join(',')];
-            for (const op of uniqueOperations.values()) {
-                const percentage = totalItemsProcessed > 0 ? ((op.count / totalItemsProcessed) * 100).toFixed(2) + '%' : '0%';
-                const values = [op.natOp, op.cfop, op.cstIcms, op.cstPisCofins, op.cstIpi, op.count, percentage].map(val => {
+            
+            for (const op of currentTableData) {
+                const values = [op.natOp, op.cfop, op.cstIcms, op.cstPisCofins, op.cstIpi, op.count, op.percentageStr, op.lastUsageStr].map(val => {
                     const strVal = String(val);
                     return (strVal.includes(',') || strVal.includes('"')) ? `"${strVal.replace(/"/g, '""')}"` : strVal;
                 });
