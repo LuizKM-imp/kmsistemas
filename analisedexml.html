@@ -258,7 +258,7 @@
                 </div>
                 <div style="overflow-x: auto;">
                     <table>
-                        <thead><tr><th>Natureza da Operação</th><th>CFOP</th><th>CST/CSOSN ICMS</th><th>CST PIS/COFINS</th><th>CST IPI</th></tr></thead>
+                        <thead><tr><th>Natureza da Operação</th><th>CFOP</th><th>CST/CSOSN ICMS</th><th>CST PIS/COFINS</th><th>CST IPI</th><th>Qtd</th><th>%</th></tr></thead>
                         <tbody id="results-table-body"></tbody>
                     </table>
                      <p id="no-results" style="display: none; text-align: center; padding: 40px; font-style: italic; color: #7f8c8d;">Nenhuma operação encontrada nos arquivos válidos.</p>
@@ -372,6 +372,7 @@
         const exportCsvButton = document.getElementById('export-csv');
         
         let uniqueOperations = new Map();
+        let totalItemsProcessed = 0;
 
         folderInput.addEventListener('change', handleFolderSelect);
         exportCsvButton.addEventListener('click', exportToCsv);
@@ -385,6 +386,7 @@
             resultsSection.style.display = 'none';
             resultsTableBody.innerHTML = '';
             uniqueOperations.clear();
+            totalItemsProcessed = 0;
         }
 
         async function handleFolderSelect(event) {
@@ -437,6 +439,7 @@
             const products = nfeNode.querySelectorAll('det');
 
             for (const product of products) {
+                totalItemsProcessed++;
                 const cfop = queryTagValue('prod > CFOP', product);
                 const impostoNode = product.querySelector('imposto');
                 
@@ -459,7 +462,10 @@
                 
                 const operationKey = `${natOp}|${cfop}|${cstIcms}|${cstPisCofins}|${cstIpi}`;
                 if (!uniqueOperations.has(operationKey)) {
-                    uniqueOperations.set(operationKey, { natOp, cfop, cstIcms, cstPisCofins, cstIpi });
+                    uniqueOperations.set(operationKey, { natOp, cfop, cstIcms, cstPisCofins, cstIpi, count: 1 });
+                } else {
+                    const op = uniqueOperations.get(operationKey);
+                    op.count++;
                 }
             }
         }
@@ -488,18 +494,20 @@
             });
             
             sortedOperations.forEach(op => {
+                const percentage = totalItemsProcessed > 0 ? ((op.count / totalItemsProcessed) * 100).toFixed(2) + '%' : '0%';
                 const row = document.createElement('tr');
-                row.innerHTML = `<td>${op.natOp}</td><td>${op.cfop}</td><td>${op.cstIcms}</td><td>${op.cstPisCofins}</td><td>${op.cstIpi}</td>`;
+                row.innerHTML = `<td>${op.natOp}</td><td>${op.cfop}</td><td>${op.cstIcms}</td><td>${op.cstPisCofins}</td><td>${op.cstIpi}</td><td>${op.count}</td><td>${percentage}</td>`;
                 resultsTableBody.appendChild(row);
             });
         }
         
         function exportToCsv() {
             if (uniqueOperations.size === 0) return;
-            const headers = ["Natureza da Operação", "CFOP", "CST/CSOSN ICMS", "CST PIS/COFINS", "CST IPI"];
+            const headers = ["Natureza da Operação", "CFOP", "CST/CSOSN ICMS", "CST PIS/COFINS", "CST IPI", "Qtd", "% Total"];
             const csvRows = [headers.join(',')];
             for (const op of uniqueOperations.values()) {
-                const values = [op.natOp, op.cfop, op.cstIcms, op.cstPisCofins, op.cstIpi].map(val => {
+                const percentage = totalItemsProcessed > 0 ? ((op.count / totalItemsProcessed) * 100).toFixed(2) + '%' : '0%';
+                const values = [op.natOp, op.cfop, op.cstIcms, op.cstPisCofins, op.cstIpi, op.count, percentage].map(val => {
                     const strVal = String(val);
                     return (strVal.includes(',') || strVal.includes('"')) ? `"${strVal.replace(/"/g, '""')}"` : strVal;
                 });
