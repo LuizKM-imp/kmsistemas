@@ -1,141 +1,726 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Levantamento de Implantação</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #f5f5f5;
-    }
-    h1 {
-      text-align: center;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      margin-top: 30px;
-      padding: 12px 20px;
-      font-size: 16px;
-      background: #2d6cdf;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #1f4fb8;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K&M Sistemas - Levantamento de Regras e Processos</title>
+    <style>
+        :root {
+            --verde-escuro: #04ab5c;
+            --verde-claro: #a9cf44;
+            --fundo-creme: #fdfaf5;
+            --texto-padrao: #333;
+            --borda-suave: #ddd;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--fundo-creme);
+            color: var(--texto-padrao);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--borda-suave);
+            padding-bottom: 20px;
+        }
+
+        .header img {
+            max-width: 250px;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            color: var(--verde-escuro);
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .header p {
+            margin: 5px 0 0;
+            color: #777;
+        }
+
+        fieldset {
+            border: 1px solid var(--borda-suave);
+            border-radius: 8px;
+            margin-bottom: 25px;
+            padding: 20px;
+        }
+
+        legend {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--verde-escuro);
+            padding: 0 10px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--borda-suave);
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .radio-group label {
+            display: inline-block;
+            margin-right: 15px;
+            font-weight: normal;
+        }
+
+        .radio-group input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--verde-escuro);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #038a4a;
+        }
+        
+        .sub-question {
+            margin-left: 20px;
+            padding-left: 15px;
+            border-left: 2px solid var(--verde-claro);
+        }
+
+    </style>
+    <!-- Incluindo as bibliotecas para gerar o DOCX e salvar o arquivo -->
+    <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
 
-<h1>Levantamento de Implantação</h1>
+    <div class="container">
+        <div class="header">
+            <img src="https://raw.githubusercontent.com/LuizKM-imp/kmsistemas/refs/heads/main/km.png" alt="Logo K&M Sistemas">
+            <h1>Documento de Levantamento de Regras e Processos</h1>
+            <p>Versão: v1.0</p>
+        </div>
 
-<form id="form">
-  <label>Quantidade de empresas e CNPJ:</label>
-  <textarea id="empresas"></textarea>
+        <form id="levantamentoForm">
+            <!-- Participantes -->
+            <fieldset>
+                <legend>Participantes</legend>
+                <div class="form-group">
+                    <label>Empresa:</label>
+                    <input type="text" value="K&M Sistemas" readonly>
+                </div>
+                 <div class="form-group">
+                    <label>Abner Lopes – Coord. Implantação:</label>
+                    <input type="email" value="implantacao@kmsistemas.com.br" readonly>
+                </div>
+                 <div class="form-group">
+                    <label>Dion – Relacionamento:</label>
+                    <input type="email" value="relacionamento@kmsistemas.com.br" readonly>
+                </div>
+            </fieldset>
 
-  <label>Usuários (nome e função):</label>
-  <textarea id="usuarios"></textarea>
+            <!-- Dados da Empresa (Cliente) -->
+            <fieldset>
+                <legend>Dados da Empresa (Cliente)</legend>
+                <div class="form-group">
+                    <label for="razaoSocial">Razão Social:</label>
+                    <input type="text" id="razaoSocial" name="razaoSocial">
+                </div>
+                <div class="form-group">
+                    <label for="cnpj">CNPJ:</label>
+                    <input type="text" id="cnpj" name="cnpj">
+                </div>
+                <div class="form-group">
+                    <label for="inscricaoEstadual">Inscrição Estadual:</label>
+                    <input type="text" id="inscricaoEstadual" name="inscricaoEstadual">
+                </div>
+                <div class="form-group">
+                    <label for="regimeTributario">Regime Tributário:</label>
+                    <input type="text" id="regimeTributario" name="regimeTributario">
+                </div>
+                <div class="form-group">
+                    <label for="beneficioFiscal">Benefício Fiscal:</label>
+                    <input type="text" id="beneficioFiscal" name="beneficioFiscal">
+                </div>
+                <div class="form-group">
+                    <label for="ramo">Ramo:</label>
+                    <input type="text" id="ramo" name="ramo">
+                </div>
+                <div class="form-group">
+                    <label for="especialidade">Especialidade:</label>
+                    <input type="text" id="especialidade" name="especialidade">
+                </div>
+                <div class="form-group">
+                    <label for="patrocinadorNome">Nome do Patrocinador(a):</label>
+                    <input type="text" id="patrocinadorNome" name="patrocinadorNome">
+                </div>
+                <div class="form-group">
+                    <label for="patrocinadorContato">Contato do Patrocinador(a):</label>
+                    <input type="tel" id="patrocinadorContato" name="patrocinadorContato" placeholder="(00) 00000-0000">
+                </div>
+            </fieldset>
 
-  <label>Dores do cliente:</label>
-  <textarea id="dores"></textarea>
+            <!-- Dados do Projeto -->
+            <fieldset>
+                <legend>Dados do Projeto</legend>
+                 <div class="form-group">
+                    <label for="horasImplantacao">Horas de Implantação:</label>
+                    <input type="number" id="horasImplantacao" name="horasImplantacao">
+                </div>
+                 <div class="form-group">
+                    <label for="administradorProjeto">Administrador do Projeto:</label>
+                    <input type="text" id="administradorProjeto" name="administradorProjeto">
+                </div>
+                <div class="form-group">
+                    <label for="quantidadeUsuarios">Quantidade de Usuários:</label>
+                    <input type="number" id="quantidadeUsuarios" name="quantidadeUsuarios">
+                </div>
+                <div class="form-group">
+                    <label>Módulos Contratados:</label>
+                    <input type="text" value="Comercial, Estoque, Industrial, Faturamento, Pagar, Receber, Tesouraria" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="quantidadeEmpresas">Quantidade de Empresas:</label>
+                    <input type="number" id="quantidadeEmpresas" name="quantidadeEmpresas">
+                </div>
+                <div class="form-group">
+                    <label for="razaoSocialCnpjEmpresas">Razão Social e CNPJ de cada uma:</label>
+                    <textarea id="razaoSocialCnpjEmpresas" name="razaoSocialCnpjEmpresas"></textarea>
+                </div>
+                 <div class="form-group radio-group">
+                    <label>Possui servidor?</label>
+                    <label><input type="radio" name="possuiServidor" value="Sim"> Sim</label>
+                    <label><input type="radio" name="possuiServidor" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>Terá acesso remoto?</label>
+                    <label><input type="radio" name="acessoRemoto" value="Sim"> Sim</label>
+                    <label><input type="radio" name="acessoRemoto" value="Não"> Não</label>
+                </div>
+                 <div class="form-group">
+                    <label for="acessosApp">Quantidade de acessos ao APP KM Industrial:</label>
+                    <input type="number" id="acessosApp" name="acessosApp">
+                </div>
+            </fieldset>
 
-  <label>Dias disponíveis para agenda:</label>
-  <input type="text" id="agenda">
+            <!-- Usuários -->
+            <fieldset>
+                <legend>Usuários</legend>
+                <div class="form-group">
+                    <label for="nomesUsuarios">Nomes dos usuários:</label>
+                    <textarea id="nomesUsuarios" name="nomesUsuarios"></textarea>
+                </div>
+            </fieldset>
+            
+            <!-- Dores do Cliente -->
+            <fieldset>
+                <legend>Dores do Cliente</legend>
+                <div class="form-group">
+                    <label for="doresCliente">Descrever os principais problemas enfrentados atualmente e os motivos que levaram à contratação do sistema.</label>
+                    <textarea id="doresCliente" name="doresCliente"></textarea>
+                </div>
+            </fieldset>
 
-  <label>Paga comissão sobre vendas?</label>
-  <input type="text" id="comissao">
+            <!-- Agenda -->
+            <fieldset>
+                <legend>Agenda</legend>
+                <div class="form-group">
+                    <label for="agendaTreinamentos">Dias e horários ideais para treinamentos:</label>
+                    <textarea id="agendaTreinamentos" name="agendaTreinamentos"></textarea>
+                </div>
+            </fieldset>
 
-  <label>Tipo de comissão:</label>
-  <input type="text" id="tipoComissao">
+            <!-- Módulos -->
+            <fieldset>
+                <legend>Módulos</legend>
 
-  <label>Utiliza PDV?</label>
-  <input type="text" id="pdv">
+                <!-- 1. Comercial -->
+                <h3>1. Comercial</h3>
+                <div class="form-group radio-group">
+                    <label>1.1 Paga comissão sobre vendas?</label>
+                    <label><input type="radio" name="pagaComissao" value="Sim"> Sim</label>
+                    <label><input type="radio" name="pagaComissao" value="Não"> Não</label>
+                </div>
+                <div class="form-group">
+                    <label for="tipoComissao">1.2 Tipo de comissão:</label>
+                    <input type="text" id="tipoComissao" name="tipoComissao" placeholder="Faturamento ou Recebimento?">
+                </div>
+                <div class="form-group radio-group">
+                    <label>1.3 Utiliza PDV (Vendas Balcão)?</label>
+                    <label><input type="radio" name="utilizaPdv" value="Sim"> Sim</label>
+                    <label><input type="radio" name="utilizaPdv" value="Não"> Não</label>
+                    <div class="sub-question">
+                         <label>Se sim, emite NFC-e?</label>
+                         <label><input type="radio" name="emiteNfcePdv" value="Sim"> Sim</label>
+                         <label><input type="radio" name="emiteNfcePdv" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="form-group radio-group">
+                    <label>1.4 Realiza fechamento de caixa diário?</label>
+                    <label><input type="radio" name="fechamentoCaixa" value="Sim"> Sim</label>
+                    <label><input type="radio" name="fechamentoCaixa" value="Não"> Não</label>
+                </div>
+                 <div class="form-group">
+                    <label for="personalizacoesItens">1.5 Como o vendedor lança personalizações de itens e envia para a produção?</label>
+                    <textarea id="personalizacoesItens" name="personalizacoesItens"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="precificacaoProdutos">1.6 Como é feita a precificação dos produtos?</label>
+                    <textarea id="precificacaoProdutos" name="precificacaoProdutos"></textarea>
+                </div>
+                <div class="form-group radio-group">
+                    <label>1.7 Produtos possuem código EAN?</label>
+                    <label><input type="radio" name="codigoEan" value="Sim"> Sim</label>
+                    <label><input type="radio" name="codigoEan" value="Não"> Não</label>
+                </div>
+                <div class="form-group">
+                    <label for="relatoriosComercial">1.8 Quais informações deseja nos relatórios do Comercial?</label>
+                    <textarea id="relatoriosComercial" name="relatoriosComercial"></textarea>
+                </div>
 
-  <label>Controla estoque?</label>
-  <input type="text" id="estoque">
+                <!-- 2. Estoque -->
+                <h3>2. Estoque</h3>
+                <div class="form-group radio-group">
+                    <label>2.1 Controla estoque de produtos acabados?</label>
+                    <label><input type="radio" name="controleEstoqueAcabados" value="Sim"> Sim</label>
+                    <label><input type="radio" name="controleEstoqueAcabados" value="Não"> Não</label>
+                </div>
+                 <div class="form-group radio-group">
+                    <label>2.2 Controla estoque de matérias-primas?</label>
+                    <label><input type="radio" name="controleEstoqueMateriaPrima" value="Sim"> Sim</label>
+                    <label><input type="radio" name="controleEstoqueMateriaPrima" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>2.3 Produtos possuem classificação em grupos e subgrupos?</label>
+                    <label><input type="radio" name="classificacaoGrupos" value="Sim"> Sim</label>
+                    <label><input type="radio" name="classificacaoGrupos" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>2.4 Cadastro será feito do zero?</label>
+                    <label><input type="radio" name="cadastroDoZero" value="Sim"> Sim</label>
+                    <label><input type="radio" name="cadastroDoZero" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>2.5 Faz entrada de compras?</label>
+                    <label><input type="radio" name="entradaCompras" value="Sim"> Sim</label>
+                    <label><input type="radio" name="entradaCompras" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>2.6 Controla pedidos de compra?</label>
+                    <label><input type="radio" name="controlePedidosCompra" value="Sim"> Sim</label>
+                    <label><input type="radio" name="controlePedidosCompra" value="Não"> Não</label>
+                </div>
+                <div class="form-group">
+                    <label for="requisicaoMateriais">2.7 Como é feita a requisição de materiais para produção?</label>
+                    <textarea id="requisicaoMateriais" name="requisicaoMateriais"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="frequenciaInventario">2.8 Frequência de inventário (balanço):</label>
+                    <input type="text" id="frequenciaInventario" name="frequenciaInventario">
+                </div>
+                <div class="form-group radio-group">
+                    <label>2.9 Controla lote de matérias-primas ou produtos acabados?</label>
+                    <label><input type="radio" name="controleLote" value="Sim"> Sim</label>
+                    <label><input type="radio" name="controleLote" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>2.10 Utiliza SPED?</label>
+                    <label><input type="radio" name="utilizaSped" value="Sim"> Sim</label>
+                    <label><input type="radio" name="utilizaSped" value="Não"> Não</label>
+                </div>
+                <div class="form-group">
+                    <label for="romaneioProdutos">2.11 Como é feito o romaneio dos produtos?</label>
+                    <textarea id="romaneioProdutos" name="romaneioProdutos"></textarea>
+                </div>
+                <div class="form-group radio-group">
+                    <label>2.12 Utiliza código de barras?</label>
+                    <label><input type="radio" name="utilizaCodigoBarras" value="Sim"> Sim</label>
+                    <label><input type="radio" name="utilizaCodigoBarras" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>2.13 Utiliza etiquetas (produtos, caixas, expedição, etc.)?</label>
+                    <label><input type="radio" name="utilizaEtiquetas" value="Sim"> Sim</label>
+                    <label><input type="radio" name="utilizaEtiquetas" value="Não"> Não</label>
+                </div>
+                <div class="form-group">
+                    <label for="relatoriosEstoque">2.14 Quais informações deseja nos relatórios do Estoque?</label>
+                    <textarea id="relatoriosEstoque" name="relatoriosEstoque"></textarea>
+                </div>
+                
+                 <!-- 3. Industrial -->
+                <h3>3. Industrial</h3>
+                <div class="form-group">
+                    <label for="controleProducaoAtual">3.1 Como é feito o controle de produção atualmente?</label>
+                    <textarea id="controleProducaoAtual" name="controleProducaoAtual"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="setoresProdutivos">3.2 Quais são os setores produtivos?</label>
+                    <textarea id="setoresProdutivos" name="setoresProdutivos"></textarea>
+                </div>
+                <div class="form-group radio-group">
+                    <label>3.3 Serão disponibilizados computadores na produção?</label>
+                    <label><input type="radio" name="computadoresProducao" value="Sim"> Sim</label>
+                    <label><input type="radio" name="computadoresProducao" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>3.4 Deseja utilizar o aplicativo KM Industrial?</label>
+                    <label><input type="radio" name="utilizarApp" value="Sim"> Sim</label>
+                    <label><input type="radio" name="utilizarApp" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>3.5 Controla serviços feitos por terceiros?</label>
+                    <label><input type="radio" name="controleServicosTerceiros" value="Sim"> Sim</label>
+                    <label><input type="radio" name="controleServicosTerceiros" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>3.6 Emite e recebe notas fiscais de serviço de terceiros?</label>
+                    <label><input type="radio" name="emiteRecebeNfTerceiros" value="Sim"> Sim</label>
+                    <label><input type="radio" name="emiteRecebeNfTerceiros" value="Não"> Não</label>
+                </div>
+                <div class="form-group">
+                    <label for="fechamentoServicos">3.7 Como é feito o fechamento desses serviços?</label>
+                    <textarea id="fechamentoServicos" name="fechamentoServicos"></textarea>
+                </div>
+                 <div class="form-group">
+                    <label for="tipoProducao">3.8 Produz apenas sob demanda ou também para estoque?</label>
+                    <input type="text" id="tipoProducao" name="tipoProducao">
+                </div>
+                <div class="form-group">
+                    <label for="relatoriosIndustrial">3.9 Quais informações deseja nos relatórios do Industrial?</label>
+                    <textarea id="relatoriosIndustrial" name="relatoriosIndustrial"></textarea>
+                </div>
 
-  <label>Como é feito o controle de produção?</label>
-  <textarea id="producao"></textarea>
+                <!-- 4. Faturamento -->
+                <h3>4. Faturamento</h3>
+                <div class="form-group radio-group">
+                    <label>4.1 Vai emitir NF-e e NFC-e pelo MentorSoft?</label>
+                    <label><input type="radio" name="emiteNfeMentor" value="Sim"> Sim</label>
+                    <label><input type="radio" name="emiteNfeMentor" value="Não"> Não</label>
+                </div>
+                 <div class="form-group">
+                    <label for="emissaoNotasAtual">4.2 Como é feita a emissão de notas atualmente?</label>
+                    <textarea id="emissaoNotasAtual" name="emissaoNotasAtual"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="tiposOperacoes">4.3 Quais tipos de operações realiza?</label>
+                    <textarea id="tiposOperacoes" name="tiposOperacoes"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="serieNfe">4.4 Número de série da NF-e:</label>
+                    <input type="text" id="serieNfe" name="serieNfe">
+                </div>
+                <div class="form-group">
+                    <label for="tipoCertificado">4.5 Tipo de certificado digital:</label>
+                    <input type="text" id="tipoCertificado" name="tipoCertificado">
+                </div>
+                <div class="form-group">
+                    <label for="envioCertificado">4.6 Solicitar envio do certificado para instalação.</label>
+                    <input type="text" id="envioCertificado" name="envioCertificado">
+                </div>
+                <div class="form-group">
+                    <label for="controleFaturamento">4.7 Controle de faturamento será por pedido ou romaneio?</label>
+                    <input type="text" id="controleFaturamento" name="controleFaturamento">
+                </div>
+                 <div class="form-group">
+                    <label for="beneficioFiscalFat">4.8 Possui benefício fiscal? Quais?</label>
+                    <input type="text" id="beneficioFiscalFat" name="beneficioFiscalFat">
+                </div>
+                <div class="form-group">
+                    <label for="nomeContador">4.9 Nome do contador:</label>
+                    <input type="text" id="nomeContador" name="nomeContador">
+                </div>
+                <div class="form-group">
+                    <label for="contatoContador">4.10 Contato do contador (e-mail/telefone/WhatsApp):</label>
+                    <input type="text" id="contatoContador" name="contatoContador">
+                </div>
+                <div class="form-group">
+                    <label for="emailEnvioNfe">4.11 E-mail e senha utilizados para envio automático de NF-e e boletos:</label>
+                    <input type="text" id="emailEnvioNfe" name="emailEnvioNfe">
+                </div>
+                <div class="form-group">
+                    <label for="relatoriosFaturamento">4.12 Quais informações deseja nos relatórios do Faturamento?</label>
+                    <textarea id="relatoriosFaturamento" name="relatoriosFaturamento"></textarea>
+                </div>
 
-  <label>Vai emitir NF-e?</label>
-  <input type="text" id="nfe">
+                <!-- 5. Pagar -->
+                <h3>5. Pagar</h3>
+                <div class="form-group">
+                    <label for="controleContasPagar">5.1 Como é o controle de contas a pagar?</label>
+                    <textarea id="controleContasPagar" name="controleContasPagar"></textarea>
+                </div>
+                <div class="form-group radio-group">
+                    <label>5.2 Realiza adiantamento a fornecedores?</label>
+                    <label><input type="radio" name="adiantamentoFornecedores" value="Sim"> Sim</label>
+                    <label><input type="radio" name="adiantamentoFornecedores" value="Não"> Não</label>
+                </div>
+                <div class="form-group">
+                    <label for="liquidacaoTitulos">5.3 Como é feita a liquidação dos títulos (formas de pagamento)?</label>
+                    <textarea id="liquidacaoTitulos" name="liquidacaoTitulos"></textarea>
+                </div>
+                <div class="form-group radio-group">
+                    <label>5.4 Faz pagamentos de terceiros com cheques da empresa ou de clientes?</label>
+                    <label><input type="radio" name="pagamentosCheques" value="Sim"> Sim</label>
+                    <label><input type="radio" name="pagamentosCheques" value="Não"> Não</label>
+                </div>
+                <div class="form-group">
+                    <label for="relatoriosPagar">5.5 Quais informações deseja nos relatórios do Pagar?</label>
+                    <textarea id="relatoriosPagar" name="relatoriosPagar"></textarea>
+                </div>
+                
+                <!-- 6. Receber -->
+                <h3>6. Receber</h3>
+                <div class="form-group">
+                    <label for="controleTitulosReceber">6.1 Como é feito o controle de títulos a receber?</label>
+                    <textarea id="controleTitulosReceber" name="controleTitulosReceber"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="formasRecebimento">6.2 Quais são as principais formas de recebimento?</label>
+                    <textarea id="formasRecebimento" name="formasRecebimento"></textarea>
+                </div>
+                <div class="form-group radio-group">
+                    <label>6.3 Emite boletos? Quais?</label>
+                    <label><input type="radio" name="emiteBoletos" value="Sim"> Sim</label>
+                    <label><input type="radio" name="emiteBoletos" value="Não"> Não</label>
+                    <div class="sub-question">
+                         <input type="text" name="quaisBoletos" placeholder="Se sim, quais?">
+                    </div>
+                </div>
+                <div class="form-group radio-group">
+                    <label>6.4 Deseja boletos via API?</label>
+                    <label><input type="radio" name="boletosApi" value="Sim"> Sim</label>
+                    <label><input type="radio" name="boletosApi" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>6.5 Recebe adiantamentos em alguma situação?</label>
+                    <label><input type="radio" name="recebeAdiantamentos" value="Sim"> Sim</label>
+                    <label><input type="radio" name="recebeAdiantamentos" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>6.6 Aceita cheques de clientes?</label>
+                    <label><input type="radio" name="aceitaCheques" value="Sim"> Sim</label>
+                    <label><input type="radio" name="aceitaCheques" value="Não"> Não</label>
+                </div>
+                <div class="form-group">
+                    <label for="relatoriosReceber">6.7 Quais informações deseja nos relatórios do Receber?</label>
+                    <textarea id="relatoriosReceber" name="relatoriosReceber"></textarea>
+                </div>
 
-  <label>Nome do contador:</label>
-  <input type="text" id="contador">
+                <!-- 7. Tesouraria -->
+                <h3>7. Tesouraria</h3>
+                <div class="form-group radio-group">
+                    <label>7.1 Faz conciliação bancária?</label>
+                    <label><input type="radio" name="conciliacaoBancaria" value="Sim"> Sim</label>
+                    <label><input type="radio" name="conciliacaoBancaria" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>7.2 Utiliza fluxo de caixa?</label>
+                    <label><input type="radio" name="fluxoCaixa" value="Sim"> Sim</label>
+                    <label><input type="radio" name="fluxoCaixa" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>7.3 Possui plano de contas?</label>
+                    <label><input type="radio" name="planoContas" value="Sim"> Sim</label>
+                    <label><input type="radio" name="planoContas" value="Não"> Não</label>
+                </div>
+                <div class="form-group radio-group">
+                    <label>7.4 Faz transferência entre contas?</label>
+                    <label><input type="radio" name="transferenciaContas" value="Sim"> Sim</label>
+                    <label><input type="radio" name="transferenciaContas" value="Não"> Não</label>
+                </div>
+            </fieldset>
 
-  <label>Faz conciliação bancária?</label>
-  <input type="text" id="conciliacao">
+            <button type="submit">Gerar Documento (.docx)</button>
+        </form>
+    </div>
 
-  <button type="button" onclick="gerarDoc()">Gerar Documento Word</button>
-</form>
+    <script>
+        document.getElementById('levantamentoForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Função auxiliar para obter valor de campos de texto/textarea
+            const getValue = (id) => document.getElementById(id).value.replace(/\n/g, '<br>');
+            
+            // Função auxiliar para obter valor de campos de rádio
+            const getRadioValue = (name) => {
+                const radio = document.querySelector(`input[name="${name}"]:checked`);
+                return radio ? radio.value : 'Não respondido';
+            };
 
-<script>
-  async function gerarDoc() {
-    const { Document, Packer, Paragraph, HeadingLevel } = window.docx;
+            const razaoSocialCliente = getValue('razaoSocial');
+            const dataAtual = new Date().toLocaleDateString('pt-BR');
 
-    function valor(id) {
-      return document.getElementById(id).value || "-";
-    }
+            // Monta o conteúdo HTML que será convertido para DOCX
+            let content = `
+                <style>
+                    body { font-family: Arial, sans-serif; }
+                    h1, h2, h3 { color: #04ab5c; }
+                    p { margin: 5px 0; }
+                    strong { color: #333; }
+                </style>
+                <h1>Documento de Levantamento de Regras e Processos</h1>
+                <p><strong>Cliente:</strong> ${razaoSocialCliente}</p>
+                <p><strong>Data de Geração:</strong> ${dataAtual}</p>
+                <br>
 
-    const doc = new Document({
-      sections: [{
-        children: [
-          new Paragraph({
-            text: "Levantamento de Regras e Processos para Implantação",
-            heading: HeadingLevel.TITLE
-          }),
+                <h2>Dados da Empresa (Cliente)</h2>
+                <p><strong>Razão Social:</strong> ${getValue('razaoSocial')}</p>
+                <p><strong>CNPJ:</strong> ${getValue('cnpj')}</p>
+                <p><strong>Inscrição Estadual:</strong> ${getValue('inscricaoEstadual')}</p>
+                <p><strong>Regime Tributário:</strong> ${getValue('regimeTributario')}</p>
+                <p><strong>Benefício Fiscal:</strong> ${getValue('beneficioFiscal')}</p>
+                <p><strong>Ramo:</strong> ${getValue('ramo')}</p>
+                <p><strong>Especialidade:</strong> ${getValue('especialidade')}</p>
+                <p><strong>Patrocinador(a):</strong> ${getValue('patrocinadorNome')}</p>
+                <p><strong>Contato:</strong> ${getValue('patrocinadorContato')}</p>
+                
+                <h2>Dados do Projeto</h2>
+                <p><strong>Horas de Implantação:</strong> ${getValue('horasImplantacao')}</p>
+                <p><strong>Administrador do Projeto:</strong> ${getValue('administradorProjeto')}</p>
+                <p><strong>Quantidade de Usuários:</strong> ${getValue('quantidadeUsuarios')}</p>
+                <p><strong>Módulos Contratados:</strong> Comercial, Estoque, Industrial, Faturamento, Pagar, Receber, Tesouraria</p>
+                <p><strong>Quantidade de Empresas:</strong> ${getValue('quantidadeEmpresas')}</p>
+                <p><strong>Razão Social e CNPJ de cada uma:</strong> ${getValue('razaoSocialCnpjEmpresas')}</p>
+                <p><strong>Possui servidor?</strong> ${getRadioValue('possuiServidor')}</p>
+                <p><strong>Terá acesso remoto?</strong> ${getRadioValue('acessoRemoto')}</p>
+                <p><strong>Quantidade de acessos ao APP KM Industrial:</strong> ${getValue('acessosApp')}</p>
 
-          new Paragraph({ text: "1. Informações Gerais", heading: HeadingLevel.HEADING_1 }),
-          new Paragraph("Empresas e CNPJ: " + valor("empresas")),
-          new Paragraph("Usuários: " + valor("usuarios")),
+                <h2>Usuários</h2>
+                <p><strong>Nomes dos usuários:</strong><br>${getValue('nomesUsuarios')}</p>
 
-          new Paragraph({ text: "2. Diagnóstico", heading: HeadingLevel.HEADING_1 }),
-          new Paragraph("Dores do cliente: " + valor("dores")),
-          new Paragraph("Agenda disponível: " + valor("agenda")),
+                <h2>Dores do Cliente</h2>
+                <p><strong>Principais problemas e motivos da contratação:</strong><br>${getValue('doresCliente')}</p>
 
-          new Paragraph({ text: "3. Comercial", heading: HeadingLevel.HEADING_1 }),
-          new Paragraph("Paga comissão: " + valor("comissao")),
-          new Paragraph("Tipo de comissão: " + valor("tipoComissao")),
-          new Paragraph("Utiliza PDV: " + valor("pdv")),
+                <h2>Agenda</h2>
+                <p><strong>Dias e horários ideais para treinamentos:</strong><br>${getValue('agendaTreinamentos')}</p>
 
-          new Paragraph({ text: "4. Estoque", heading: HeadingLevel.HEADING_1 }),
-          new Paragraph("Controle de estoque: " + valor("estoque")),
+                <br>
+                <h1>Módulos</h1>
+                
+                <h2>1. Comercial</h2>
+                <p><strong>1.1 Paga comissão sobre vendas?</strong> ${getRadioValue('pagaComissao')}</p>
+                <p><strong>1.2 Tipo de comissão:</strong> ${getValue('tipoComissao')}</p>
+                <p><strong>1.3 Utiliza PDV (Vendas Balcão)?</strong> ${getRadioValue('utilizaPdv')}</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;<em>Se sim, emite NFC-e?</em> ${getRadioValue('emiteNfcePdv')}</p>
+                <p><strong>1.4 Realiza fechamento de caixa diário?</strong> ${getRadioValue('fechamentoCaixa')}</p>
+                <p><strong>1.5 Como o vendedor lança personalizações e envia para a produção?</strong><br>${getValue('personalizacoesItens')}</p>
+                <p><strong>1.6 Como é feita a precificação dos produtos?</strong><br>${getValue('precificacaoProdutos')}</p>
+                <p><strong>1.7 Produtos possuem código EAN?</strong> ${getRadioValue('codigoEan')}</p>
+                <p><strong>1.8 Informações desejadas nos relatórios do Comercial:</strong><br>${getValue('relatoriosComercial')}</p>
 
-          new Paragraph({ text: "5. Produção", heading: HeadingLevel.HEADING_1 }),
-          new Paragraph("Controle de produção: " + valor("producao")),
+                <h2>2. Estoque</h2>
+                <p><strong>2.1 Controla estoque de produtos acabados?</strong> ${getRadioValue('controleEstoqueAcabados')}</p>
+                <p><strong>2.2 Controla estoque de matérias-primas?</strong> ${getRadioValue('controleEstoqueMateriaPrima')}</p>
+                <p><strong>2.3 Produtos possuem classificação em grupos e subgrupos?</strong> ${getRadioValue('classificacaoGrupos')}</p>
+                <p><strong>2.4 Cadastro será feito do zero?</strong> ${getRadioValue('cadastroDoZero')}</p>
+                <p><strong>2.5 Faz entrada de compras?</strong> ${getRadioValue('entradaCompras')}</p>
+                <p><strong>2.6 Controla pedidos de compra?</strong> ${getRadioValue('controlePedidosCompra')}</p>
+                <p><strong>2.7 Como é feita a requisição de materiais para produção?</strong><br>${getValue('requisicaoMateriais')}</p>
+                <p><strong>2.8 Frequência de inventário (balanço):</strong> ${getValue('frequenciaInventario')}</p>
+                <p><strong>2.9 Controla lote de matérias-primas ou produtos acabados?</strong> ${getRadioValue('controleLote')}</p>
+                <p><strong>2.10 Utiliza SPED?</strong> ${getRadioValue('utilizaSped')}</p>
+                <p><strong>2.11 Como é feito o romaneio dos produtos?</strong><br>${getValue('romaneioProdutos')}</p>
+                <p><strong>2.12 Utiliza código de barras?</strong> ${getRadioValue('utilizaCodigoBarras')}</p>
+                <p><strong>2.13 Utiliza etiquetas?</strong> ${getRadioValue('utilizaEtiquetas')}</p>
+                <p><strong>2.14 Informações desejadas nos relatórios do Estoque:</strong><br>${getValue('relatoriosEstoque')}</p>
+                
+                <h2>3. Industrial</h2>
+                <p><strong>3.1 Como é feito o controle de produção atualmente?</strong><br>${getValue('controleProducaoAtual')}</p>
+                <p><strong>3.2 Quais são os setores produtivos?</strong><br>${getValue('setoresProdutivos')}</p>
+                <p><strong>3.3 Serão disponibilizados computadores na produção?</strong> ${getRadioValue('computadoresProducao')}</p>
+                <p><strong>3.4 Deseja utilizar o aplicativo KM Industrial?</strong> ${getRadioValue('utilizarApp')}</p>
+                <p><strong>3.5 Controla serviços feitos por terceiros?</strong> ${getRadioValue('controleServicosTerceiros')}</p>
+                <p><strong>3.6 Emite e recebe notas fiscais de serviço de terceiros?</strong> ${getRadioValue('emiteRecebeNfTerceiros')}</p>
+                <p><strong>3.7 Como é feito o fechamento desses serviços?</strong><br>${getValue('fechamentoServicos')}</p>
+                <p><strong>3.8 Produz sob demanda ou para estoque?</strong> ${getValue('tipoProducao')}</p>
+                <p><strong>3.9 Informações desejadas nos relatórios do Industrial:</strong><br>${getValue('relatoriosIndustrial')}</p>
 
-          new Paragraph({ text: "6. Faturamento", heading: HeadingLevel.HEADING_1 }),
-          new Paragraph("Emite NF-e: " + valor("nfe")),
-          new Paragraph("Contador: " + valor("contador")),
+                <h2>4. Faturamento</h2>
+                <p><strong>4.1 Vai emitir NF-e e NFC-e pelo MentorSoft?</strong> ${getRadioValue('emiteNfeMentor')}</p>
+                <p><strong>4.2 Como é feita a emissão de notas atualmente?</strong><br>${getValue('emissaoNotasAtual')}</p>
+                <p><strong>4.3 Quais tipos de operações realiza?</strong><br>${getValue('tiposOperacoes')}</p>
+                <p><strong>4.4 Número de série da NF-e:</strong> ${getValue('serieNfe')}</p>
+                <p><strong>4.5 Tipo de certificado digital:</strong> ${getValue('tipoCertificado')}</p>
+                <p><strong>4.6 Envio do certificado para instalação:</strong> ${getValue('envioCertificado')}</p>
+                <p><strong>4.7 Controle de faturamento por pedido ou romaneio?</strong> ${getValue('controleFaturamento')}</p>
+                <p><strong>4.8 Possui benefício fiscal? Quais?</strong> ${getValue('beneficioFiscalFat')}</p>
+                <p><strong>4.9 Nome do contador:</strong> ${getValue('nomeContador')}</p>
+                <p><strong>4.10 Contato do contador:</strong> ${getValue('contatoContador')}</p>
+                <p><strong>4.11 E-mail e senha para envio automático:</strong> ${getValue('emailEnvioNfe')}</p>
+                <p><strong>4.12 Informações desejadas nos relatórios do Faturamento:</strong><br>${getValue('relatoriosFaturamento')}</p>
 
-          new Paragraph({ text: "7. Tesouraria", heading: HeadingLevel.HEADING_1 }),
-          new Paragraph("Conciliação bancária: " + valor("conciliacao")),
-        ]
-      }]
-    });
+                <h2>5. Pagar</h2>
+                <p><strong>5.1 Como é o controle de contas a pagar?</strong><br>${getValue('controleContasPagar')}</p>
+                <p><strong>5.2 Realiza adiantamento a fornecedores?</strong> ${getRadioValue('adiantamentoFornecedores')}</p>
+                <p><strong>5.3 Como é feita a liquidação dos títulos?</strong><br>${getValue('liquidacaoTitulos')}</p>
+                <p><strong>5.4 Faz pagamentos de terceiros com cheques?</strong> ${getRadioValue('pagamentosCheques')}</p>
+                <p><strong>5.5 Informações desejadas nos relatórios do Pagar:</strong><br>${getValue('relatoriosPagar')}</p>
 
-    const blob = await Packer.toBlob(doc);
-    saveAs(blob, "Levantamento_Cliente.docx");
-  }
-</script>
-
+                <h2>6. Receber</h2>
+                <p><strong>6.1 Como é feito o controle de títulos a receber?</strong><br>${getValue('controleTitulosReceber')}</p>
+                <p><strong>6.2 Principais formas de recebimento:</strong><br>${getValue('formasRecebimento')}</p>
+                <p><strong>6.3 Emite boletos? Quais?</strong> ${getRadioValue('emiteBoletos')} - ${document.querySelector('input[name="quaisBoletos"]').value}</p>
+                <p><strong>6.4 Deseja boletos via API?</strong> ${getRadioValue('boletosApi')}</p>
+                <p><strong>6.5 Recebe adiantamentos?</strong> ${getRadioValue('recebeAdiantamentos')}</p>
+                <p><strong>6.6 Aceita cheques de clientes?</strong> ${getRadioValue('aceitaCheques')}</p>
+                <p><strong>6.7 Informações desejadas nos relatórios do Receber:</strong><br>${getValue('relatoriosReceber')}</p>
+                
+                <h2>7. Tesouraria</h2>
+                <p><strong>7.1 Faz conciliação bancária?</strong> ${getRadioValue('conciliacaoBancaria')}</p>
+                <p><strong>7.2 Utiliza fluxo de caixa?</strong> ${getRadioValue('fluxoCaixa')}</p>
+                <p><strong>7.3 Possui plano de contas?</strong> ${getRadioValue('planoContas')}</p>
+                <p><strong>7.4 Faz transferência entre contas?</strong> ${getRadioValue('transferenciaContas')}</p>
+            `;
+            
+            // Converte o HTML para DOCX
+            var converted = htmlDocx.asBlob(content);
+            
+            // Salva o arquivo
+            saveAs(converted, `Levantamento - ${razaoSocialCliente}.docx`);
+        });
+    </script>
 </body>
 </html>
