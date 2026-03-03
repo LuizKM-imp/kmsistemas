@@ -48,7 +48,7 @@
             margin: 0 0 10px 0;
         }
 
-        /* --- Estilos das Abas --- */
+        /* --- Estilos das Abas Principais --- */
         .tab-nav {
             display: flex;
             border-bottom: 2px solid var(--border-color);
@@ -69,9 +69,7 @@
             transition: all 0.3s ease;
         }
         
-        .tab-btn:hover {
-            background-color: #e8eaf6;
-        }
+        .tab-btn:hover { background-color: #e8eaf6; }
 
         .tab-btn.active {
             color: var(--secondary-color);
@@ -85,11 +83,50 @@
             gap: 25px;
         }
         
-        .tab-content.active {
+        .tab-content.active { display: flex; }
+
+        /* --- Estilos das Sub-Abas (Resultados) --- */
+        .sub-tab-nav {
             display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sub-tab-btn {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            background-color: #f8f9f9;
+            border-radius: 5px 5px 0 0;
+            font-size: 0.95em;
+            color: var(--text-color);
+            transition: background-color 0.2s;
+        }
+
+        .sub-tab-btn:hover { background-color: #e8e8e8; }
+
+        .sub-tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            border-color: var(--primary-color);
+        }
+
+        .result-view {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .result-view.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
-        /* --- Estilos Gerais para Componentes --- */
+        /* --- Componentes Gerais --- */
         .upload-section, .summary-card, .results-section, .info-card {
             background-color: var(--card-background);
             padding: 25px;
@@ -109,9 +146,7 @@
             display: inline-block;
         }
 
-        .folder-label:hover, .file-label:hover {
-            background-color: #2471a3;
-        }
+        .folder-label:hover, .file-label:hover { background-color: #2471a3; }
 
         table {
             width: 100%;
@@ -130,33 +165,17 @@
             color: white;
         }
 
-        /* --- Estilos de Ordenação --- */
-        th {
-            cursor: pointer;
-            user-select: none;
-            position: relative;
-        }
-        th:hover {
-            background-color: #038a4a;
-        }
-        th::after {
-            content: ' \21F5'; /* Seta dupla */
-            opacity: 0.4;
-            font-size: 0.8em;
-            margin-left: 5px;
-            float: right;
-        }
-        th.asc::after { content: ' \2191'; opacity: 1; } /* Seta cima */
-        th.desc::after { content: ' \2193'; opacity: 1; } /* Seta baixo */
+        /* Ordenação */
+        th { cursor: pointer; user-select: none; position: relative; }
+        th:hover { background-color: #038a4a; }
+        th::after { content: ' \21F5'; opacity: 0.4; font-size: 0.8em; margin-left: 5px; float: right; }
+        th.asc::after { content: ' \2191'; opacity: 1; }
+        th.desc::after { content: ' \2193'; opacity: 1; }
 
-
-        /* --- Estilos específicos da Análise em Lote --- */
+        /* Análise em Lote */
         #folderInput { display: none; }
 
-        .progress-section {
-            margin-top: 20px;
-            display: none;
-        }
+        .progress-section { margin-top: 20px; display: none; }
         
         #progress-bar-container {
             width: 100%;
@@ -174,9 +193,7 @@
             color: white; font-weight: bold;
         }
 
-        #progress-text {
-            margin-top: 8px; font-style: italic; text-align: center;
-        }
+        #progress-text { margin-top: 8px; font-style: italic; text-align: center; }
         
         .summary-card {
             display: none;
@@ -184,32 +201,28 @@
             gap: 20px; text-align: center;
         }
 
-        .summary-item {
-            background-color: var(--background-color); padding: 15px; border-radius: 5px;
-        }
-        
+        .summary-item { background-color: var(--background-color); padding: 15px; border-radius: 5px; }
         .summary-item .value { font-size: 2em; font-weight: bold; display: block; }
         .summary-item .label { font-size: 0.9em; color: #7f8c8d; }
         
-        /* Ajuste de fonte para as datas */
         #summary-min-date .value, #summary-max-date .value { font-size: 1.2em; line-height: 1.6em; padding-top: 5px; }
-
         #summary-files .value { color: var(--info-color); }
         #summary-valid .value { color: var(--success-color); }
         #summary-ops .value { color: var(--primary-color); }
         #summary-errors .value { color: var(--error-color); }
 
-        #export-csv, #clearButton {
+        .btn-action {
              color: white; padding: 10px 18px; border: none;
              border-radius: 5px; cursor: pointer; font-weight: bold;
              transition: background-color 0.3s ease;
         }
-        #export-csv { background-color: var(--success-color); }
-        #export-csv:hover { background-color: #229954; }
+        .btn-export { background-color: var(--success-color); }
+        .btn-export:hover { background-color: #229954; }
+        
         #clearButton { background-color: var(--error-color); margin-left: 10px; vertical-align: middle; }
         #clearButton:hover { background-color: #c0392b; }
         
-        /* --- Estilos específicos da Análise Individual --- */
+        /* Análise Individual */
         #xmlFile { display: none; }
         #fileName { margin-top: 15px; font-style: italic; color: var(--primary-color); }
 
@@ -257,7 +270,7 @@
         <!-- Conteúdo da Aba de Análise em Lote -->
         <div id="tab-lote" class="tab-content active">
             <section class="upload-section">
-                <p>Selecione uma pasta com arquivos XML para identificar e consolidar todas as operações e suas tributações.</p>
+                <p>Selecione uma pasta com arquivos XML para identificar e consolidar operações e participantes.</p>
                 <div style="text-align: center;">
                     <label for="folderInput" class="folder-label">Selecionar Pasta com XMLs</label>
                     <input type="file" id="folderInput" webkitdirectory directory multiple />
@@ -269,6 +282,7 @@
                     <p id="progress-text">Aguardando seleção...</p>
                 </div>
             </section>
+            
             <section id="summary-card" class="summary-card">
                  <div class="summary-item" id="summary-files"><span class="value">0</span><span class="label">Arquivos Lidos</span></div>
                 <div class="summary-item" id="summary-valid"><span class="value">0</span><span class="label">NF-es Válidas</span></div>
@@ -277,29 +291,76 @@
                 <div class="summary-item" id="summary-min-date"><span class="value">-</span><span class="label">Primeira Emissão</span></div>
                 <div class="summary-item" id="summary-max-date"><span class="value">-</span><span class="label">Última Emissão</span></div>
             </section>
+
             <main id="results-section" class="results-section" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2>Operações Identificadas</h2>
-                    <button id="export-csv">Exportar para CSV</button>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <!-- Sub Navegação para Resultados -->
+                        <div class="sub-tab-nav">
+                            <button class="sub-tab-btn active" data-view="view-operations">Operações Identificadas</button>
+                            <button class="sub-tab-btn" data-view="view-emitentes">Emitentes</button>
+                            <button class="sub-tab-btn" data-view="view-destinatarios">Destinatários</button>
+                        </div>
+                    </div>
+                    <button id="export-csv" class="btn-action btn-export">Exportar Tabela Atual CSV</button>
                 </div>
-                <div style="overflow-x: auto;">
-                    <table id="results-table">
-                        <thead>
-                            <tr>
-                                <th data-col="0">Natureza da Operação</th>
-                                <th data-col="1">CFOP</th>
-                                <th data-col="2">CST/CSOSN ICMS</th>
-                                <th data-col="3">CST PIS/COFINS</th>
-                                <th data-col="4">CST IPI</th>
-                                <th data-col="5">Qtd</th>
-                                <th data-col="6">%</th>
-                                <th data-col="7">Última Utilização</th>
-                            </tr>
-                        </thead>
-                        <tbody id="results-table-body"></tbody>
-                    </table>
-                     <p id="no-results" style="display: none; text-align: center; padding: 40px; font-style: italic; color: #7f8c8d;">Nenhuma operação encontrada nos arquivos válidos.</p>
+
+                <!-- Tabela de Operações -->
+                <div id="view-operations" class="result-view active">
+                    <div style="overflow-x: auto;">
+                        <table id="results-table">
+                            <thead>
+                                <tr>
+                                    <th data-col="0" data-table="ops">Natureza da Operação</th>
+                                    <th data-col="1" data-table="ops">CFOP</th>
+                                    <th data-col="2" data-table="ops">CST/CSOSN ICMS</th>
+                                    <th data-col="3" data-table="ops">CST PIS/COFINS</th>
+                                    <th data-col="4" data-table="ops">CST IPI</th>
+                                    <th data-col="5" data-table="ops">Qtd Itens</th>
+                                    <th data-col="6" data-table="ops">% do Total</th>
+                                    <th data-col="7" data-table="ops">Última Utilização</th>
+                                </tr>
+                            </thead>
+                            <tbody id="results-table-body"></tbody>
+                        </table>
+                    </div>
                 </div>
+
+                <!-- Tabela de Emitentes -->
+                <div id="view-emitentes" class="result-view">
+                    <div style="overflow-x: auto;">
+                        <table id="emit-table">
+                            <thead>
+                                <tr>
+                                    <th data-col="0" data-table="emit">CNPJ/CPF</th>
+                                    <th data-col="1" data-table="emit">Razão Social / Nome</th>
+                                    <th data-col="2" data-table="emit">Qtd Notas</th>
+                                    <th data-col="3" data-table="emit">% do Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="emit-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tabela de Destinatários -->
+                <div id="view-destinatarios" class="result-view">
+                    <div style="overflow-x: auto;">
+                        <table id="dest-table">
+                            <thead>
+                                <tr>
+                                    <th data-col="0" data-table="dest">CNPJ/CPF</th>
+                                    <th data-col="1" data-table="dest">Razão Social / Nome</th>
+                                    <th data-col="2" data-table="dest">Qtd Notas</th>
+                                    <th data-col="3" data-table="dest">% do Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dest-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <p id="no-results" style="display: none; text-align: center; padding: 40px; font-style: italic; color: #7f8c8d;">Nenhum dado encontrado nos arquivos válidos.</p>
             </main>
         </div>
 
@@ -311,7 +372,7 @@
                 <div style="text-align: center;">
                     <label for="xmlFile" class="file-label">Selecionar arquivo XML</label>
                     <input type="file" id="xmlFile" accept=".xml">
-                    <button id="clearButton" style="display: none;">Limpar Dados</button>
+                    <button id="clearButton" class="btn-action" style="display: none;">Limpar Dados</button>
                     <p id="fileName"></p>
                 </div>
             </section>
@@ -352,7 +413,27 @@
 
     <script>
         /*******************************************************************
-         * LÓGICA DE CONTROLE DAS ABAS
+         * VARIÁVEIS GLOBAIS
+         *******************************************************************/
+        // Lote
+        let uniqueOperations = new Map();
+        let emitentesMap = new Map();
+        let destinatariosMap = new Map();
+        let totalItemsProcessed = 0;
+        let totalFilesProcessed = 0;
+        let minDate = null;
+        let maxDate = null;
+
+        let opsTableData = [];
+        let emitTableData = [];
+        let destTableData = [];
+
+        let currentActiveTableId = 'results-table'; // Padrão
+        let currentSortCol = -1;
+        let isAscending = true;
+
+        /*******************************************************************
+         * CONTROLE DE ABAS (Lote x Individual)
          *******************************************************************/
         const tabs = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
@@ -360,10 +441,8 @@
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const targetTab = tab.getAttribute('data-tab');
-
                 tabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
-
                 tabContents.forEach(content => {
                     content.classList.remove('active');
                     if (content.id === `tab-${targetTab}`) {
@@ -374,114 +453,141 @@
         });
 
         /*******************************************************************
-         * FUNÇÕES AUXILIARES COMUNS
+         * FUNÇÕES AUXILIARES
          *******************************************************************/
-        const queryTagValue = (selector, parentNode, defaultValue = "N/A") => {
+        function queryTagValue(selector, parentNode, defaultValue = "N/A") {
+            if (!parentNode) return defaultValue;
             const element = parentNode.querySelector(selector);
             return element ? element.textContent : defaultValue;
-        };
+        }
 
-        const formatCurrency = (value) => {
+        function formatCurrency(value) {
             const number = parseFloat(value);
             if (isNaN(number)) return "R$ 0,00";
             return number.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        };
+        }
 
-        const readFileAsText = (file) => {
+        function readFileAsText(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onload = event => resolve(event.target.result);
                 reader.onerror = error => reject(error);
                 reader.readAsText(file, 'UTF-8');
             });
-        };
-        
+        }
+
+        function escapeCsv(val) {
+            const str = String(val);
+            if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+                return `"${str.replace(/"/g, '""')}"`;
+            }
+            return str;
+        }
+
         /*******************************************************************
-         * LÓGICA DA ANÁLISE EM LOTE
+         * LÓGICA: ANÁLISE EM LOTE
          *******************************************************************/
         const folderInput = document.getElementById('folderInput');
-        const progressBar = document.getElementById('progress-bar');
-        const progressText = document.getElementById('progress-text');
-        const progressSection = document.getElementById('progress-section');
-        const summaryCard = document.getElementById('summary-card');
-        const resultsSection = document.getElementById('results-section');
-        const resultsTableBody = document.getElementById('results-table-body');
         const exportCsvButton = document.getElementById('export-csv');
-        
-        let uniqueOperations = new Map();
-        let totalItemsProcessed = 0;
-        
-        // Variáveis de data e ordenação
-        let minDate = null;
-        let maxDate = null;
-        let currentTableData = [];
-        let currentSortCol = -1;
-        let isAscending = true;
+
+        // Configurar Sub-Abas (Operações / Emitentes / Destinatários)
+        document.querySelectorAll('.sub-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.result-view').forEach(v => v.classList.remove('active'));
+                
+                btn.classList.add('active');
+                const targetId = btn.getAttribute('data-view');
+                document.getElementById(targetId).classList.add('active');
+
+                // Define qual tabela está visível para fins de exportação e ordenação
+                if(targetId === 'view-operations') currentActiveTableId = 'results-table';
+                else if(targetId === 'view-emitentes') currentActiveTableId = 'emit-table';
+                else if(targetId === 'view-destinatarios') currentActiveTableId = 'dest-table';
+            });
+        });
+
+        // Configurar Ordenação (Headers)
+        document.querySelectorAll('th[data-table]').forEach(th => {
+            th.addEventListener('click', () => {
+                const tableType = th.getAttribute('data-table');
+                const colIndex = parseInt(th.getAttribute('data-col'));
+                
+                // Mapear o tipo da tabela atual
+                let activeType = '';
+                if(currentActiveTableId === 'results-table') activeType = 'ops';
+                if(currentActiveTableId === 'emit-table') activeType = 'emit';
+                if(currentActiveTableId === 'dest-table') activeType = 'dest';
+
+                // Só ordena se clicar no cabeçalho da tabela visível
+                if(tableType === activeType) {
+                    sortTable(colIndex, tableType);
+                }
+            });
+        });
 
         folderInput.addEventListener('change', handleFolderSelect);
         exportCsvButton.addEventListener('click', exportToCsv);
 
-        // Adiciona listeners para os cabeçalhos da tabela
-        document.querySelectorAll('#results-table th').forEach(th => {
-            th.addEventListener('click', () => {
-                const colIndex = parseInt(th.getAttribute('data-col'));
-                sortTable(colIndex);
-            });
-        });
-
         function resetUI_Lote() {
-            progressSection.style.display = 'block';
-            progressBar.style.width = '0%';
-            progressBar.textContent = '0%';
-            progressText.textContent = 'Iniciando...';
-            summaryCard.style.display = 'none';
-            resultsSection.style.display = 'none';
-            resultsTableBody.innerHTML = '';
+            document.getElementById('progress-section').style.display = 'block';
+            document.getElementById('progress-bar').style.width = '0%';
+            document.getElementById('progress-bar').textContent = '0%';
+            document.getElementById('progress-text').textContent = 'Iniciando...';
+            document.getElementById('summary-card').style.display = 'none';
+            document.getElementById('results-section').style.display = 'none';
+            
+            // Limpa arrays e mapas
             uniqueOperations.clear();
+            emitentesMap.clear();
+            destinatariosMap.clear();
+            opsTableData = [];
+            emitTableData = [];
+            destTableData = [];
             totalItemsProcessed = 0;
+            totalFilesProcessed = 0;
             minDate = null;
             maxDate = null;
-            currentTableData = [];
             
-            // Reseta ícones de ordenação
-            document.querySelectorAll('#results-table th').forEach(th => {
-                th.classList.remove('asc', 'desc');
-            });
+            // Limpa HTML das tabelas
+            document.getElementById('results-table-body').innerHTML = '';
+            document.getElementById('emit-table-body').innerHTML = '';
+            document.getElementById('dest-table-body').innerHTML = '';
+
+            // Remove setas de ordenação
+            document.querySelectorAll('th').forEach(th => th.classList.remove('asc', 'desc'));
         }
 
         async function handleFolderSelect(event) {
             const files = event.target.files;
-            if (files.length === 0) {
-                progressText.textContent = 'Nenhuma pasta selecionada.';
-                return;
-            }
+            if (files.length === 0) return;
 
             resetUI_Lote();
 
             const xmlFiles = Array.from(files).filter(file => file.name.toLowerCase().endsWith('.xml'));
             if (xmlFiles.length === 0) {
-                progressText.textContent = 'Nenhum arquivo .xml encontrado na pasta selecionada.';
+                document.getElementById('progress-text').textContent = 'Nenhum XML encontrado.';
                 return;
             }
 
-            let processedCount = 0, validNFeCount = 0, errorCount = 0;
+            let validNFeCount = 0, errorCount = 0;
 
-            for (const file of xmlFiles) {
+            for (let i = 0; i < xmlFiles.length; i++) {
+                const file = xmlFiles[i];
                 try {
                     const fileContent = await readFileAsText(file);
                     const parser = new DOMParser();
                     const xmlDoc = parser.parseFromString(fileContent, "application/xml");
 
-                    if (xmlDoc.getElementsByTagName("parsererror").length > 0) throw new Error("XML mal formatado.");
+                    if (xmlDoc.getElementsByTagName("parsererror").length > 0) throw new Error("XML inválido");
                     
+                    // Busca infNFe em qualquer lugar (trata nfeProc e NFe puro)
                     const nfeNode = xmlDoc.querySelector('infNFe');
-                    if (!nfeNode) throw new Error("Não é uma NF-e (tag <infNFe> não encontrada).");
+                    if (!nfeNode) throw new Error("Não é NFe");
                     
-                    // Extração de Data do Arquivo
+                    // Extração de Data
                     let dhEmi = queryTagValue('ide > dhEmi', nfeNode, null);
-                    if (!dhEmi) {
-                         dhEmi = queryTagValue('ide > dEmi', nfeNode, null);
-                    }
+                    if (!dhEmi) dhEmi = queryTagValue('ide > dEmi', nfeNode, null);
                     
                     let fileDate = null;
                     if (dhEmi) {
@@ -493,21 +599,23 @@
                         }
                     }
 
-                    // Passamos a data do arquivo para a extração
                     extractOperations(nfeNode, fileDate);
+                    extractParticipants(nfeNode);
+                    
                     validNFeCount++;
                 } catch (error) {
-                    console.error(`Erro ao processar ${file.name}:`, error.message);
+                    console.warn(`Erro em ${file.name}: ${error.message}`);
                     errorCount++;
                 }
                 
-                processedCount++;
-                const percentage = Math.round((processedCount / xmlFiles.length) * 100);
-                progressBar.style.width = `${percentage}%`;
-                progressBar.textContent = `${percentage}%`;
-                progressText.textContent = `Processando ${processedCount} de ${xmlFiles.length}: ${file.name}`;
+                // Atualiza Barra de Progresso
+                const percentage = Math.round(((i + 1) / xmlFiles.length) * 100);
+                document.getElementById('progress-bar').style.width = `${percentage}%`;
+                document.getElementById('progress-bar').textContent = `${percentage}%`;
+                document.getElementById('progress-text').textContent = `Lendo ${i + 1} de ${xmlFiles.length}: ${file.name}`;
             }
-            
+
+            totalFilesProcessed = validNFeCount;
             displayResults_Lote(xmlFiles.length, validNFeCount, errorCount);
         }
 
@@ -523,14 +631,17 @@
                 let cstIcms = 'N/A', cstPisCofins = 'N/A', cstIpi = 'N/A';
 
                 if (impostoNode) {
+                    // ICMS
                     const icmsNode = impostoNode.querySelector('ICMS');
                     if(icmsNode && icmsNode.children[0]) {
                         cstIcms = queryTagValue('CST', icmsNode.children[0], null) || queryTagValue('CSOSN', icmsNode.children[0], 'N/A');
                     }
+                    // PIS/COFINS
                     const pisNode = impostoNode.querySelector('PIS');
                     if (pisNode && pisNode.children[0]) {
                         cstPisCofins = queryTagValue('CST', pisNode.children[0], 'N/A');
                     }
+                    // IPI
                     const ipiNode = impostoNode.querySelector('IPI');
                     if (ipiNode) {
                        cstIpi = queryTagValue('IPITrib > CST', ipiNode, null) || queryTagValue('IPINT > CST', ipiNode, 'N/A');
@@ -540,7 +651,6 @@
                 const operationKey = `${natOp}|${cfop}|${cstIcms}|${cstPisCofins}|${cstIpi}`;
                 
                 if (!uniqueOperations.has(operationKey)) {
-                    // Se nova operação, adiciona com a data atual deste arquivo
                     uniqueOperations.set(operationKey, { 
                         natOp, cfop, cstIcms, cstPisCofins, cstIpi, 
                         count: 1, 
@@ -549,7 +659,6 @@
                 } else {
                     const op = uniqueOperations.get(operationKey);
                     op.count++;
-                    // Se a operação já existe, verificamos se a data deste arquivo é mais recente
                     if (fileDate) {
                         if (!op.lastUsage || fileDate > op.lastUsage) {
                             op.lastUsage = fileDate;
@@ -559,60 +668,112 @@
             }
         }
 
+        function extractParticipants(nfeNode) {
+            // Emitente
+            const emitCnpj = queryTagValue('emit > CNPJ', nfeNode, null);
+            const emitCpf = queryTagValue('emit > CPF', nfeNode, null);
+            const emitId = emitCnpj || emitCpf || 'Desconhecido';
+            const emitNome = queryTagValue('emit > xNome', nfeNode, 'Sem Nome');
+
+            if (emitId !== 'Desconhecido') {
+                if (!emitentesMap.has(emitId)) {
+                    emitentesMap.set(emitId, { id: emitId, nome: emitNome, count: 0 });
+                }
+                emitentesMap.get(emitId).count++;
+            }
+
+            // Destinatário
+            // Verifica se existe a tag dest antes
+            if (nfeNode.querySelector('dest')) {
+                const destCnpj = queryTagValue('dest > CNPJ', nfeNode, null);
+                const destCpf = queryTagValue('dest > CPF', nfeNode, null);
+                const destId = destCnpj || destCpf || 'Consumidor/Outro';
+                const destNome = queryTagValue('dest > xNome', nfeNode, 'Sem Nome');
+
+                if (!destinatariosMap.has(destId)) {
+                    destinatariosMap.set(destId, { id: destId, nome: destNome, count: 0 });
+                }
+                destinatariosMap.get(destId).count++;
+            }
+        }
+
         function displayResults_Lote(totalFiles, validCount, errorCount) {
-            progressText.textContent = `Análise concluída! ${uniqueOperations.size} combinações de operações encontradas.`;
+            document.getElementById('progress-text').textContent = 'Análise Concluída!';
             
-            summaryCard.style.display = 'grid';
+            // Atualizar Resumo
+            document.getElementById('summary-card').style.display = 'grid';
             document.querySelector('#summary-files .value').textContent = totalFiles;
             document.querySelector('#summary-valid .value').textContent = validCount;
             document.querySelector('#summary-ops .value').textContent = uniqueOperations.size;
             document.querySelector('#summary-errors .value').textContent = errorCount;
-            
             document.querySelector('#summary-min-date .value').textContent = minDate ? minDate.toLocaleDateString('pt-BR') : '-';
             document.querySelector('#summary-max-date .value').textContent = maxDate ? maxDate.toLocaleDateString('pt-BR') : '-';
             
-            resultsSection.style.display = 'block';
-            if (uniqueOperations.size === 0) {
+            document.getElementById('results-section').style.display = 'block';
+
+            if (validCount === 0) {
                  document.getElementById('no-results').style.display = 'block';
-                 exportCsvButton.style.display = 'none';
+                 document.getElementById('export-csv').style.display = 'none';
                  return;
             }
             
             document.getElementById('no-results').style.display = 'none';
-            exportCsvButton.style.display = 'inline-block';
+            document.getElementById('export-csv').style.display = 'inline-block';
 
-            currentTableData = Array.from(uniqueOperations.values()).map(op => {
+            // 1. Processar dados de Operações
+            opsTableData = Array.from(uniqueOperations.values()).map(op => {
                 const percentage = totalItemsProcessed > 0 ? ((op.count / totalItemsProcessed) * 100) : 0;
                 return {
-                    natOp: op.natOp,
-                    cfop: op.cfop,
-                    cstIcms: op.cstIcms,
-                    cstPisCofins: op.cstPisCofins,
-                    cstIpi: op.cstIpi,
-                    count: op.count,
+                    ...op,
                     percentage: percentage,
                     percentageStr: percentage.toFixed(2) + '%',
-                    lastUsage: op.lastUsage, // Objeto Date para ordenação
-                    lastUsageStr: op.lastUsage ? op.lastUsage.toLocaleDateString('pt-BR') : '-' // String para exibição
+                    lastUsageStr: op.lastUsage ? op.lastUsage.toLocaleDateString('pt-BR') : '-'
                 };
             });
+            // Ordena Padrão: NatOp
+            opsTableData.sort((a,b) => (a.natOp + a.cfop).localeCompare(b.natOp + b.cfop));
+            renderTableOps(opsTableData);
 
-            // Ordenação padrão (alfabética por NatOp + CFOP)
-            currentTableData.sort((a,b) => (a.natOp + a.cfop).localeCompare(b.natOp + b.cfop));
-            
-            renderTable(currentTableData);
+            // 2. Processar dados de Emitentes
+            emitTableData = Array.from(emitentesMap.values()).map(e => {
+                const pct = totalFilesProcessed > 0 ? (e.count / totalFilesProcessed * 100) : 0;
+                return { ...e, percentage: pct, percentageStr: pct.toFixed(2) + '%' };
+            });
+            emitTableData.sort((a,b) => b.count - a.count); // Padrão: Mais notas primeiro
+            renderTableParticipants('emit-table-body', emitTableData);
+
+            // 3. Processar dados de Destinatários
+            destTableData = Array.from(destinatariosMap.values()).map(d => {
+                const pct = totalFilesProcessed > 0 ? (d.count / totalFilesProcessed * 100) : 0;
+                return { ...d, percentage: pct, percentageStr: pct.toFixed(2) + '%' };
+            });
+            destTableData.sort((a,b) => b.count - a.count); // Padrão: Mais notas primeiro
+            renderTableParticipants('dest-table-body', destTableData);
         }
 
-        function renderTable(data) {
-            resultsTableBody.innerHTML = '';
+        // Renderização HTML
+        function renderTableOps(data) {
+            const tbody = document.getElementById('results-table-body');
+            tbody.innerHTML = '';
             data.forEach(op => {
                 const row = document.createElement('tr');
                 row.innerHTML = `<td>${op.natOp}</td><td>${op.cfop}</td><td>${op.cstIcms}</td><td>${op.cstPisCofins}</td><td>${op.cstIpi}</td><td>${op.count}</td><td>${op.percentageStr}</td><td>${op.lastUsageStr}</td>`;
-                resultsTableBody.appendChild(row);
+                tbody.appendChild(row);
             });
         }
 
-        function sortTable(colIndex) {
+        function renderTableParticipants(tbodyId, data) {
+            const tbody = document.getElementById(tbodyId);
+            tbody.innerHTML = '';
+            data.forEach(p => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${p.id}</td><td>${p.nome}</td><td>${p.count}</td><td>${p.percentageStr}</td>`;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Ordenação Genérica
+        function sortTable(colIndex, tableType) {
             if (currentSortCol === colIndex) {
                 isAscending = !isAscending;
             } else {
@@ -620,61 +781,101 @@
                 isAscending = true;
             }
 
-            document.querySelectorAll('#results-table th').forEach((th, index) => {
+            // Atualiza ícones visuais
+            document.querySelectorAll(`th[data-table="${tableType}"]`).forEach((th, index) => {
                 th.classList.remove('asc', 'desc');
                 if (index === colIndex) {
                     th.classList.add(isAscending ? 'asc' : 'desc');
                 }
             });
 
-            currentTableData.sort((a, b) => {
+            // Seleciona o array correto
+            let dataRef;
+            if (tableType === 'ops') dataRef = opsTableData;
+            else if (tableType === 'emit') dataRef = emitTableData;
+            else if (tableType === 'dest') dataRef = destTableData;
+
+            dataRef.sort((a, b) => {
                 let valA, valB;
 
-                switch(colIndex) {
-                    case 0: valA = a.natOp; valB = b.natOp; break;
-                    case 1: valA = a.cfop; valB = b.cfop; break;
-                    case 2: valA = a.cstIcms; valB = b.cstIcms; break;
-                    case 3: valA = a.cstPisCofins; valB = b.cstPisCofins; break;
-                    case 4: valA = a.cstIpi; valB = b.cstIpi; break;
-                    case 5: valA = a.count; valB = b.count; break;
-                    case 6: valA = a.percentage; valB = b.percentage; break;
-                    case 7: 
-                        // Ordenação especial para data (trata null como menor valor)
+                if (tableType === 'ops') {
+                    // Colunas Operações
+                    if(colIndex === 0) { valA = a.natOp; valB = b.natOp; }
+                    else if(colIndex === 1) { valA = a.cfop; valB = b.cfop; }
+                    else if(colIndex === 2) { valA = a.cstIcms; valB = b.cstIcms; }
+                    else if(colIndex === 3) { valA = a.cstPisCofins; valB = b.cstPisCofins; }
+                    else if(colIndex === 4) { valA = a.cstIpi; valB = b.cstIpi; }
+                    else if(colIndex === 5) { valA = a.count; valB = b.count; }
+                    else if(colIndex === 6) { valA = a.percentage; valB = b.percentage; }
+                    else if(colIndex === 7) { 
                         valA = a.lastUsage ? a.lastUsage.getTime() : 0; 
                         valB = b.lastUsage ? b.lastUsage.getTime() : 0; 
-                        break;
-                    default: return 0;
+                    }
+                } else {
+                    // Colunas Participantes (Emit/Dest)
+                    if(colIndex === 0) { valA = a.id; valB = b.id; }
+                    else if(colIndex === 1) { valA = a.nome; valB = b.nome; }
+                    else if(colIndex === 2) { valA = a.count; valB = b.count; }
+                    else if(colIndex === 3) { valA = a.percentage; valB = b.percentage; }
                 }
+
+                // Comparação
+                if (typeof valA === 'string') valA = valA.toLowerCase();
+                if (typeof valB === 'string') valB = valB.toLowerCase();
 
                 if (valA < valB) return isAscending ? -1 : 1;
                 if (valA > valB) return isAscending ? 1 : -1;
                 return 0;
             });
 
-            renderTable(currentTableData);
+            // Re-renderizar
+            if (tableType === 'ops') renderTableOps(dataRef);
+            else if (tableType === 'emit') renderTableParticipants('emit-table-body', dataRef);
+            else if (tableType === 'dest') renderTableParticipants('dest-table-body', dataRef);
         }
-        
+
+        // Exportação CSV
         function exportToCsv() {
-            if (uniqueOperations.size === 0) return;
-            const headers = ["Natureza da Operação", "CFOP", "CST/CSOSN ICMS", "CST PIS/COFINS", "CST IPI", "Qtd", "% Total", "Última Utilização"];
-            const csvRows = [headers.join(',')];
-            
-            for (const op of currentTableData) {
-                const values = [op.natOp, op.cfop, op.cstIcms, op.cstPisCofins, op.cstIpi, op.count, op.percentageStr, op.lastUsageStr].map(val => {
-                    const strVal = String(val);
-                    return (strVal.includes(',') || strVal.includes('"')) ? `"${strVal.replace(/"/g, '""')}"` : strVal;
+            let csvRows = [];
+            let fileName = '';
+
+            if (currentActiveTableId === 'results-table') {
+                if (opsTableData.length === 0) return;
+                fileName = 'analise_operacoes.csv';
+                csvRows.push(["Natureza", "CFOP", "CST ICMS", "CST PIS/COF", "CST IPI", "Qtd", "%", "Ultima Utilizacao"].join(','));
+                opsTableData.forEach(op => {
+                    csvRows.push([
+                        op.natOp, op.cfop, op.cstIcms, op.cstPisCofins, op.cstIpi, 
+                        op.count, op.percentageStr, op.lastUsageStr
+                    ].map(escapeCsv).join(','));
                 });
-                csvRows.push(values.join(','));
+
+            } else if (currentActiveTableId === 'emit-table') {
+                if (emitTableData.length === 0) return;
+                fileName = 'analise_emitentes.csv';
+                csvRows.push(["CNPJ/CPF", "Razão Social", "Qtd Notas", "% Total"].join(','));
+                emitTableData.forEach(p => {
+                    csvRows.push([p.id, p.nome, p.count, p.percentageStr].map(escapeCsv).join(','));
+                });
+
+            } else if (currentActiveTableId === 'dest-table') {
+                if (destTableData.length === 0) return;
+                fileName = 'analise_destinatarios.csv';
+                csvRows.push(["CNPJ/CPF", "Razão Social", "Qtd Notas", "% Total"].join(','));
+                destTableData.forEach(p => {
+                    csvRows.push([p.id, p.nome, p.count, p.percentageStr].map(escapeCsv).join(','));
+                });
             }
+
             const blob = new Blob([`\uFEFF${csvRows.join('\n')}`], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'analise_operacoes_nfe.csv';
+            link.download = fileName;
             link.click();
         }
 
         /*******************************************************************
-         * LÓGICA DA ANÁLISE INDIVIDUAL
+         * LÓGICA: ANÁLISE INDIVIDUAL
          *******************************************************************/
         const xmlFileInput = document.getElementById('xmlFile');
         const clearButton = document.getElementById('clearButton');
@@ -690,39 +891,35 @@
             document.getElementById('fileName').textContent = `Arquivo: ${file.name}`;
             document.getElementById('clearButton').style.display = 'inline-block';
 
-            if (!file.name.toLowerCase().endsWith(".xml")) {
-                showError_Individual("O arquivo selecionado não parece ser um XML.");
-                return;
-            }
-
             try {
                 const xmlString = await readFileAsText(file);
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(xmlString, "application/xml");
                 
-                if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
-                   throw new Error("O arquivo está mal formatado ou não é um XML válido.");
-                }
+                if (xmlDoc.getElementsByTagName("parsererror").length > 0) throw new Error("XML inválido.");
                 const nfeNode = xmlDoc.querySelector('infNFe');
-                if (!nfeNode) {
-                    throw new Error("Este XML não parece ser uma NF-e (tag <infNFe> não encontrada).");
-                }
+                if (!nfeNode) throw new Error("Tag infNFe não encontrada.");
                 
                 extractAndDisplayData_Individual(nfeNode);
                 document.getElementById('results').style.display = 'grid';
                 document.getElementById('error-message').style.display = 'none';
             } catch (error) {
-                showError_Individual(error.message);
+                const errorDiv = document.getElementById('error-message');
+                errorDiv.textContent = `Erro: ${error.message}`;
+                errorDiv.style.display = 'block';
+                document.getElementById('results').style.display = 'none';
             }
-        };
+        }
 
-        const extractAndDisplayData_Individual = (nfeNode) => {
+        function extractAndDisplayData_Individual(nfeNode) {
+            // Cabeçalho
             document.getElementById('emitente').textContent = queryTagValue('emit > xNome', nfeNode);
             document.getElementById('cnpjEmitente').textContent = queryTagValue('emit > CNPJ', nfeNode);
             document.getElementById('destinatario').textContent = queryTagValue('dest > xNome', nfeNode);
             document.getElementById('cnpjDestinatario').textContent = queryTagValue('dest > CNPJ', nfeNode, queryTagValue('dest > CPF', nfeNode));
             document.getElementById('operacao').textContent = queryTagValue('ide > natOp', nfeNode);
             
+            // Totais
             const icmsTotNode = nfeNode.querySelector('total > ICMSTot');
             if (icmsTotNode) {
                 document.getElementById('vProd').textContent = formatCurrency(queryTagValue('vProd', icmsTotNode, '0'));
@@ -731,6 +928,7 @@
                 document.getElementById('vTotal').textContent = formatCurrency(queryTagValue('vNF', icmsTotNode, '0'));
             }
 
+            // Impostos Agrupados
             const products = nfeNode.querySelectorAll('det');
             const cfopSet = new Set(), cstIcmsSet = new Set(), cstPisCofinsSet = new Set(), cstIpiSet = new Set(), cEnqIpiSet = new Set();
             
@@ -740,8 +938,10 @@
             for (const product of products) {
                 const prodCfop = queryTagValue('prod > CFOP', product, null);
                 if (prodCfop) cfopSet.add(prodCfop);
+                
                 const impostoNode = product.querySelector('imposto');
                 if (!impostoNode) continue;
+                
                 const icmsNode = impostoNode.querySelector('ICMS');
                 if(icmsNode && icmsNode.children[0]) {
                     const cst = queryTagValue('CST', icmsNode.children[0], null) || queryTagValue('CSOSN', icmsNode.children[0], null);
@@ -766,16 +966,9 @@
             document.getElementById('cstIpi').textContent = [...cstIpiSet].join(', ') || 'N/A';
             document.getElementById('cEnqIpi').textContent = [...cEnqIpiSet].join(', ') || 'N/A';
             document.getElementById('infCpl').textContent = queryTagValue('infAdic > infCpl', nfeNode, "Sem informações complementares.");
-        };
+        }
 
-        const showError_Individual = (message) => {
-            const errorDiv = document.getElementById('error-message');
-            errorDiv.textContent = `Erro: ${message}`;
-            errorDiv.style.display = 'block';
-            document.getElementById('results').style.display = 'none';
-        };
-
-        const clearData_Individual = (keepFileName = false) => {
+        function clearData_Individual(keepFileName = false) {
             if (!keepFileName) {
                 xmlFileInput.value = '';
                 document.getElementById('fileName').textContent = '';
@@ -783,7 +976,7 @@
             }
             document.getElementById('results').style.display = 'none';
             document.getElementById('error-message').style.display = 'none';
-        };
+        }
     </script>
 </body>
 </html>
