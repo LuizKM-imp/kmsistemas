@@ -33,13 +33,29 @@
         .add-user-btn:hover { background-color: var(--c-green-light); color: var(--c-text-dark); }
         .remove-btn { position: absolute; top: 10px; right: 10px; background-color: var(--c-red-bg); color: var(--c-red); border: 1px solid #f6cccb; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
         #generate-btn:disabled { background-color: #aaa; cursor: wait; }
+
+        /* --- NOVOS ESTILOS PARA ABAS E MODO AUTOMÁTICO --- */
+        .tabs { display: flex; gap: 10px; margin-bottom: 2rem; border-bottom: 2px solid var(--c-border); padding-bottom: 0; }
+        .tab { background: none; border: none; font-size: 1.1rem; font-weight: 600; color: var(--c-text-light); padding: 10px 20px; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s ease; border-radius: 0; }
+        .tab:hover { color: var(--c-green-dark); }
+        .tab.active { color: var(--c-green-dark); border-bottom: 3px solid var(--c-green-dark); }
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        #paste-html-btn { background-color: var(--c-green-dark); color: white; width: 100%; margin-bottom: 1.5rem; font-size: 1.2rem; display: flex; justify-content: center; align-items: center; gap: 10px;}
+        #paste-html-btn:hover { background-color: #038a49; }
+        #receba-html { width: 100%; min-height: 300px; border: 2px dashed var(--c-green-light); padding: 20px; font-family: monospace; font-size: 0.95rem; text-align: center; color: var(--c-text-dark); background-color: #fafff0; }
+        #receba-html:focus { text-align: left; }
+        #receba-html::placeholder { color: #888; line-height: 250px; text-align: center; font-size: 1.1rem;}
+        /* ------------------------------------------------- */
+
     </style>
 </head>
 <body>
     <div class="container">
         <div class="logo-container">
             <div class="km-logo">
-                <!-- URL da sua logo foi inserida aqui -->
                 <img id="km-logo-img" src="https://raw.githubusercontent.com/LuizKM-imp/kmsistemas/refs/heads/main/km.png" alt="Logo KM Sistemas" crossorigin="anonymous">
             </div>
             <div id="client-logo-area">
@@ -47,40 +63,203 @@
                 <img id="client-logo-pasted" src="" alt="Logo do Cliente" style="display:none;">
             </div>
         </div>
+        
         <h1>Formulário de Passagem de Cliente ao Suporte</h1>
-        <!-- Restante do Formulário (inalterado) -->
-        <h2>Dados Gerais</h2>
-        <div class="form-group"><label for="razaoSocial">Razão Social:</label><input type="text" id="razaoSocial" placeholder="Ex: Tecnologia LTDA"></div>
-        <div class="form-group"><label for="nomeFantasia">Nome Fantasia:</label><input type="text" id="nomeFantasia" placeholder="Ex: Super Tech"></div>
-        <div class="form-group"><label for="qtdCnpj">Quantidade de CNPJ:</label><input type="text" id="qtdCnpj"></div>
-        <div class="form-group"><label for="patrocinador">Patrocinador:</label><input type="text" id="patrocinador"></div>
-        <div class="form-group"><label for="admProjeto">Adm(s) do Projeto:</label><input type="text" id="admProjeto"></div>
-        <div class="form-group"><label for="consultor">Consultor de Implantação:</label><input type="text" id="consultor"></div>
-        <h2>Configuração do Sistema</h2>
-        <div class="form-group"><label>Módulos contratados:</label><div class="checkbox-group" id="modulosContratados"><label><input type="checkbox" value="Comercial">Comercial</label><label><input type="checkbox" value="Estoque">Estoque</label><label><input type="checkbox" value="Industrial">Industrial</label><label><input type="checkbox" value="Faturamento">Faturamento</label><label><input type="checkbox" value="Pagar">Pagar</label><label><input type="checkbox" value="Receber">Receber</label><label><input type="checkbox" value="Tesouraria">Tesouraria</label></div></div>
-        <div class="form-group"><label>Documentos Fiscais:</label><div class="checkbox-group" id="documentosFiscais"><label><input type="checkbox" value="NFe">NFe</label><label><input type="checkbox" value="NFCe">NFCe</label><label><input type="checkbox" value="SPED">SPED</label><label><input type="checkbox" value="CTe">CTe</label><label><input type="checkbox" value="MDFe">MDFe</label></div></div>
-        <div class="form-group"><label for="ferramentasAdicionais">Ferramentas adicionais:</label><textarea id="ferramentasAdicionais"></textarea></div>
-        <h2>Detalhes da Implantação</h2>
-        <div class="form-group"><label for="capacitacaoUsuarios">Capacitação dos usuários:</label><textarea id="capacitacaoUsuarios"></textarea></div>
-        <div class="form-group"><label for="pedidosHomologacao">Tipos de Pedido emitidos em homologação:</label><textarea id="pedidosHomologacao"></textarea></div>
-        <div class="form-group"><label for="pedidosProducao">Tipos de Pedido emitidos em produção:</label><textarea id="pedidosProducao"></textarea></div>
-        <div class="form-group"><label for="envioCiencia">Envio de ciência (dados fiscais para contabilidade):</label><textarea id="envioCiencia"></textarea></div>
-        <div class="form-group"><label for="boletos">Detalhes sobre Boletos:</label><textarea id="boletos"></textarea></div>
-        <h2>Perfil dos Usuários</h2>
-        <div id="usuarios-container"></div>
-        <div class="form-group"><button type="button" class="add-user-btn" onclick="adicionarUsuario()">+ Adicionar Usuário</button></div>
-        <h2>Considerações Finais</h2>
-        <div class="form-group"><label for="resumoCliente">Resumo do cliente (principais pontos de atenção para o Suporte):</label><textarea id="resumoCliente"></textarea></div>
-    </div>
-    <div class="button-group">
-        <button id="generate-btn" onclick="gerarPdf()">Gerar PDF</button>
+
+        <!-- SISTEMA DE ABAS -->
+        <div class="tabs">
+            <button class="tab active" data-tab="automatico" onclick="mudarAba('automatico')">Automático</button>
+            <button class="tab" data-tab="manual" onclick="mudarAba('manual')">Manual</button>
+        </div>
+
+        <!-- ABA AUTOMÁTICO -->
+        <div id="automatico" class="tab-content active">
+            <button id="paste-html-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                Colar HTML e Gerar PDF
+            </button>
+            <textarea id="receba-html" placeholder="Cole aqui o HTML do Receba"></textarea>
+        </div>
+
+        <!-- ABA MANUAL (SEU FORMULÁRIO INTACTO) -->
+        <div id="manual" class="tab-content">
+            <h2>Dados Gerais</h2>
+            <div class="form-group"><label for="razaoSocial">Razão Social:</label><input type="text" id="razaoSocial" placeholder="Ex: Tecnologia LTDA"></div>
+            <div class="form-group"><label for="nomeFantasia">Nome Fantasia:</label><input type="text" id="nomeFantasia" placeholder="Ex: Super Tech"></div>
+            <div class="form-group"><label for="qtdCnpj">Quantidade de CNPJ:</label><input type="text" id="qtdCnpj"></div>
+            <div class="form-group"><label for="patrocinador">Patrocinador:</label><input type="text" id="patrocinador"></div>
+            <div class="form-group"><label for="admProjeto">Adm(s) do Projeto:</label><input type="text" id="admProjeto"></div>
+            <div class="form-group"><label for="consultor">Consultor de Implantação:</label><input type="text" id="consultor"></div>
+            
+            <h2>Configuração do Sistema</h2>
+            <div class="form-group"><label>Módulos contratados:</label><div class="checkbox-group" id="modulosContratados"><label><input type="checkbox" value="Comercial">Comercial</label><label><input type="checkbox" value="Estoque">Estoque</label><label><input type="checkbox" value="Industrial">Industrial</label><label><input type="checkbox" value="Faturamento">Faturamento</label><label><input type="checkbox" value="Pagar">Pagar</label><label><input type="checkbox" value="Receber">Receber</label><label><input type="checkbox" value="Tesouraria">Tesouraria</label></div></div>
+            <div class="form-group"><label>Documentos Fiscais:</label><div class="checkbox-group" id="documentosFiscais"><label><input type="checkbox" value="NFe">NFe</label><label><input type="checkbox" value="NFCe">NFCe</label><label><input type="checkbox" value="SPED">SPED</label><label><input type="checkbox" value="CTe">CTe</label><label><input type="checkbox" value="MDFe">MDFe</label></div></div>
+            <div class="form-group"><label for="ferramentasAdicionais">Ferramentas adicionais:</label><textarea id="ferramentasAdicionais"></textarea></div>
+            
+            <h2>Detalhes da Implantação</h2>
+            <div class="form-group"><label for="capacitacaoUsuarios">Capacitação dos usuários:</label><textarea id="capacitacaoUsuarios"></textarea></div>
+            <div class="form-group"><label for="pedidosHomologacao">Tipos de Pedido emitidos em homologação:</label><textarea id="pedidosHomologacao"></textarea></div>
+            <div class="form-group"><label for="pedidosProducao">Tipos de Pedido emitidos em produção:</label><textarea id="pedidosProducao"></textarea></div>
+            <div class="form-group"><label for="envioCiencia">Envio de ciência (dados fiscais para contabilidade):</label><textarea id="envioCiencia"></textarea></div>
+            <div class="form-group"><label for="boletos">Detalhes sobre Boletos:</label><textarea id="boletos"></textarea></div>
+            
+            <h2>Perfil dos Usuários</h2>
+            <div id="usuarios-container"></div>
+            <div class="form-group"><button type="button" class="add-user-btn" onclick="adicionarUsuario()">+ Adicionar Usuário</button></div>
+            
+            <h2>Considerações Finais</h2>
+            <div class="form-group"><label for="resumoCliente">Resumo do cliente (principais pontos de atenção para o Suporte):</label><textarea id="resumoCliente"></textarea></div>
+            
+            <div class="button-group">
+                <button id="generate-btn" onclick="gerarPdf()">Gerar PDF Manual</button>
+            </div>
+        </div>
     </div>
 
-    <!-- BIBLIOTECA JSPDF COMPLETA E EMBUTIDA -->
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- BIBLIOTECA JSPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
-
     <script>
+        // =========================================================
+        // LÓGICAS NOVAS - SISTEMA DE ABAS E MODO AUTOMÁTICO
+        // =========================================================
+        
+        function mudarAba(abaId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(abaId).classList.add('active');
+            document.querySelector(`[data-tab="${abaId}"]`).classList.add('active');
+        }
+
+        document.getElementById("paste-html-btn").addEventListener("click", async () => {
+            const textarea = document.getElementById("receba-html");
+            
+            try {
+                // Tenta ler o clipboard automaticamente (requer permissão do navegador)
+                const text = await navigator.clipboard.readText();
+                if(text) textarea.value = text;
+            } catch (err) {
+                console.log("Acesso ao clipboard bloqueado pelo navegador. Utilizando o conteúdo já colado na caixa de texto.");
+                if(!textarea.value.trim()) {
+                    alert("Não foi possível ler a área de transferência. Por favor, clique na caixa abaixo, aperte Ctrl+V para colar o HTML, e clique neste botão novamente.");
+                    return;
+                }
+            }
+            
+            if(textarea.value.trim() !== "") {
+                gerarPdfAutomatico();
+            }
+        });
+
+        async function gerarPdfAutomatico() {
+            const htmlContent = document.getElementById("receba-html").value;
+            if(!htmlContent) return;
+
+            const btn = document.getElementById("paste-html-btn");
+            btn.innerHTML = "Gerando PDF...";
+            btn.disabled = true;
+
+            const tempContainer = document.createElement("div");
+            tempContainer.innerHTML = htmlContent;
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            const MARGIN = 15;
+            const PAGE_WIDTH = doc.internal.pageSize.getWidth();
+            const PAGE_HEIGHT = doc.internal.pageSize.getHeight();
+            const CONTENT_WIDTH = PAGE_WIDTH - MARGIN * 2;
+            const LINE_HEIGHT = 4.5;
+            let cursorY = MARGIN;
+
+            // Recriando as funções de layout para manter o isolamento do código manual
+            const checkPageBreak = (neededHeight = 10) => {
+                if (cursorY + neededHeight > PAGE_HEIGHT - MARGIN) {
+                    doc.addPage();
+                    cursorY = MARGIN; 
+                }
+            };
+            
+            const addImageWithRatio = (imgEl, x, y, maxWidth, maxHeight) => {
+                 if (!imgEl.src || !imgEl.complete || imgEl.naturalWidth === 0) return;
+                const imgRatio = imgEl.naturalWidth / imgEl.naturalHeight;
+                let newWidth = maxWidth;
+                let newHeight = newWidth / imgRatio;
+                if (newHeight > maxHeight) {
+                    newHeight = maxHeight;
+                    newWidth = newHeight * imgRatio;
+                }
+                try { doc.addImage(imgEl, 'PNG', x, y, newWidth, newHeight, '', 'FAST'); } 
+                catch(e) { console.error("Erro adicionando imagem:", e); }
+            };
+            
+            const addHeader = () => {
+                const kmLogoImg = document.getElementById('km-logo-img');
+                const clientLogoImg = document.getElementById('client-logo-pasted');
+                addImageWithRatio(kmLogoImg, MARGIN, 8, 40, 20);
+                addImageWithRatio(clientLogoImg, PAGE_WIDTH - MARGIN - 40, 8, 40, 20);
+            };
+
+            const addSectionTitle = (title) => {
+                if(!title.trim()) return;
+                checkPageBreak(15);
+                cursorY += 8;
+                doc.setFontSize(12).setFont('helvetica', 'bold').setTextColor('#04ab5c');
+                doc.text(title, MARGIN, cursorY);
+                cursorY += 1;
+                doc.setDrawColor('#a9cf44').setLineWidth(0.5).line(MARGIN, cursorY, PAGE_WIDTH - MARGIN, cursorY);
+                cursorY += 6;
+                doc.setFontSize(10).setTextColor('#333333');
+            };
+
+            const addLongTextField = (value) => {
+                if (!value.trim()) return;
+                checkPageBreak(15);
+                doc.setFont('helvetica', 'normal').setTextColor('#000000');
+                const splitText = doc.splitTextToSize(value, CONTENT_WIDTH);
+                doc.text(splitText, MARGIN, cursorY);
+                cursorY += (splitText.length * LINE_HEIGHT) + 2;
+                doc.setTextColor('#333333');
+            };
+
+            // INÍCIO DA GERAÇÃO
+            addHeader();
+            cursorY = 30;
+            
+            doc.setFontSize(16).setFont('helvetica', 'bold').text('Documento de passagem ao Suporte', PAGE_WIDTH / 2, cursorY, { align: 'center' });
+            cursorY += 5;
+
+            // Parser do HTML
+            function parseHTMLContent(element) {
+                for (let child of element.children) {
+                    const tag = child.tagName.toLowerCase();
+                    
+                    if (['h1', 'h2', 'h3'].includes(tag)) {
+                        addSectionTitle(child.innerText);
+                    } else if (tag === 'p') {
+                        addLongTextField(child.innerText);
+                    } else if (tag === 'ul' || tag === 'ol') {
+                        let listText = Array.from(child.querySelectorAll('li')).map(li => "• " + li.innerText).join('\n');
+                        if(listText) addLongTextField(listText);
+                    } else {
+                        // Busca elementos dentro de divs genéricas
+                        parseHTMLContent(child);
+                    }
+                }
+            }
+
+            parseHTMLContent(tempContainer);
+
+            doc.save("Passagem_Suporte_Automatico.pdf");
+
+            btn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg> Colar HTML e Gerar PDF`;
+            btn.disabled = false;
+        }
+
+        // =========================================================
+        // SEU CÓDIGO MANUAL ORIGINAL ABAIXO (100% INTACTO)
+        // =========================================================
+
         // Funções UI (inalteradas)
         function adicionarUsuario() {
             const container = document.getElementById('usuarios-container');
@@ -258,7 +437,7 @@
             const fileName = `Passagem_Suporte_${getData('nomeFantasia').replace(/[^a-z0-9]/gi, '_') || "Cliente"}.pdf`;
             doc.save(fileName);
             
-            generateButton.innerText = 'Gerar PDF';
+            generateButton.innerText = 'Gerar PDF Manual';
             generateButton.disabled = false;
         }
     </script>
