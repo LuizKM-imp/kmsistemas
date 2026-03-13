@@ -146,7 +146,7 @@
             display: inline-block;
         }
 
-        .folder-label:hover, .file-label:hover { background-color: #2471a3; }
+        .folder-label:hover, .file-label:hover { background-color: #038d4b; }
 
         table {
             width: 100%;
@@ -253,13 +253,443 @@
             border: 1px solid var(--error-color); padding: 15px; border-radius: 5px;
             text-align: center; font-weight: bold; display: none;
         }
+
+        #individual-error {
+            color: var(--error-color);
+            background-color: #fadbd8;
+            border: 1px solid var(--error-color);
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+
+        .individual-upload-panel {
+            display: grid;
+            gap: 16px;
+        }
+
+        .individual-upload-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .individual-upload-copy h2 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 1.45em;
+        }
+
+        .individual-upload-copy p {
+            margin: 8px 0 0;
+            color: #6c7a89;
+        }
+
+        .individual-upload-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .individual-meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        #fileName {
+            margin: 0;
+            font-style: italic;
+            color: var(--primary-color);
+        }
+
+        .individual-status-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-weight: 600;
+            background-color: #eaf7ef;
+            color: var(--primary-color);
+            border: 1px solid rgba(4, 171, 92, 0.18);
+        }
+
+        .individual-status-pill.warn {
+            background-color: #f7f7e8;
+            color: #7d6a16;
+            border-color: rgba(169, 207, 68, 0.35);
+        }
+
+        .individual-status-pill.error {
+            background-color: #fdecea;
+            color: var(--error-color);
+            border-color: rgba(192, 57, 43, 0.28);
+        }
+
+        .individual-workspace {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .individual-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }
+
+        .individual-metric {
+            background-color: var(--card-background);
+            border: 1px solid #dfe6e9;
+            border-radius: 8px;
+            padding: 18px;
+            box-shadow: 0 3px 8px var(--shadow-color);
+        }
+
+        .individual-metric-label {
+            font-size: 0.78em;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #7f8c8d;
+            font-weight: bold;
+        }
+
+        .individual-metric-value {
+            margin-top: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--text-color);
+            line-height: 1.2;
+            word-break: break-word;
+        }
+
+        .individual-metric-sub {
+            margin-top: 8px;
+            color: #6c7a89;
+            font-size: 0.9em;
+            line-height: 1.45;
+        }
+
+        .individual-shell {
+            display: grid;
+            gap: 16px;
+        }
+
+        .individual-shell-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .individual-view-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .individual-view-btn {
+            padding: 10px 14px;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background-color: #f8f9f9;
+            border-radius: 6px;
+            font-size: 0.95em;
+            color: var(--text-color);
+            transition: all 0.2s ease;
+        }
+
+        .individual-view-btn:hover {
+            background-color: #eef8f1;
+            border-color: rgba(4, 171, 92, 0.28);
+        }
+
+        .individual-view-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .individual-view-host {
+            background-color: #f7f9fa;
+            border: 1px solid #dfe6e9;
+            border-radius: 8px;
+            min-height: 520px;
+            max-height: 72vh;
+            overflow: auto;
+            padding: 18px;
+        }
+
+        .individual-view {
+            display: none;
+        }
+
+        .individual-view.active {
+            display: block;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+
+        .analysis-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .analysis-grid.cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .analysis-grid.cols-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .analysis-card {
+            background-color: var(--card-background);
+            border: 1px solid #dfe6e9;
+            border-radius: 8px;
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .analysis-card h3 {
+            margin: 0 0 14px;
+            color: var(--primary-color);
+            font-size: 1.05em;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .analysis-card h4 {
+            margin: 0 0 12px;
+            color: var(--secondary-color);
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .analysis-copy {
+            margin: 0 0 14px;
+            color: #6c7a89;
+            line-height: 1.5;
+        }
+
+        .analysis-field-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 12px;
+        }
+
+        .analysis-field {
+            background-color: #f8f9f9;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            padding: 12px;
+        }
+
+        .analysis-field-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #7f8c8d;
+            font-weight: bold;
+        }
+
+        .analysis-field-value {
+            margin-top: 6px;
+            font-weight: 600;
+            color: var(--text-color);
+            word-break: break-word;
+            line-height: 1.45;
+        }
+
+        .analysis-field-note {
+            margin-top: 5px;
+            color: #6c7a89;
+            font-size: 0.88em;
+        }
+
+        .analysis-callout {
+            background: linear-gradient(135deg, rgba(4, 171, 92, 0.08), rgba(169, 207, 68, 0.16));
+            border: 1px solid rgba(4, 171, 92, 0.16);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .analysis-callout strong {
+            display: block;
+            color: var(--primary-color);
+            margin-bottom: 6px;
+        }
+
+        .analysis-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 7px 11px;
+            border-radius: 999px;
+            font-size: 0.82em;
+            font-weight: bold;
+            margin-right: 6px;
+            margin-bottom: 6px;
+            background-color: #eef8f1;
+            color: var(--primary-color);
+        }
+
+        .analysis-pill.warn {
+            background-color: #f7f7e8;
+            color: #7d6a16;
+        }
+
+        .analysis-pill.error {
+            background-color: #fdecea;
+            color: var(--error-color);
+        }
+
+        .analysis-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .analysis-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 14px;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            background-color: #fbfcfc;
+        }
+
+        .analysis-list-item strong {
+            display: block;
+        }
+
+        .analysis-list-item span {
+            color: #6c7a89;
+            text-align: right;
+            font-size: 0.92em;
+        }
+
+        .analysis-table-shell {
+            overflow: auto;
+            border: 1px solid #dfe6e9;
+            border-radius: 8px;
+            background-color: white;
+        }
+
+        .analysis-table-shell table {
+            min-width: 760px;
+        }
+
+        .analysis-empty {
+            padding: 18px;
+            border: 1px dashed #bdc3c7;
+            border-radius: 6px;
+            color: #7f8c8d;
+            background-color: #fbfcfc;
+        }
+
+        .analysis-note-box {
+            padding: 14px;
+            border-radius: 6px;
+            background-color: #f8f9f9;
+            border: 1px solid #e1e8ed;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .analysis-tree details {
+            border: 1px solid #dfe6e9;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            background-color: white;
+            overflow: hidden;
+        }
+
+        .analysis-tree summary {
+            cursor: pointer;
+            padding: 12px 14px;
+            font-weight: bold;
+            list-style: none;
+            background-color: #f8f9f9;
+        }
+
+        .analysis-tree summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .analysis-tree-body {
+            padding: 12px 14px 14px;
+            border-top: 1px solid #e1e8ed;
+        }
+
+        .individual-item-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+            gap: 16px;
+        }
+
+        .individual-item-table tbody tr {
+            cursor: pointer;
+        }
+
+        .individual-item-table tbody tr.selected-item {
+            background-color: #eef8f1;
+        }
+
+        .individual-item-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .analysis-search {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.95em;
+            margin-bottom: 14px;
+        }
+
+        .analysis-inline-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .analysis-grid.cols-2,
+            .analysis-grid.cols-3,
+            .individual-item-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .individual-view-host {
+                max-height: none;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header class="header">
             <h1>Analisador de XML de NF-e</h1>
-            <p>Selecione uma aba para analisar arquivos em lote ou individualmente.</p>
+            <p>Analise em lote ou abra uma NF-e individual.</p>
         </header>
 
         <nav class="tab-nav">
@@ -366,48 +796,53 @@
 
         <!-- Conteúdo da Aba de Análise Individual -->
         <div id="tab-individual" class="tab-content">
-            <div id="error-message"></div>
-            <section class="upload-section">
-                 <p>Selecione um único arquivo XML de uma Nota Fiscal Eletrônica para extrair as informações.</p>
-                <div style="text-align: center;">
-                    <label for="xmlFile" class="file-label">Selecionar arquivo XML</label>
-                    <input type="file" id="xmlFile" accept=".xml">
-                    <button id="clearButton" class="btn-action" style="display: none;">Limpar Dados</button>
-                    <p id="fileName"></p>
+            <div id="individual-error"></div>
+            <section class="upload-section individual-upload-panel">
+                <div class="individual-upload-top">
+                    <div class="individual-upload-copy">
+                        <h2>Análise individual da NF-e</h2>
+                        <p>Carregue um XML e navegue pelos blocos da NF-e em abas internas.</p>
+                    </div>
+                    <div class="individual-upload-actions">
+                        <label for="xmlFile" class="file-label">Selecionar arquivo XML</label>
+                        <input type="file" id="xmlFile" accept=".xml">
+                        <button id="clearButton" class="btn-action" style="display: none;">Limpar dados</button>
+                    </div>
+                </div>
+                <div class="individual-meta-row">
+                    <p id="fileName">Nenhum arquivo selecionado.</p>
+                    <div id="individual-status" class="individual-status-pill warn">Aguardando XML</div>
                 </div>
             </section>
-            <main id="results" style="display: none;">
-                <div class="info-card">
-                    <h3>Envolvidos na Operação</h3>
-                    <div class="info-item"><span>Emitente:</span><span id="emitente"></span></div>
-                    <div class="info-item"><span>CNPJ Emitente:</span><span id="cnpjEmitente"></span></div>
-                    <div class="info-item"><span>Destinatário:</span><span id="destinatario"></span></div>
-                    <div class="info-item"><span>CNPJ/CPF Dest.:</span><span id="cnpjDestinatario"></span></div>
-                </div>
-                <div class="info-card">
-                    <h3>Dados da Operação</h3>
-                    <div class="info-item"><span>Natureza:</span><span id="operacao"></span></div>
-                    <div class="info-item"><span>CFOP:</span><span id="cfop"></span></div>
-                </div>
-                <div class="info-card">
-                    <h3>Valores Totais</h3>
-                    <div class="info-item"><span>Total dos Itens:</span><span id="vProd"></span></div>
-                    <div class="info-item"><span>Frete:</span><span id="vFrete"></span></div>
-                    <div class="info-item"><span>Desp. Adicionais:</span><span id="vOutro"></span></div>
-                    <div class="info-item"><span style="font-size: 1.1em;"><strong>Valor Final:</strong></span><span id="vTotal" style="font-size: 1.1em; font-weight: bold;"></span></div>
-                </div>
-                <div class="info-card">
-                    <h3>Códigos de Tributação (CST/CSOSN)</h3>
-                    <div class="info-item"><span>ICMS:</span><span id="cstIcms"></span></div>
-                    <div class="info-item"><span>PIS/COFINS:</span><span id="cstPisCofins"></span></div>
-                    <div class="info-item"><span>IPI:</span><span id="cstIpi"></span></div>
-                    <div class="info-item"><span>Cód. Enq. IPI:</span><span id="cEnqIpi"></span></div>
-                </div>
-                <div class="info-card full-width">
-                    <h3>Outras Informações</h3>
-                    <div class="info-item vertical"><span>Informações Complementares ao Fisco:</span><span id="infCpl"></span></div>
-                </div>
-            </main>
+            <div id="individualWorkspace" class="individual-workspace">
+                <section id="individualMetrics" class="individual-metrics"></section>
+
+                <section class="results-section individual-shell">
+                    <div class="individual-shell-top">
+                        <div class="individual-view-nav">
+                            <button class="individual-view-btn active" data-ind-view="overview">Resumo</button>
+                            <button class="individual-view-btn" data-ind-view="parties">Partes</button>
+                            <button class="individual-view-btn" data-ind-view="items">Itens</button>
+                            <button class="individual-view-btn" data-ind-view="taxes">Tributos</button>
+                            <button class="individual-view-btn" data-ind-view="finance">Financeiro</button>
+                            <button class="individual-view-btn" data-ind-view="logistics">Logística</button>
+                            <button class="individual-view-btn" data-ind-view="technical">Técnico</button>
+                            <button class="individual-view-btn" data-ind-view="xml">XML</button>
+                        </div>
+                    </div>
+
+                    <div class="individual-view-host">
+                        <section id="ind-view-overview" class="individual-view active"></section>
+                        <section id="ind-view-parties" class="individual-view"></section>
+                        <section id="ind-view-items" class="individual-view"></section>
+                        <section id="ind-view-taxes" class="individual-view"></section>
+                        <section id="ind-view-finance" class="individual-view"></section>
+                        <section id="ind-view-logistics" class="individual-view"></section>
+                        <section id="ind-view-technical" class="individual-view"></section>
+                        <section id="ind-view-xml" class="individual-view"></section>
+                    </div>
+                </section>
+            </div>
         </div>
     </div>
 
@@ -877,6 +1312,7 @@
         /*******************************************************************
          * LÓGICA: ANÁLISE INDIVIDUAL
          *******************************************************************/
+        if (false) {
         const xmlFileInput = document.getElementById('xmlFile');
         const clearButton = document.getElementById('clearButton');
 
@@ -977,6 +1413,1594 @@
             document.getElementById('results').style.display = 'none';
             document.getElementById('error-message').style.display = 'none';
         }
+        }
+
+        (() => {
+            const labels = {
+                cUF: 'Código da UF',
+                cNF: 'Código numérico',
+                natOp: 'Natureza da operação',
+                mod: 'Modelo',
+                serie: 'Série',
+                nNF: 'Número da NF-e',
+                dhEmi: 'Data de emissão',
+                dEmi: 'Data de emissão',
+                dhSaiEnt: 'Saída/entrada',
+                dSaiEnt: 'Saída/entrada',
+                tpNF: 'Tipo de operação',
+                idDest: 'Destino da operação',
+                cMunFG: 'Município do fato gerador',
+                tpImp: 'Formato DANFE',
+                tpEmis: 'Tipo de emissão',
+                cDV: 'Dígito verificador',
+                tpAmb: 'Ambiente',
+                finNFe: 'Finalidade',
+                indFinal: 'Consumidor final',
+                indPres: 'Indicador de presença',
+                procEmi: 'Processo de emissão',
+                verProc: 'Versão do processo',
+                CNPJ: 'CNPJ',
+                CPF: 'CPF',
+                xNome: 'Razão social / nome',
+                xFant: 'Nome fantasia',
+                IE: 'Inscrição estadual',
+                IEST: 'IE substituto tributário',
+                IM: 'Inscrição municipal',
+                CNAE: 'CNAE',
+                CRT: 'Regime tributário',
+                xLgr: 'Logradouro',
+                nro: 'Número',
+                xCpl: 'Complemento',
+                xBairro: 'Bairro',
+                cMun: 'Código do município',
+                xMun: 'Município',
+                UF: 'UF',
+                CEP: 'CEP',
+                cPais: 'Código do país',
+                xPais: 'País',
+                fone: 'Telefone',
+                email: 'E-mail',
+                indIEDest: 'Situação IE destinatário',
+                cProd: 'Código do produto',
+                cEAN: 'GTIN/EAN',
+                xProd: 'Descrição',
+                NCM: 'NCM',
+                CEST: 'CEST',
+                CFOP: 'CFOP',
+                EXTIPI: 'EX TIPI',
+                uCom: 'Unidade comercial',
+                qCom: 'Quantidade comercial',
+                vUnCom: 'Valor unitário comercial',
+                vProd: 'Valor do produto',
+                cEANTrib: 'GTIN tributável',
+                uTrib: 'Unidade tributável',
+                qTrib: 'Quantidade tributável',
+                vUnTrib: 'Valor unitário tributável',
+                vFrete: 'Frete',
+                vSeg: 'Seguro',
+                vDesc: 'Desconto',
+                vOutro: 'Outras despesas',
+                indTot: 'Compõe total',
+                vTotTrib: 'Tributos aproximados',
+                xPed: 'Pedido',
+                nItemPed: 'Item do pedido',
+                nFCI: 'FCI',
+                qVol: 'Quantidade de volumes',
+                esp: 'Espécie',
+                marca: 'Marca',
+                nVol: 'Numeração',
+                pesoL: 'Peso líquido',
+                pesoB: 'Peso bruto',
+                modFrete: 'Modalidade do frete',
+                nFat: 'Número da fatura',
+                vOrig: 'Valor original',
+                vLiq: 'Valor líquido',
+                nDup: 'Duplicata',
+                dVenc: 'Vencimento',
+                vDup: 'Valor da duplicata',
+                indPag: 'Indicador de pagamento',
+                tPag: 'Forma de pagamento',
+                vPag: 'Valor pago',
+                tpIntegra: 'Integração do pagamento',
+                CNPJPag: 'CNPJ credenciador',
+                CNPJReceb: 'CNPJ recebedor',
+                cAut: 'Código de autorização',
+                infAdFisco: 'Informações ao fisco',
+                infCpl: 'Informações complementares',
+                chNFe: 'Chave da NF-e',
+                dhRecbto: 'Recebimento',
+                nProt: 'Protocolo',
+                digVal: 'Digest value',
+                cStat: 'Código de status',
+                xMotivo: 'Motivo',
+                verAplic: 'Versão do autorizador',
+                vBC: 'Base de cálculo',
+                vICMS: 'Valor ICMS',
+                vICMSDeson: 'ICMS desonerado',
+                vFCP: 'FCP',
+                vBCST: 'Base ST',
+                vST: 'Valor ST',
+                vFCPST: 'FCP ST',
+                vFCPSTRet: 'FCP ST retido',
+                vII: 'II',
+                vIPI: 'IPI',
+                vIPIDevol: 'IPI devolvido',
+                vPIS: 'PIS',
+                vCOFINS: 'COFINS',
+                vNF: 'Valor total da NF-e',
+                pICMS: 'Alíquota ICMS',
+                pPIS: 'Alíquota PIS',
+                pCOFINS: 'Alíquota COFINS',
+                pIPI: 'Alíquota IPI',
+                pICMSRet: 'Alíquota retenção',
+                xEnder: 'Endereço',
+                placa: 'Placa',
+                tpViaTransp: 'Via transporte',
+                tpIntermedio: 'Intermediação',
+                idCSRT: 'ID CSRT',
+                hashCSRT: 'Hash CSRT'
+            };
+
+            const maps = {
+                tpAmb: { '1': 'Produção', '2': 'Homologação' },
+                tpNF: { '0': 'Entrada', '1': 'Saída' },
+                idDest: { '1': 'Interna', '2': 'Interestadual', '3': 'Exterior' },
+                tpImp: {
+                    '0': 'Sem DANFE',
+                    '1': 'DANFE retrato',
+                    '2': 'DANFE paisagem',
+                    '3': 'DANFE simplificado',
+                    '4': 'DANFE NFC-e',
+                    '5': 'DANFE NFC-e eletrônica'
+                },
+                tpEmis: {
+                    '1': 'Normal',
+                    '2': 'Contingência FS-IA',
+                    '3': 'SCAN',
+                    '4': 'DPEC',
+                    '5': 'FS-DA',
+                    '6': 'SVC-AN',
+                    '7': 'SVC-RS',
+                    '9': 'Contingência off-line'
+                },
+                finNFe: {
+                    '1': 'NF-e normal',
+                    '2': 'Complementar',
+                    '3': 'Ajuste',
+                    '4': 'Devolução / retorno'
+                },
+                indFinal: { '0': 'Não', '1': 'Sim' },
+                indPres: {
+                    '0': 'Não se aplica',
+                    '1': 'Operação presencial',
+                    '2': 'Internet',
+                    '3': 'Teleatendimento',
+                    '4': 'Entrega em domicílio',
+                    '5': 'Fora do estabelecimento',
+                    '9': 'Não presencial / outros'
+                },
+                procEmi: {
+                    '0': 'Aplicativo do contribuinte',
+                    '1': 'Avulsa pelo fisco',
+                    '2': 'Avulsa via site',
+                    '3': 'Aplicativo do fisco'
+                },
+                CRT: {
+                    '1': 'Simples Nacional',
+                    '2': 'Simples Nacional excesso sublimite',
+                    '3': 'Regime normal'
+                },
+                indIEDest: { '1': 'Contribuinte ICMS', '2': 'Isento', '9': 'Não contribuinte' },
+                indPag: { '0': 'À vista', '1': 'A prazo' },
+                tPag: {
+                    '01': 'Dinheiro',
+                    '02': 'Cheque',
+                    '03': 'Cartão de crédito',
+                    '04': 'Cartão de débito',
+                    '05': 'Crédito loja',
+                    '10': 'Vale alimentação',
+                    '11': 'Vale refeição',
+                    '12': 'Vale presente',
+                    '13': 'Vale combustível',
+                    '15': 'Boleto bancário',
+                    '16': 'Depósito bancário',
+                    '17': 'PIX',
+                    '18': 'Transferência / carteira digital',
+                    '19': 'Programa de fidelidade',
+                    '90': 'Sem pagamento',
+                    '99': 'Outros'
+                },
+                tpIntegra: { '1': 'Pagamento integrado', '2': 'Pagamento não integrado' },
+                modFrete: {
+                    '0': 'Por conta do emitente',
+                    '1': 'Por conta do destinatário/remetente',
+                    '2': 'Por conta de terceiros',
+                    '3': 'Transporte próprio remetente',
+                    '4': 'Transporte próprio destinatário',
+                    '9': 'Sem transporte'
+                },
+                orig: {
+                    '0': 'Nacional',
+                    '1': 'Estrangeira importação direta',
+                    '2': 'Estrangeira adquirida no mercado interno',
+                    '3': 'Nacional com conteúdo importado > 40%',
+                    '4': 'Nacional conforme PPB',
+                    '5': 'Nacional com conteúdo importado <= 40%',
+                    '6': 'Estrangeira importação direta sem similar',
+                    '7': 'Estrangeira adquirida no mercado interno sem similar',
+                    '8': 'Nacional com conteúdo importado > 70%'
+                },
+                mod: { '55': 'NF-e', '65': 'NFC-e' },
+                indTot: { '0': 'Não compõe o total', '1': 'Compõe o total' }
+            };
+
+            const moneyTags = new Set([
+                'vBC', 'vBCST', 'vICMS', 'vICMSDeson', 'vFCP', 'vST', 'vFCPST', 'vFCPSTRet', 'vProd',
+                'vFrete', 'vSeg', 'vDesc', 'vII', 'vIPI', 'vIPIDevol', 'vPIS', 'vCOFINS', 'vOutro',
+                'vNF', 'vTotTrib', 'vOrig', 'vLiq', 'vDup', 'vPag', 'vServ', 'vBCRet', 'vICMSRet',
+                'vBCFCP', 'vAliqProd', 'vBCUFDest', 'vFCPUFDest', 'vICMSUFDest', 'vICMSUFRemet', 'vIOF'
+            ]);
+            const numberTags = new Set([
+                'qCom', 'qTrib', 'qVol', 'pesoL', 'pesoB', 'vUnCom', 'vUnTrib', 'qBCProd', 'vAliqProd'
+            ]);
+            const percentTags = new Set([
+                'pICMS', 'pPIS', 'pCOFINS', 'pIPI', 'pICMSRet', 'pMVAST', 'pRedBC', 'pRedBCST', 'pFCP',
+                'pFCPST', 'pFCPSTRet', 'pBCOp', 'pCredSN', 'pICMSUFDest', 'pFCPUFDest', 'pST'
+            ]);
+            const dateTags = new Set(['dhEmi', 'dEmi', 'dhSaiEnt', 'dSaiEnt', 'dhRecbto', 'dVenc']);
+
+            const refs = {
+                fileInput: document.getElementById('xmlFile'),
+                clearButton: document.getElementById('clearButton'),
+                fileName: document.getElementById('fileName'),
+                error: document.getElementById('individual-error'),
+                status: document.getElementById('individual-status'),
+                workspace: document.getElementById('individualWorkspace'),
+                metrics: document.getElementById('individualMetrics'),
+                viewButtons: Array.from(document.querySelectorAll('.individual-view-btn')),
+                views: {
+                    overview: document.getElementById('ind-view-overview'),
+                    parties: document.getElementById('ind-view-parties'),
+                    items: document.getElementById('ind-view-items'),
+                    taxes: document.getElementById('ind-view-taxes'),
+                    finance: document.getElementById('ind-view-finance'),
+                    logistics: document.getElementById('ind-view-logistics'),
+                    technical: document.getElementById('ind-view-technical'),
+                    xml: document.getElementById('ind-view-xml')
+                }
+            };
+
+            if (!refs.fileInput || !refs.workspace) {
+                return;
+            }
+
+            const state = {
+                data: null,
+                activeView: 'overview',
+                selectedItemIndex: null,
+                itemFilter: ''
+            };
+
+            const currencyFormatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+            const numberFormatter = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 4 });
+
+            function elementChildren(node) {
+                return Array.from(node?.childNodes || []).filter(child => child.nodeType === 1);
+            }
+
+            function firstChild(node, name) {
+                return elementChildren(node).find(child => child.localName === name) || null;
+            }
+
+            function childList(node, name) {
+                const children = elementChildren(node);
+                return name ? children.filter(child => child.localName === name) : children;
+            }
+
+            function descendant(node, name) {
+                return node ? Array.from(node.getElementsByTagNameNS('*', name))[0] || null : null;
+            }
+
+            function descendants(node, name) {
+                return node ? Array.from(node.getElementsByTagNameNS('*', name)) : [];
+            }
+
+            function textValue(node, path = '') {
+                if (!node) return '';
+                if (!path) return (node.textContent || '').trim();
+                const parts = path.split('/');
+                let current = node;
+                for (const part of parts) {
+                    current = firstChild(current, part);
+                    if (!current) return '';
+                }
+                return (current.textContent || '').trim();
+            }
+
+            function hasValue(value) {
+                return value !== null && value !== undefined && String(value).trim() !== '';
+            }
+
+            function escapeHtml(value) {
+                return String(value ?? '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function toNumber(value) {
+                if (!hasValue(value)) return NaN;
+                const cleaned = String(value).trim().replace(/\s/g, '').replace(',', '.');
+                const parsed = Number(cleaned);
+                return Number.isFinite(parsed) ? parsed : NaN;
+            }
+
+            function formatMoney(value) {
+                const numeric = toNumber(value);
+                return Number.isFinite(numeric) ? currencyFormatter.format(numeric) : '-';
+            }
+
+            function formatNumber(value, digits = 4) {
+                const numeric = toNumber(value);
+                if (!Number.isFinite(numeric)) return '-';
+                return new Intl.NumberFormat('pt-BR', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: digits
+                }).format(numeric);
+            }
+
+            function formatPercent(value) {
+                const numeric = toNumber(value);
+                return Number.isFinite(numeric) ? `${numberFormatter.format(numeric)}%` : '-';
+            }
+
+            function formatDate(value) {
+                if (!hasValue(value)) return '-';
+                const parsed = new Date(value);
+                if (Number.isNaN(parsed.getTime())) return value;
+                const options = value.includes('T')
+                    ? { dateStyle: 'full', timeStyle: 'short' }
+                    : { dateStyle: 'long' };
+                return new Intl.DateTimeFormat('pt-BR', options).format(parsed);
+            }
+
+            function formatDocument(value) {
+                const digits = String(value || '').replace(/\D/g, '');
+                if (digits.length === 14) return digits.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+                if (digits.length === 11) return digits.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+                return value || '-';
+            }
+
+            function formatPhone(value) {
+                const digits = String(value || '').replace(/\D/g, '');
+                if (digits.length === 10) return digits.replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
+                if (digits.length === 11) return digits.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+                return value || '-';
+            }
+
+            function formatCep(value) {
+                const digits = String(value || '').replace(/\D/g, '');
+                return digits.length === 8 ? digits.replace(/^(\d{5})(\d{3})$/, '$1-$2') : (value || '-');
+            }
+
+            function formatFileSize(bytes) {
+                if (!Number.isFinite(bytes)) return '-';
+                if (bytes < 1024) return `${bytes} B`;
+                if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+                return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+            }
+
+            function codeLabel(group, value) {
+                if (!hasValue(value)) return '-';
+                const raw = String(value);
+                return maps[group] && maps[group][raw] ? `${raw} - ${maps[group][raw]}` : raw;
+            }
+
+            function humanizeTag(tag) {
+                return String(tag || '')
+                    .replace(/([a-z])([A-Z])/g, '$1 $2')
+                    .replace(/^./, match => match.toUpperCase());
+            }
+
+            function formatLeafField(tag, value) {
+                if (!hasValue(value)) return '-';
+                if (tag === 'CNPJ' || tag === 'CPF' || tag === 'CNPJPag' || tag === 'CNPJReceb') return formatDocument(value);
+                if (tag === 'fone') return formatPhone(value);
+                if (tag === 'CEP') return formatCep(value);
+                if (dateTags.has(tag)) return formatDate(value);
+                if (percentTags.has(tag)) return formatPercent(value);
+                if (moneyTags.has(tag) && !['vUnCom', 'vUnTrib'].includes(tag)) return formatMoney(value);
+                if (numberTags.has(tag)) return formatNumber(value, 4);
+                if (maps[tag]) return codeLabel(tag, value);
+                return value;
+            }
+
+            function leafFields(node, exclude = []) {
+                if (!node) return [];
+                const excludeSet = new Set(exclude);
+                return childList(node)
+                    .filter(child => !excludeSet.has(child.localName))
+                    .filter(child => childList(child).length === 0)
+                    .map(child => ({
+                        tag: child.localName,
+                        label: labels[child.localName] || humanizeTag(child.localName),
+                        value: textValue(child)
+                    }));
+            }
+
+            function pickDocument(node) {
+                return textValue(node, 'CNPJ') || textValue(node, 'CPF') || textValue(node, 'idEstrangeiro') || '';
+            }
+
+            function combineAddress(node, addressTag = '') {
+                const baseNode = addressTag ? firstChild(node, addressTag) : node;
+                if (!baseNode) return '';
+                return [
+                    textValue(baseNode, 'xLgr'),
+                    textValue(baseNode, 'nro'),
+                    textValue(baseNode, 'xCpl'),
+                    textValue(baseNode, 'xBairro'),
+                    textValue(baseNode, 'xMun'),
+                    textValue(baseNode, 'UF')
+                ].filter(Boolean).join(', ');
+            }
+
+            function summarizeBy(items, labelGetter, totalGetter) {
+                const map = new Map();
+                items.forEach(item => {
+                    const label = labelGetter(item) || 'Não informado';
+                    if (!map.has(label)) {
+                        map.set(label, { label, count: 0, total: 0 });
+                    }
+                    const entry = map.get(label);
+                    entry.count += 1;
+                    const total = toNumber(totalGetter(item));
+                    entry.total += Number.isFinite(total) ? total : 0;
+                });
+                return Array.from(map.values()).sort((a, b) => b.total - a.total || b.count - a.count || a.label.localeCompare(b.label));
+            }
+
+            function collectInventory(xmlDoc) {
+                const inventory = new Map();
+                const allNodes = Array.from(xmlDoc.getElementsByTagNameNS('*', '*'));
+                allNodes.forEach(node => {
+                    const tag = node.localName;
+                    if (!tag) return;
+                    if (!inventory.has(tag)) {
+                        inventory.set(tag, { tag, count: 0, sample: '', attributes: new Set() });
+                    }
+                    const entry = inventory.get(tag);
+                    entry.count += 1;
+                    Array.from(node.attributes || []).forEach(attr => entry.attributes.add(`${attr.name}=${attr.value}`));
+                    if (!entry.sample) {
+                        const sample = textValue(node);
+                        entry.sample = sample.length > 140 ? `${sample.slice(0, 137)}...` : sample;
+                    }
+                });
+                return Array.from(inventory.values())
+                    .map(entry => ({ ...entry, attributes: Array.from(entry.attributes) }))
+                    .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+            }
+
+            function collectExtraTopSections(infNFe) {
+                const curated = new Set([
+                    'ide', 'emit', 'dest', 'retirada', 'entrega', 'autXML', 'det', 'total', 'transp', 'cobr',
+                    'pag', 'infAdic', 'exporta', 'compra', 'cana', 'infRespTec', 'infIntermed', 'avulsa', 'infNFeSupl'
+                ]);
+                return childList(infNFe).filter(node => !curated.has(node.localName));
+            }
+
+            function collectSignature(xmlDoc) {
+                const signature = descendant(xmlDoc, 'Signature');
+                if (!signature) return null;
+                return {
+                    canonicalizationMethod: descendant(signature, 'CanonicalizationMethod')?.getAttribute('Algorithm') || '',
+                    signatureMethod: descendant(signature, 'SignatureMethod')?.getAttribute('Algorithm') || '',
+                    digestMethod: descendant(signature, 'DigestMethod')?.getAttribute('Algorithm') || '',
+                    digestValue: textValue(descendant(signature, 'DigestValue')),
+                    signatureValue: textValue(descendant(signature, 'SignatureValue')),
+                    certificate: textValue(descendant(signature, 'X509Certificate'))
+                };
+            }
+
+            function collectTaxBlocks(impostoNode) {
+                if (!impostoNode) return [];
+                const blocks = [];
+                childList(impostoNode).forEach(groupNode => {
+                    const groupName = groupNode.localName;
+                    const directLeaves = childList(groupNode)
+                        .filter(child => childList(child).length === 0)
+                        .map(child => ({
+                            tag: child.localName,
+                            label: labels[child.localName] || humanizeTag(child.localName),
+                            value: textValue(child)
+                        }));
+                    const branchNodes = childList(groupNode).filter(child => childList(child).length > 0);
+                    if (branchNodes.length) {
+                        branchNodes.forEach(branchNode => {
+                            const fields = [...directLeaves, ...leafFields(branchNode)];
+                            if (fields.length) {
+                                blocks.push({
+                                    group: groupName,
+                                    subtype: branchNode.localName,
+                                    fields
+                                });
+                            }
+                        });
+                    } else if (directLeaves.length) {
+                        blocks.push({
+                            group: groupName,
+                            subtype: '',
+                            fields: directLeaves
+                        });
+                    } else if (textValue(groupNode)) {
+                        blocks.push({
+                            group: groupName,
+                            subtype: '',
+                            fields: [{
+                                tag: groupName,
+                                label: labels[groupName] || humanizeTag(groupName),
+                                value: textValue(groupNode)
+                            }]
+                        });
+                    }
+                });
+                return blocks;
+            }
+
+            function parseItems(infNFe) {
+                return childList(infNFe, 'det').map((detNode, index) => {
+                    const prodNode = firstChild(detNode, 'prod');
+                    const impostoNode = firstChild(detNode, 'imposto');
+                    const icmsGroup = firstChild(impostoNode, 'ICMS');
+                    const icmsSubtype = childList(icmsGroup)[0] || null;
+                    const ipiNode = firstChild(impostoNode, 'IPI');
+                    const ipiSubtype = childList(ipiNode).find(child => childList(child).length > 0) || null;
+                    const pisNode = firstChild(impostoNode, 'PIS');
+                    const pisSubtype = childList(pisNode).find(child => childList(child).length > 0) || childList(pisNode)[0] || null;
+                    const cofinsNode = firstChild(impostoNode, 'COFINS');
+                    const cofinsSubtype = childList(cofinsNode).find(child => childList(child).length > 0) || childList(cofinsNode)[0] || null;
+                    return {
+                        index,
+                        line: detNode.getAttribute('nItem') || String(index + 1),
+                        code: textValue(prodNode, 'cProd'),
+                        description: textValue(prodNode, 'xProd'),
+                        ncm: textValue(prodNode, 'NCM'),
+                        cest: textValue(prodNode, 'CEST'),
+                        cfop: textValue(prodNode, 'CFOP'),
+                        gtin: textValue(prodNode, 'cEAN'),
+                        gtinTrib: textValue(prodNode, 'cEANTrib'),
+                        unit: textValue(prodNode, 'uCom'),
+                        qty: textValue(prodNode, 'qCom'),
+                        unitValue: textValue(prodNode, 'vUnCom'),
+                        total: textValue(prodNode, 'vProd'),
+                        freight: textValue(prodNode, 'vFrete'),
+                        discount: textValue(prodNode, 'vDesc'),
+                        other: textValue(prodNode, 'vOutro'),
+                        approxTaxes: textValue(impostoNode, 'vTotTrib') || textValue(prodNode, 'vTotTrib'),
+                        infoAdicional: textValue(detNode, 'infAdProd'),
+                        prodNode,
+                        impostoNode,
+                        taxBlocks: collectTaxBlocks(impostoNode),
+                        icmsOrigin: textValue(icmsSubtype, 'orig'),
+                        icmsCode: textValue(icmsSubtype, 'CST') || textValue(icmsSubtype, 'CSOSN'),
+                        icmsRate: textValue(icmsSubtype, 'pICMS'),
+                        icmsValue: textValue(icmsSubtype, 'vICMS'),
+                        ipiCode: textValue(ipiSubtype, 'CST'),
+                        pisCode: textValue(pisSubtype, 'CST'),
+                        cofinsCode: textValue(cofinsSubtype, 'CST')
+                    };
+                });
+            }
+
+            function renderFieldGrid(fields) {
+                const normalized = fields.filter(field => field && field.label);
+                if (!normalized.length) return renderEmpty('Nenhum campo encontrado neste bloco.');
+                return `
+                    <div class="analysis-field-grid">
+                        ${normalized.map(field => `
+                            <div class="analysis-field">
+                                <div class="analysis-field-label">${escapeHtml(field.label)}</div>
+                                <div class="analysis-field-value">${escapeHtml(hasValue(field.value) ? field.value : '-')}</div>
+                                ${field.note ? `<div class="analysis-field-note">${escapeHtml(field.note)}</div>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            function renderEmpty(message) {
+                return `<div class="analysis-empty">${escapeHtml(message)}</div>`;
+            }
+
+            function renderList(entries, renderer) {
+                if (!entries.length) return renderEmpty('Nenhum dado disponível neste bloco.');
+                return `<div class="analysis-list">${entries.map(renderer).join('')}</div>`;
+            }
+
+            function renderPartyCard(title, node, addressTag, options = {}) {
+                if (!node) {
+                    return `
+                        <article class="analysis-card">
+                            <h3>${escapeHtml(title)}</h3>
+                            ${renderEmpty(options.emptyMessage || 'Bloco não encontrado neste XML.')}
+                        </article>
+                    `;
+                }
+                const addressNode = addressTag ? firstChild(node, addressTag) : null;
+                const fields = [
+                    { label: 'Nome / razão social', value: textValue(node, 'xNome') || '-' },
+                    { label: 'Fantasia', value: textValue(node, 'xFant') || '-' },
+                    { label: 'Documento', value: formatDocument(pickDocument(node)) },
+                    { label: 'IE', value: textValue(node, 'IE') || '-' },
+                    { label: 'IE ST', value: textValue(node, 'IEST') || '-' },
+                    { label: 'IM', value: textValue(node, 'IM') || '-' },
+                    { label: 'CNAE', value: textValue(node, 'CNAE') || '-' },
+                    { label: 'Regime tributário', value: codeLabel('CRT', textValue(node, 'CRT')) },
+                    { label: 'Situação IE destinatário', value: codeLabel('indIEDest', textValue(node, 'indIEDest')) },
+                    { label: 'E-mail', value: textValue(node, 'email') || '-' },
+                    { label: 'Telefone', value: formatPhone(textValue(node, 'fone')) },
+                    { label: 'Endereço', value: combineAddress(node, addressTag) || '-' },
+                    { label: 'CEP', value: formatCep(textValue(addressNode, 'CEP')) },
+                    { label: 'País', value: textValue(addressNode, 'xPais') || '-' }
+                ];
+                return `
+                    <article class="analysis-card">
+                        <h3>${escapeHtml(title)}</h3>
+                        ${renderFieldGrid(fields)}
+                    </article>
+                `;
+            }
+
+            function renderGenericNode(node) {
+                if (!node) return renderEmpty('Bloco não presente.');
+                const leaves = leafFields(node);
+                const branches = childList(node).filter(child => childList(child).length > 0);
+                const leafHtml = leaves.length
+                    ? renderFieldGrid(leaves.map(field => ({
+                        label: field.label,
+                        value: formatLeafField(field.tag, field.value)
+                    })))
+                    : '';
+                const branchHtml = branches.length
+                    ? `
+                        <div class="analysis-tree" style="margin-top:${leafHtml ? '14px' : '0'};">
+                            ${branches.map(branch => `
+                                <details>
+                                    <summary>${escapeHtml(branch.localName)}</summary>
+                                    <div class="analysis-tree-body">${renderGenericNode(branch)}</div>
+                                </details>
+                            `).join('')}
+                        </div>
+                    `
+                    : '';
+                return leafHtml || branchHtml ? `${leafHtml}${branchHtml}` : renderEmpty('Sem dados úteis neste bloco.');
+            }
+
+            function buildData(xmlText, sourceMeta) {
+                const xmlDoc = new DOMParser().parseFromString(xmlText, 'application/xml');
+                if (xmlDoc.getElementsByTagName('parsererror').length > 0) {
+                    throw new Error('XML inválido.');
+                }
+                const infNFe = descendant(xmlDoc, 'infNFe');
+                if (!infNFe) {
+                    throw new Error('A tag infNFe não foi encontrada.');
+                }
+
+                const ide = firstChild(infNFe, 'ide');
+                const emit = firstChild(infNFe, 'emit');
+                const dest = firstChild(infNFe, 'dest');
+                const retirada = firstChild(infNFe, 'retirada');
+                const entrega = firstChild(infNFe, 'entrega');
+                const total = firstChild(infNFe, 'total');
+                const icmsTot = firstChild(total, 'ICMSTot');
+                const transp = firstChild(infNFe, 'transp');
+                const cobr = firstChild(infNFe, 'cobr');
+                const pag = firstChild(infNFe, 'pag');
+                const infAdic = firstChild(infNFe, 'infAdic');
+                const compra = firstChild(infNFe, 'compra');
+                const exporta = firstChild(infNFe, 'exporta');
+                const cana = firstChild(infNFe, 'cana');
+                const infRespTec = firstChild(infNFe, 'infRespTec');
+                const infIntermed = firstChild(infNFe, 'infIntermed');
+                const avulsa = firstChild(infNFe, 'avulsa');
+                const infNFeSupl = descendant(xmlDoc, 'infNFeSupl');
+                const infProt = descendant(xmlDoc, 'infProt');
+                const autXML = childList(infNFe, 'autXML');
+                const items = parseItems(infNFe);
+                const payments = childList(pag, 'detPag');
+                const duplicatas = childList(cobr, 'dup');
+                const volumes = childList(transp, 'vol');
+                const extraTopSections = collectExtraTopSections(infNFe);
+                const inventory = collectInventory(xmlDoc);
+                const signature = collectSignature(xmlDoc);
+
+                const totalValue = toNumber(textValue(icmsTot, 'vNF'));
+                const productValue = toNumber(textValue(icmsTot, 'vProd'));
+                const approxTaxes = toNumber(textValue(icmsTot, 'vTotTrib'));
+                const totalQuantity = items.reduce((sum, item) => sum + (toNumber(item.qty) || 0), 0);
+                const cfopSummary = summarizeBy(items, item => item.cfop || 'Sem CFOP', item => item.total);
+                const ncmSummary = summarizeBy(items, item => item.ncm || 'Sem NCM', item => item.total);
+                const productSummary = summarizeBy(items, item => item.description || item.code || 'Item sem descrição', item => item.total);
+                const taxTagSummary = summarizeBy(
+                    items.flatMap(item => item.taxBlocks.map(block => ({
+                        label: `${block.group}${block.subtype ? ` / ${block.subtype}` : ''}`,
+                        total: item.total
+                    }))),
+                    item => item.label,
+                    item => item.total
+                );
+                const missingGtin = items.filter(item => !hasValue(item.gtin) || /SEM GTIN/i.test(item.gtin)).length;
+                const rates = items.map(item => toNumber(item.icmsRate)).filter(Number.isFinite);
+                const maxItem = items.reduce((best, item) => {
+                    if (!best) return item;
+                    return (toNumber(item.total) || 0) > (toNumber(best.total) || 0) ? item : best;
+                }, null);
+
+                return {
+                    xmlDoc,
+                    sourceMeta,
+                    infNFe,
+                    ide,
+                    emit,
+                    dest,
+                    retirada,
+                    entrega,
+                    total,
+                    icmsTot,
+                    transp,
+                    cobr,
+                    pag,
+                    infAdic,
+                    compra,
+                    exporta,
+                    cana,
+                    infRespTec,
+                    infIntermed,
+                    avulsa,
+                    infNFeSupl,
+                    infProt,
+                    autXML,
+                    items,
+                    payments,
+                    duplicatas,
+                    volumes,
+                    extraTopSections,
+                    inventory,
+                    signature,
+                    analytics: {
+                        cfopSummary,
+                        ncmSummary,
+                        productSummary,
+                        taxTagSummary
+                    },
+                    summary: {
+                        key: infNFe.getAttribute('Id') ? infNFe.getAttribute('Id').replace(/^NFe/, '') : (textValue(infProt, 'chNFe') || '-'),
+                        totalValue,
+                        productValue,
+                        approxTaxes,
+                        itemCount: items.length,
+                        totalQuantity,
+                        paymentCount: payments.length,
+                        duplicateCount: duplicatas.length,
+                        volumeCount: volumes.length,
+                        cfopCount: cfopSummary.length,
+                        ncmCount: ncmSummary.length,
+                        missingGtin,
+                        route: [textValue(firstChild(emit, 'enderEmit'), 'UF'), textValue(firstChild(dest, 'enderDest'), 'UF')].filter(Boolean).join(' -> ') || '-',
+                        sameState: textValue(firstChild(emit, 'enderEmit'), 'UF') && textValue(firstChild(emit, 'enderEmit'), 'UF') === textValue(firstChild(dest, 'enderDest'), 'UF'),
+                        lowestIcms: rates.length ? Math.min(...rates) : NaN,
+                        highestIcms: rates.length ? Math.max(...rates) : NaN,
+                        maxItem
+                    }
+                };
+            }
+
+            function setStatus(message, type = 'warn') {
+                refs.status.textContent = message;
+                refs.status.className = `individual-status-pill ${type}`;
+            }
+
+            function showError(message) {
+                refs.error.textContent = message;
+                refs.error.style.display = 'block';
+            }
+
+            function hideError() {
+                refs.error.textContent = '';
+                refs.error.style.display = 'none';
+            }
+
+            function activateView(viewName) {
+                state.activeView = viewName;
+                refs.viewButtons.forEach(button => {
+                    button.classList.toggle('active', button.dataset.indView === viewName);
+                });
+                Object.entries(refs.views).forEach(([name, view]) => {
+                    view.classList.toggle('active', name === viewName);
+                });
+            }
+
+            function resetIndividual(options = {}) {
+                const { keepFile = false } = options;
+                state.data = null;
+                state.itemFilter = '';
+                state.selectedItemIndex = null;
+                refs.metrics.innerHTML = '';
+                Object.values(refs.views).forEach(view => {
+                    view.innerHTML = '';
+                });
+                refs.workspace.style.display = 'none';
+                hideError();
+                activateView('overview');
+                if (!keepFile) {
+                    refs.fileInput.value = '';
+                    refs.fileName.textContent = 'Nenhum arquivo selecionado.';
+                    refs.clearButton.style.display = 'none';
+                    setStatus('Aguardando XML', 'warn');
+                }
+            }
+
+            function renderMetrics(data) {
+                const metrics = [
+                    {
+                        label: 'Valor total',
+                        value: formatMoney(data.summary.totalValue),
+                        sub: `Produtos ${formatMoney(data.summary.productValue)}`
+                    },
+                    {
+                        label: 'Itens',
+                        value: String(data.summary.itemCount),
+                        sub: `${formatNumber(data.summary.totalQuantity, 4)} unidade(s) comerciais`
+                    },
+                    {
+                        label: 'Tributos aprox.',
+                        value: formatMoney(data.summary.approxTaxes),
+                        sub: `${data.summary.cfopCount} CFOP distintos`
+                    },
+                    {
+                        label: 'Pagamentos',
+                        value: String(data.summary.paymentCount),
+                        sub: `${data.summary.duplicateCount} duplicata(s)`
+                    },
+                    {
+                        label: 'Volumes',
+                        value: String(data.summary.volumeCount),
+                        sub: `Rota ${data.summary.route}`
+                    },
+                    {
+                        label: 'Status SEFAZ',
+                        value: textValue(data.infProt, 'cStat') || '-',
+                        sub: textValue(data.infProt, 'xMotivo') || 'Sem protocolo no XML'
+                    }
+                ];
+
+                refs.metrics.innerHTML = metrics.map(metric => `
+                    <article class="individual-metric">
+                        <div class="individual-metric-label">${escapeHtml(metric.label)}</div>
+                        <div class="individual-metric-value">${escapeHtml(metric.value)}</div>
+                        <div class="individual-metric-sub">${escapeHtml(metric.sub)}</div>
+                    </article>
+                `).join('');
+            }
+
+            function renderOverview(data) {
+                const insights = [
+                    {
+                        label: 'Fluxo fiscal',
+                        value: `${codeLabel('tpNF', textValue(data.ide, 'tpNF'))} • ${codeLabel('finNFe', textValue(data.ide, 'finNFe'))}`,
+                        note: `${codeLabel('idDest', textValue(data.ide, 'idDest'))} • ${codeLabel('tpAmb', textValue(data.ide, 'tpAmb'))}`
+                    },
+                    {
+                        label: 'Origem x destino',
+                        value: data.summary.sameState ? 'Operação no mesmo estado' : 'Operação entre estados ou sem UF completa',
+                        note: `Rota ${data.summary.route}`
+                    },
+                    {
+                        label: 'GTIN ausente',
+                        value: `${data.summary.missingGtin} item(ns)`,
+                        note: `${data.summary.itemCount - data.summary.missingGtin} item(ns) com GTIN informado`
+                    },
+                    {
+                        label: 'Faixa ICMS',
+                        value: `${formatPercent(data.summary.lowestIcms)} até ${formatPercent(data.summary.highestIcms)}`,
+                        note: 'Com base nas alíquotas encontradas nos itens'
+                    },
+                    {
+                        label: 'Maior item',
+                        value: data.summary.maxItem ? `${data.summary.maxItem.line} • ${data.summary.maxItem.description || data.summary.maxItem.code}` : '-',
+                        note: data.summary.maxItem ? formatMoney(data.summary.maxItem.total) : 'Nenhum item disponível'
+                    },
+                    {
+                        label: 'Arquivo',
+                        value: data.sourceMeta.name || 'XML carregado',
+                        note: `${formatFileSize(data.sourceMeta.size)} • ${data.inventory.length} tags distintas`
+                    }
+                ];
+
+                const identificationFields = [
+                    { label: 'Chave da NF-e', value: data.summary.key },
+                    { label: 'Natureza da operação', value: textValue(data.ide, 'natOp') || '-' },
+                    { label: 'Modelo', value: codeLabel('mod', textValue(data.ide, 'mod')) },
+                    { label: 'Série / número', value: [textValue(data.ide, 'serie'), textValue(data.ide, 'nNF')].filter(Boolean).join(' / ') || '-' },
+                    { label: 'Emissão', value: formatDate(textValue(data.ide, 'dhEmi') || textValue(data.ide, 'dEmi')) },
+                    { label: 'Saída / entrada', value: formatDate(textValue(data.ide, 'dhSaiEnt') || textValue(data.ide, 'dSaiEnt')) },
+                    { label: 'Formato DANFE', value: codeLabel('tpImp', textValue(data.ide, 'tpImp')) },
+                    { label: 'Presença', value: codeLabel('indPres', textValue(data.ide, 'indPres')) },
+                    { label: 'Consumidor final', value: codeLabel('indFinal', textValue(data.ide, 'indFinal')) },
+                    { label: 'Processo emissor', value: codeLabel('procEmi', textValue(data.ide, 'procEmi')) },
+                    { label: 'Versão do processo', value: textValue(data.ide, 'verProc') || '-' },
+                    { label: 'Protocolo', value: textValue(data.infProt, 'nProt') || '-' }
+                ];
+
+                return `
+                    <div class="analysis-grid cols-2">
+                        <article class="analysis-card">
+                            <h3>Leitura rápida</h3>
+                            <p class="analysis-copy">O essencial da NF-e em um painel compacto.</p>
+                            <div class="analysis-callout">
+                                <strong>${escapeHtml(textValue(data.emit, 'xNome') || 'Emitente não identificado')}</strong>
+                                ${escapeHtml(formatDocument(pickDocument(data.emit)))} • ${escapeHtml(combineAddress(data.emit, 'enderEmit') || 'Endereço não informado')}
+                            </div>
+                            <div style="height: 14px;"></div>
+                            <div class="analysis-callout">
+                                <strong>${escapeHtml(textValue(data.dest, 'xNome') || 'Destinatário não identificado')}</strong>
+                                ${escapeHtml(formatDocument(pickDocument(data.dest)))} • ${escapeHtml(combineAddress(data.dest, 'enderDest') || 'Endereço não informado')}
+                            </div>
+                            <div style="height: 14px;"></div>
+                            ${renderFieldGrid(identificationFields)}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>Destaques automáticos</h3>
+                            <p class="analysis-copy">Sinais úteis para leitura humana rápida da nota.</p>
+                            ${renderList(insights, insight => `
+                                <div class="analysis-list-item">
+                                    <div>
+                                        <strong>${escapeHtml(insight.label)}</strong>
+                                        <div class="analysis-field-note">${escapeHtml(insight.note)}</div>
+                                    </div>
+                                    <span>${escapeHtml(insight.value)}</span>
+                                </div>
+                            `)}
+                        </article>
+                    </div>
+                    <div style="height: 16px;"></div>
+                    <div class="analysis-grid cols-3">
+                        <article class="analysis-card">
+                            <h3>Top CFOP</h3>
+                            ${renderList(data.analytics.cfopSummary.slice(0, 6), entry => `
+                                <div class="analysis-list-item">
+                                    <div>
+                                        <strong>${escapeHtml(entry.label)}</strong>
+                                        <div class="analysis-field-note">${escapeHtml(`${entry.count} item(ns)`)}</div>
+                                    </div>
+                                    <span>${escapeHtml(formatMoney(entry.total))}</span>
+                                </div>
+                            `)}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>Top NCM</h3>
+                            ${renderList(data.analytics.ncmSummary.slice(0, 6), entry => `
+                                <div class="analysis-list-item">
+                                    <div>
+                                        <strong>${escapeHtml(entry.label)}</strong>
+                                        <div class="analysis-field-note">${escapeHtml(`${entry.count} item(ns)`)}</div>
+                                    </div>
+                                    <span>${escapeHtml(formatMoney(entry.total))}</span>
+                                </div>
+                            `)}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>Produtos com maior valor</h3>
+                            ${renderList(data.analytics.productSummary.slice(0, 6), entry => `
+                                <div class="analysis-list-item">
+                                    <div>
+                                        <strong>${escapeHtml(entry.label)}</strong>
+                                        <div class="analysis-field-note">${escapeHtml(`${entry.count} ocorrência(s)`)}</div>
+                                    </div>
+                                    <span>${escapeHtml(formatMoney(entry.total))}</span>
+                                </div>
+                            `)}
+                        </article>
+                    </div>
+                `;
+            }
+
+            function renderParties(data) {
+                const authorizations = data.autXML.length
+                    ? renderList(data.autXML, node => `
+                        <div class="analysis-list-item">
+                            <div>
+                                <strong>${escapeHtml(formatDocument(pickDocument(node)))}</strong>
+                                <div class="analysis-field-note">Autorizado a acessar o XML</div>
+                            </div>
+                            <span>${escapeHtml(textValue(node, 'xNome') || 'Sem nome vinculado')}</span>
+                        </div>
+                    `)
+                    : renderEmpty('Nenhum autorizado em autXML foi encontrado.');
+
+                return `
+                    <div class="analysis-grid cols-2">
+                        ${renderPartyCard('Emitente', data.emit, 'enderEmit')}
+                        ${renderPartyCard('Destinatário', data.dest, 'enderDest', { emptyMessage: 'O bloco destinatário não está presente.' })}
+                    </div>
+                    <div style="height: 16px;"></div>
+                    <div class="analysis-grid cols-3">
+                        ${renderPartyCard('Retirada', data.retirada, '', { emptyMessage: 'Não há bloco retirada.' })}
+                        ${renderPartyCard('Entrega', data.entrega, '', { emptyMessage: 'Não há bloco entrega.' })}
+                        <article class="analysis-card">
+                            <h3>Autorizados no XML</h3>
+                            ${authorizations}
+                        </article>
+                    </div>
+                `;
+            }
+
+            function getFilteredItems() {
+                if (!state.data) return [];
+                const term = state.itemFilter.trim().toLowerCase();
+                if (!term) return state.data.items;
+                return state.data.items.filter(item => {
+                    const haystack = [
+                        item.line,
+                        item.code,
+                        item.description,
+                        item.ncm,
+                        item.cfop,
+                        item.cest
+                    ].join(' ').toLowerCase();
+                    return haystack.includes(term);
+                });
+            }
+
+            function renderItemDetail(item) {
+                if (!item) {
+                    return `
+                        <article class="analysis-card">
+                            <h3>Detalhes do item</h3>
+                            ${renderEmpty('Nenhum item corresponde ao filtro atual.')}
+                        </article>
+                    `;
+                }
+
+                const productFields = [
+                    { label: 'Linha', value: item.line },
+                    { label: 'Código', value: item.code || '-' },
+                    { label: 'Descrição', value: item.description || '-' },
+                    { label: 'CFOP', value: item.cfop || '-' },
+                    { label: 'NCM', value: item.ncm || '-' },
+                    { label: 'CEST', value: item.cest || '-' },
+                    { label: 'GTIN comercial', value: item.gtin || '-' },
+                    { label: 'GTIN tributável', value: item.gtinTrib || '-' },
+                    { label: 'Quantidade', value: formatNumber(item.qty, 4) },
+                    { label: 'Unidade', value: item.unit || '-' },
+                    { label: 'Valor unitário', value: formatMoney(item.unitValue) },
+                    { label: 'Valor total', value: formatMoney(item.total) },
+                    { label: 'Frete', value: formatMoney(item.freight) },
+                    { label: 'Desconto', value: formatMoney(item.discount) },
+                    { label: 'Outras despesas', value: formatMoney(item.other) },
+                    { label: 'Tributos aproximados', value: formatMoney(item.approxTaxes) },
+                    { label: 'Origem ICMS', value: codeLabel('orig', item.icmsOrigin) },
+                    { label: 'CST/CSOSN ICMS', value: item.icmsCode || '-' },
+                    { label: 'Alíquota ICMS', value: formatPercent(item.icmsRate) },
+                    { label: 'Valor ICMS', value: formatMoney(item.icmsValue) },
+                    { label: 'CST IPI', value: item.ipiCode || '-' },
+                    { label: 'CST PIS', value: item.pisCode || '-' },
+                    { label: 'CST COFINS', value: item.cofinsCode || '-' }
+                ];
+
+                const taxBlocksHtml = item.taxBlocks.length
+                    ? item.taxBlocks.map(block => `
+                        <article class="analysis-card" style="margin-top: 14px;">
+                            <h3>${escapeHtml(block.group)}${block.subtype ? ` • ${escapeHtml(block.subtype)}` : ''}</h3>
+                            ${renderFieldGrid(block.fields.map(field => ({
+                                label: field.label,
+                                value: formatLeafField(field.tag, field.value)
+                            })))}
+                        </article>
+                    `).join('')
+                    : renderEmpty('Nenhum bloco tributário detalhado foi encontrado para este item.');
+
+                return `
+                    <article class="analysis-card">
+                        <h3>Detalhes do item ${escapeHtml(item.line)}</h3>
+                        <div class="individual-item-meta">
+                            <span class="analysis-pill">${escapeHtml(item.code || 'Sem código')}</span>
+                            <span class="analysis-pill">${escapeHtml(item.cfop || 'Sem CFOP')}</span>
+                            <span class="analysis-pill">${escapeHtml(item.ncm || 'Sem NCM')}</span>
+                        </div>
+                        ${renderFieldGrid(productFields)}
+                    </article>
+                    <article class="analysis-card" style="margin-top: 16px;">
+                        <h3>Tributação do item</h3>
+                        ${taxBlocksHtml}
+                    </article>
+                    <article class="analysis-card" style="margin-top: 16px;">
+                        <h3>Informação adicional do item</h3>
+                        ${item.infoAdicional ? `<div class="analysis-note-box">${escapeHtml(item.infoAdicional)}</div>` : renderEmpty('Não há infAdProd para este item.')}
+                    </article>
+                `;
+            }
+
+            function renderItems(data) {
+                const filteredItems = getFilteredItems();
+                if (!filteredItems.length) {
+                    state.selectedItemIndex = null;
+                } else if (!filteredItems.some(item => item.index === state.selectedItemIndex)) {
+                    state.selectedItemIndex = filteredItems[0].index;
+                }
+
+                const selectedItem = filteredItems.find(item => item.index === state.selectedItemIndex) || filteredItems[0] || null;
+                const rows = filteredItems.map(item => `
+                    <tr data-item-index="${item.index}" class="${item.index === selectedItem?.index ? 'selected-item' : ''}">
+                        <td>${escapeHtml(item.line)}</td>
+                        <td>
+                            <strong>${escapeHtml(item.description || 'Sem descrição')}</strong>
+                            <div class="analysis-field-note">${escapeHtml(item.code || 'Sem código')}</div>
+                        </td>
+                        <td>${escapeHtml(item.cfop || '-')}</td>
+                        <td>${escapeHtml(item.ncm || '-')}</td>
+                        <td>${escapeHtml(formatNumber(item.qty, 4))}</td>
+                        <td>${escapeHtml(formatMoney(item.unitValue))}</td>
+                        <td>${escapeHtml(formatMoney(item.total))}</td>
+                    </tr>
+                `).join('');
+
+                refs.views.items.innerHTML = `
+                    <div class="analysis-grid cols-3">
+                        <article class="analysis-card">
+                            <h3>Itens carregados</h3>
+                            <div class="analysis-callout">
+                                <strong>${escapeHtml(`${data.items.length} item(ns) na NF-e`)}</strong>
+                                ${escapeHtml(`${filteredItems.length} item(ns) visível(is) com o filtro atual`)}
+                            </div>
+                        </article>
+                        <article class="analysis-card">
+                            <h3>CFOP mais recorrentes</h3>
+                            ${renderList(data.analytics.cfopSummary.slice(0, 5), entry => `
+                                <div class="analysis-list-item">
+                                    <div>
+                                        <strong>${escapeHtml(entry.label)}</strong>
+                                        <div class="analysis-field-note">${escapeHtml(`${entry.count} item(ns)`)}</div>
+                                    </div>
+                                    <span>${escapeHtml(formatMoney(entry.total))}</span>
+                                </div>
+                            `)}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>NCM mais relevantes</h3>
+                            ${renderList(data.analytics.ncmSummary.slice(0, 5), entry => `
+                                <div class="analysis-list-item">
+                                    <div>
+                                        <strong>${escapeHtml(entry.label)}</strong>
+                                        <div class="analysis-field-note">${escapeHtml(`${entry.count} item(ns)`)}</div>
+                                    </div>
+                                    <span>${escapeHtml(formatMoney(entry.total))}</span>
+                                </div>
+                            `)}
+                        </article>
+                    </div>
+                    <div style="height: 16px;"></div>
+                    <div class="individual-item-layout">
+                        <article class="analysis-card">
+                            <div class="analysis-inline-actions">
+                                <h3 style="margin-bottom: 0;">Tabela de itens</h3>
+                                <span class="analysis-pill">${escapeHtml(`${filteredItems.length} item(ns)`)}</span>
+                            </div>
+                            <input
+                                type="search"
+                                class="analysis-search"
+                                data-item-search
+                                placeholder="Filtrar por linha, código, descrição, NCM, CFOP ou CEST"
+                                value="${escapeHtml(state.itemFilter)}"
+                            >
+                            <div class="analysis-table-shell">
+                                <table class="individual-item-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Linha</th>
+                                            <th>Produto</th>
+                                            <th>CFOP</th>
+                                            <th>NCM</th>
+                                            <th>Qtd</th>
+                                            <th>Unitário</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>${rows || '<tr><td colspan="7">Nenhum item encontrado.</td></tr>'}</tbody>
+                                </table>
+                            </div>
+                        </article>
+                        <div>${renderItemDetail(selectedItem)}</div>
+                    </div>
+                `;
+
+                const searchInput = refs.views.items.querySelector('[data-item-search]');
+                if (searchInput) {
+                    searchInput.addEventListener('input', event => {
+                        state.itemFilter = event.target.value;
+                        renderItems(data);
+                    });
+                }
+
+                refs.views.items.querySelectorAll('[data-item-index]').forEach(row => {
+                    row.addEventListener('click', () => {
+                        state.selectedItemIndex = Number(row.dataset.itemIndex);
+                        renderItems(data);
+                    });
+                });
+            }
+
+            function renderTaxes(data) {
+                const totalsFields = [
+                    { label: 'Base ICMS', value: formatMoney(textValue(data.icmsTot, 'vBC')) },
+                    { label: 'ICMS', value: formatMoney(textValue(data.icmsTot, 'vICMS')) },
+                    { label: 'ICMS desonerado', value: formatMoney(textValue(data.icmsTot, 'vICMSDeson')) },
+                    { label: 'FCP', value: formatMoney(textValue(data.icmsTot, 'vFCP')) },
+                    { label: 'Base ST', value: formatMoney(textValue(data.icmsTot, 'vBCST')) },
+                    { label: 'ST', value: formatMoney(textValue(data.icmsTot, 'vST')) },
+                    { label: 'FCP ST', value: formatMoney(textValue(data.icmsTot, 'vFCPST')) },
+                    { label: 'FCP ST retido', value: formatMoney(textValue(data.icmsTot, 'vFCPSTRet')) },
+                    { label: 'Produtos', value: formatMoney(textValue(data.icmsTot, 'vProd')) },
+                    { label: 'Frete', value: formatMoney(textValue(data.icmsTot, 'vFrete')) },
+                    { label: 'Seguro', value: formatMoney(textValue(data.icmsTot, 'vSeg')) },
+                    { label: 'Desconto', value: formatMoney(textValue(data.icmsTot, 'vDesc')) },
+                    { label: 'II', value: formatMoney(textValue(data.icmsTot, 'vII')) },
+                    { label: 'IPI', value: formatMoney(textValue(data.icmsTot, 'vIPI')) },
+                    { label: 'IPI devolvido', value: formatMoney(textValue(data.icmsTot, 'vIPIDevol')) },
+                    { label: 'PIS', value: formatMoney(textValue(data.icmsTot, 'vPIS')) },
+                    { label: 'COFINS', value: formatMoney(textValue(data.icmsTot, 'vCOFINS')) },
+                    { label: 'Outras despesas', value: formatMoney(textValue(data.icmsTot, 'vOutro')) },
+                    { label: 'Total da NF-e', value: formatMoney(textValue(data.icmsTot, 'vNF')) },
+                    { label: 'Tributos aproximados', value: formatMoney(textValue(data.icmsTot, 'vTotTrib')) }
+                ];
+
+                refs.views.taxes.innerHTML = `
+                    <article class="analysis-card">
+                        <h3>Totais tributários consolidados</h3>
+                        ${renderFieldGrid(totalsFields)}
+                    </article>
+                    <div style="height: 16px;"></div>
+                    <div class="analysis-grid cols-3">
+                        <article class="analysis-card">
+                            <h3>CFOP com maior peso</h3>
+                            ${renderList(data.analytics.cfopSummary.slice(0, 8), entry => `
+                                <div class="analysis-list-item">
+                                    <div>
+                                        <strong>${escapeHtml(entry.label)}</strong>
+                                        <div class="analysis-field-note">${escapeHtml(`${entry.count} item(ns)`)}</div>
+                                    </div>
+                                    <span>${escapeHtml(formatMoney(entry.total))}</span>
+                                </div>
+                            `)}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>NCM com maior peso</h3>
+                            ${renderList(data.analytics.ncmSummary.slice(0, 8), entry => `
+                                <div class="analysis-list-item">
+                                    <div>
+                                        <strong>${escapeHtml(entry.label)}</strong>
+                                        <div class="analysis-field-note">${escapeHtml(`${entry.count} item(ns)`)}</div>
+                                    </div>
+                                    <span>${escapeHtml(formatMoney(entry.total))}</span>
+                                </div>
+                            `)}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>Blocos tributários detectados</h3>
+                            ${renderList(data.analytics.taxTagSummary.slice(0, 10), entry => `
+                                <div class="analysis-list-item">
+                                    <div>
+                                        <strong>${escapeHtml(entry.label)}</strong>
+                                        <div class="analysis-field-note">${escapeHtml(`${entry.count} ocorrência(s)`)}</div>
+                                    </div>
+                                    <span>${escapeHtml(formatMoney(entry.total))}</span>
+                                </div>
+                            `)}
+                        </article>
+                    </div>
+                    <div style="height: 16px;"></div>
+                    <article class="analysis-card">
+                        <h3>Faixa de alíquotas ICMS observada</h3>
+                        <div class="analysis-callout">
+                            <strong>${escapeHtml(`${formatPercent(data.summary.lowestIcms)} até ${formatPercent(data.summary.highestIcms)}`)}</strong>
+                            ${escapeHtml('Leitura baseada nas alíquotas preenchidas dentro dos itens da NF-e.')}
+                        </div>
+                    </article>
+                `;
+            }
+
+            function renderFinance(data) {
+                const fatNode = firstChild(data.cobr, 'fat');
+                const fatFields = [
+                    { label: 'Número da fatura', value: textValue(fatNode, 'nFat') || '-' },
+                    { label: 'Valor original', value: formatMoney(textValue(fatNode, 'vOrig')) },
+                    { label: 'Desconto', value: formatMoney(textValue(fatNode, 'vDesc')) },
+                    { label: 'Valor líquido', value: formatMoney(textValue(fatNode, 'vLiq')) }
+                ];
+
+                refs.views.finance.innerHTML = `
+                    <div class="analysis-grid cols-3">
+                        <article class="analysis-card">
+                            <h3>Fatura</h3>
+                            ${renderFieldGrid(fatFields)}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>Pagamentos</h3>
+                            ${data.payments.length ? renderList(data.payments, (node, index) => `
+                                <div class="analysis-list-item">
+                                    <div>
+                                        <strong>${escapeHtml(`Pagamento ${index + 1}`)}</strong>
+                                        <div class="analysis-field-note">${escapeHtml(codeLabel('tPag', textValue(node, 'tPag')))}</div>
+                                    </div>
+                                    <span>${escapeHtml(formatMoney(textValue(node, 'vPag')))}</span>
+                                </div>
+                            `) : renderEmpty('Não há detalhamento de pagamento.')}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>Duplicatas</h3>
+                            ${data.duplicatas.length ? renderList(data.duplicatas, node => `
+                                <div class="analysis-list-item">
+                                    <div>
+                                        <strong>${escapeHtml(textValue(node, 'nDup') || 'Duplicata')}</strong>
+                                        <div class="analysis-field-note">${escapeHtml(formatDate(textValue(node, 'dVenc')))}</div>
+                                    </div>
+                                    <span>${escapeHtml(formatMoney(textValue(node, 'vDup')))}</span>
+                                </div>
+                            `) : renderEmpty('Sem parcelas / duplicatas declaradas.')}
+                        </article>
+                    </div>
+                    <div style="height: 16px;"></div>
+                    <div class="analysis-grid cols-2">
+                        <article class="analysis-card">
+                            <h3>Informações de compra</h3>
+                            ${data.compra ? renderGenericNode(data.compra) : renderEmpty('O bloco compra não está presente.')}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>Intermediação</h3>
+                            ${data.infIntermed ? renderGenericNode(data.infIntermed) : renderEmpty('O bloco infIntermed não está presente.')}
+                        </article>
+                    </div>
+                `;
+            }
+
+            function renderLogistics(data) {
+                const transporta = firstChild(data.transp, 'transporta');
+                const retTransp = firstChild(data.transp, 'retTransp');
+                const veicTransp = firstChild(data.transp, 'veicTransp');
+
+                const transportFields = [
+                    { label: 'Modalidade do frete', value: codeLabel('modFrete', textValue(data.transp, 'modFrete')) },
+                    { label: 'Transportadora', value: textValue(transporta, 'xNome') || '-' },
+                    { label: 'Documento', value: formatDocument(pickDocument(transporta)) },
+                    { label: 'IE', value: textValue(transporta, 'IE') || '-' },
+                    { label: 'Endereço', value: textValue(transporta, 'xEnder') || '-' },
+                    { label: 'Município / UF', value: [textValue(transporta, 'xMun'), textValue(transporta, 'UF')].filter(Boolean).join(' / ') || '-' }
+                ];
+
+                const retentionFields = [
+                    { label: 'Valor do serviço', value: formatMoney(textValue(retTransp, 'vServ')) },
+                    { label: 'Base retenção', value: formatMoney(textValue(retTransp, 'vBCRet')) },
+                    { label: 'Alíquota retenção', value: formatPercent(textValue(retTransp, 'pICMSRet')) },
+                    { label: 'ICMS retido', value: formatMoney(textValue(retTransp, 'vICMSRet')) },
+                    { label: 'Placa', value: textValue(veicTransp, 'placa') || '-' },
+                    { label: 'UF veículo', value: textValue(veicTransp, 'UF') || '-' }
+                ];
+
+                refs.views.logistics.innerHTML = `
+                    <div class="analysis-grid cols-2">
+                        <article class="analysis-card">
+                            <h3>Transporte principal</h3>
+                            ${renderFieldGrid(transportFields)}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>Retenção e veículo</h3>
+                            ${renderFieldGrid(retentionFields)}
+                        </article>
+                    </div>
+                    <div style="height: 16px;"></div>
+                    <div class="analysis-grid cols-3">
+                        <article class="analysis-card">
+                            <h3>Volumes</h3>
+                            ${data.volumes.length ? renderList(data.volumes, (node, index) => `
+                                <div class="analysis-list-item">
+                                    <div>
+                                        <strong>${escapeHtml(`Volume ${index + 1}`)}</strong>
+                                        <div class="analysis-field-note">${escapeHtml(textValue(node, 'esp') || 'Sem espécie')}</div>
+                                    </div>
+                                    <span>${escapeHtml([
+                                        textValue(node, 'qVol') ? `${textValue(node, 'qVol')} vol.` : '',
+                                        textValue(node, 'pesoL') ? `Liq. ${formatNumber(textValue(node, 'pesoL'), 3)} kg` : '',
+                                        textValue(node, 'pesoB') ? `Br. ${formatNumber(textValue(node, 'pesoB'), 3)} kg` : ''
+                                    ].filter(Boolean).join(' • ') || '-')}</span>
+                                </div>
+                            `) : renderEmpty('Sem volumes declarados.')}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>Retirada / entrega</h3>
+                            ${renderFieldGrid([
+                                { label: 'Retirada', value: combineAddress(data.retirada) || 'Não informada' },
+                                { label: 'Entrega', value: combineAddress(data.entrega) || 'Não informada' },
+                                { label: 'Nome retirada', value: textValue(data.retirada, 'xNome') || '-' },
+                                { label: 'Nome entrega', value: textValue(data.entrega, 'xNome') || '-' },
+                                { label: 'Documento retirada', value: formatDocument(pickDocument(data.retirada)) },
+                                { label: 'Documento entrega', value: formatDocument(pickDocument(data.entrega)) }
+                            ])}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>Blocos extras logísticos</h3>
+                            ${data.exporta || data.cana
+                                ? `${data.exporta ? `<h4>Exportação</h4>${renderGenericNode(data.exporta)}` : ''}${data.cana ? `<div style="height: 12px;"></div><h4>Cana</h4>${renderGenericNode(data.cana)}` : ''}`
+                                : renderEmpty('Nenhum bloco de exportação / cana foi encontrado.')}
+                        </article>
+                    </div>
+                `;
+            }
+
+            function renderTechnical(data) {
+                const signature = data.signature;
+                const protocolFields = [
+                    { label: 'Código do status', value: textValue(data.infProt, 'cStat') || '-' },
+                    { label: 'Motivo', value: textValue(data.infProt, 'xMotivo') || '-' },
+                    { label: 'Protocolo', value: textValue(data.infProt, 'nProt') || '-' },
+                    { label: 'Chave da NF-e', value: textValue(data.infProt, 'chNFe') || data.summary.key },
+                    { label: 'Recebimento', value: formatDate(textValue(data.infProt, 'dhRecbto')) },
+                    { label: 'Versão do autorizador', value: textValue(data.infProt, 'verAplic') || '-' },
+                    { label: 'Digest value', value: textValue(data.infProt, 'digVal') || '-' },
+                    { label: 'Ambiente protocolo', value: codeLabel('tpAmb', textValue(data.infProt, 'tpAmb')) }
+                ];
+
+                const signatureFields = signature ? [
+                    { label: 'Canonicalization', value: signature.canonicalizationMethod || '-' },
+                    { label: 'Algoritmo assinatura', value: signature.signatureMethod || '-' },
+                    { label: 'Algoritmo digest', value: signature.digestMethod || '-' },
+                    { label: 'Digest value', value: signature.digestValue || '-' },
+                    { label: 'Assinatura presente', value: signature.signatureValue ? 'Sim' : 'Não' },
+                    { label: 'Certificado', value: signature.certificate ? `${signature.certificate.slice(0, 26)}...${signature.certificate.slice(-18)}` : '-' }
+                ] : [];
+
+                refs.views.technical.innerHTML = `
+                    <div class="analysis-grid cols-2">
+                        <article class="analysis-card">
+                            <h3>Protocolo SEFAZ</h3>
+                            ${renderFieldGrid(protocolFields)}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>Assinatura digital</h3>
+                            ${signatureFields.length ? renderFieldGrid(signatureFields) : renderEmpty('Não foi localizada assinatura digital no XML.')}
+                        </article>
+                    </div>
+                    <div style="height: 16px;"></div>
+                    <div class="analysis-grid cols-3">
+                        <article class="analysis-card">
+                            <h3>Responsável técnico</h3>
+                            ${data.infRespTec ? renderGenericNode(data.infRespTec) : renderEmpty('O bloco infRespTec não está presente.')}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>Suplemento da NF-e</h3>
+                            ${data.infNFeSupl ? renderGenericNode(data.infNFeSupl) : renderEmpty('Não há infNFeSupl neste XML.')}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>Emissão avulsa</h3>
+                            ${data.avulsa ? renderGenericNode(data.avulsa) : renderEmpty('O bloco avulsa não foi encontrado.')}
+                        </article>
+                    </div>
+                `;
+            }
+
+            function renderXml(data) {
+                const inventoryRows = data.inventory.map(entry => `
+                    <tr>
+                        <td><strong>${escapeHtml(entry.tag)}</strong></td>
+                        <td>${escapeHtml(String(entry.count))}</td>
+                        <td>${escapeHtml(entry.attributes.join(' | ') || '-')}</td>
+                        <td>${escapeHtml(entry.sample || '-')}</td>
+                    </tr>
+                `).join('');
+
+                refs.views.xml.innerHTML = `
+                    <div class="analysis-grid cols-2">
+                        <article class="analysis-card">
+                            <h3>Informações complementares</h3>
+                            ${textValue(data.infAdic, 'infCpl') ? `<div class="analysis-note-box">${escapeHtml(textValue(data.infAdic, 'infCpl'))}</div>` : renderEmpty('Não há infCpl no XML.')}
+                        </article>
+                        <article class="analysis-card">
+                            <h3>Informações ao fisco</h3>
+                            ${textValue(data.infAdic, 'infAdFisco') ? `<div class="analysis-note-box">${escapeHtml(textValue(data.infAdic, 'infAdFisco'))}</div>` : renderEmpty('Não há infAdFisco no XML.')}
+                        </article>
+                    </div>
+                    <div style="height: 16px;"></div>
+                    <article class="analysis-card">
+                        <h3>Blocos extras encontrados no topo da NF-e</h3>
+                        ${data.extraTopSections.length
+                            ? data.extraTopSections.map(node => `
+                                <div style="margin-top: 14px;">
+                                    <h4>${escapeHtml(node.localName)}</h4>
+                                    ${renderGenericNode(node)}
+                                </div>
+                            `).join('')
+                            : renderEmpty('Nenhum bloco extra de topo foi encontrado.')}
+                    </article>
+                    <div style="height: 16px;"></div>
+                    <article class="analysis-card">
+                        <h3>Inventário de tags do XML</h3>
+                        <div class="analysis-table-shell">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Tag</th>
+                                        <th>Ocorrências</th>
+                                        <th>Atributos</th>
+                                        <th>Exemplo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>${inventoryRows}</tbody>
+                            </table>
+                        </div>
+                    </article>
+                `;
+            }
+
+            function renderAll() {
+                if (!state.data) return;
+                renderMetrics(state.data);
+                refs.views.overview.innerHTML = renderOverview(state.data);
+                refs.views.parties.innerHTML = renderParties(state.data);
+                renderItems(state.data);
+                renderTaxes(state.data);
+                renderFinance(state.data);
+                renderLogistics(state.data);
+                renderTechnical(state.data);
+                renderXml(state.data);
+                refs.workspace.style.display = 'flex';
+                activateView(state.activeView);
+            }
+
+            async function handleIndividualFile(event) {
+                const file = event.target.files?.[0];
+                if (!file) return;
+                hideError();
+                refs.fileName.textContent = `Arquivo: ${file.name}`;
+                refs.clearButton.style.display = 'inline-block';
+                refs.workspace.style.display = 'none';
+                refs.metrics.innerHTML = '';
+                setStatus('Processando XML...', 'warn');
+
+                try {
+                    const xmlText = await readFileAsText(file);
+                    state.data = buildData(xmlText, {
+                        name: file.name,
+                        size: file.size,
+                        type: file.type || 'application/xml'
+                    });
+                    state.itemFilter = '';
+                    state.selectedItemIndex = state.data.items[0]?.index ?? null;
+                    state.activeView = 'overview';
+                    renderAll();
+                    setStatus('XML analisado com sucesso', 'ok');
+                } catch (error) {
+                    console.error(error);
+                    state.data = null;
+                    refs.workspace.style.display = 'none';
+                    refs.metrics.innerHTML = '';
+                    showError(`Erro: ${error.message || 'Não foi possível analisar o XML.'}`);
+                    setStatus('Falha na análise', 'error');
+                }
+            }
+
+            refs.fileInput.addEventListener('change', handleIndividualFile);
+            refs.clearButton.addEventListener('click', () => resetIndividual());
+            refs.viewButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    if (!state.data) return;
+                    activateView(button.dataset.indView);
+                });
+            });
+
+            resetIndividual();
+        })();
     </script>
 </body>
 </html>
