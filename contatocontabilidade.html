@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Mensagem - Implantação KM Sistemas</title>
-    <!-- Importando uma fonte do Google Fonts para um visual mais elegante -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* --- ESTILOS GERAIS (CSS) --- */
         :root {
             --cor-primaria: #04ab5c;
             --cor-secundaria: #a9cf44;
@@ -17,6 +15,8 @@
             --cor-fundo: #f0f2f5;
             --cor-caixa: #ffffff;
             --cor-texto: #343a40;
+            --cor-borda: #e9ecef;
+            --cor-botao-secundario: #eef8f1;
             --sombra-suave: 0 4px 20px rgba(0, 0, 0, 0.07);
             --borda-raio: 10px;
         }
@@ -40,7 +40,7 @@
 
         .container {
             width: 100%;
-            max-width: 1100px; /* Aumentado para o novo layout */
+            max-width: 1100px;
             background-color: var(--cor-caixa);
             padding: 2.5rem;
             border-radius: var(--borda-raio);
@@ -49,8 +49,8 @@
 
         header {
             text-align: center;
-            margin-bottom: 2.5rem;
-            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--cor-borda);
             padding-bottom: 1.5rem;
         }
 
@@ -64,29 +64,91 @@
             font-size: 1rem;
             margin-top: 0.5rem;
         }
-        
-        /* NOVO: Layout em Grid */
+
+        .tab-nav {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .tab-button {
+            border: 1px solid transparent;
+            background-color: #f8f9fa;
+            color: var(--cor-texto);
+            padding: 0.85rem 1.2rem;
+            border-radius: var(--borda-raio);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .tab-button:hover {
+            transform: translateY(-1px);
+            border-color: rgba(4, 171, 92, 0.22);
+        }
+
+        .tab-button.ativa {
+            background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
+            color: white;
+            box-shadow: 0 6px 18px rgba(4, 171, 92, 0.2);
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.ativa {
+            display: block;
+        }
+
         main {
             display: grid;
-            grid-template-columns: 320px 1fr; /* Coluna fixa para inputs, coluna flexível para a mensagem */
+            grid-template-columns: 360px 1fr;
             gap: 2.5rem;
             align-items: start;
         }
 
-        /* --- Seção dos controles --- */
         .controls-section {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
         }
 
+        .section-card {
+            border: 1px solid var(--cor-borda);
+            border-radius: var(--borda-raio);
+            padding: 1.2rem;
+            background-color: #fcfcfd;
+        }
+
+        .section-card h2,
+        .section-card h3 {
+            font-size: 1.05rem;
+            color: var(--cor-texto);
+            margin-bottom: 1rem;
+        }
+
+        .section-card p {
+            color: #6c757d;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
         .input-group {
             display: flex;
             flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
-        
+
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+
         label {
-            margin-bottom: 0.5rem;
             font-weight: 500;
             font-size: 0.9rem;
             color: #495057;
@@ -108,10 +170,78 @@
         select:focus {
             outline: none;
             border-color: var(--cor-primaria);
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+            box-shadow: 0 0 0 3px rgba(4, 171, 92, 0.2);
         }
-        
-        /* --- Seção da Mensagem --- */
+
+        .helper-text {
+            font-size: 0.82rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        .companies-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .company-card {
+            border: 1px solid #e4e7eb;
+            background-color: white;
+            border-radius: var(--borda-raio);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .company-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .company-card-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--cor-texto);
+        }
+
+        .actions-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .secondary-button,
+        .ghost-button {
+            border: none;
+            border-radius: var(--borda-raio);
+            padding: 0.75rem 1rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .secondary-button {
+            background-color: var(--cor-botao-secundario);
+            color: var(--cor-primaria);
+        }
+
+        .ghost-button {
+            background-color: #fff1f1;
+            color: #c43d3d;
+        }
+
+        .secondary-button:hover,
+        .ghost-button:hover {
+            transform: translateY(-1px);
+        }
+
         .message-section h2 {
             font-size: 1.5rem;
             color: var(--cor-texto);
@@ -123,9 +253,9 @@
             border: 1px dashed #ced4da;
             padding: 1.5rem;
             border-radius: var(--borda-raio);
-            white-space: pre-wrap; /* Essencial para manter as quebras de linha */
+            white-space: pre-wrap;
             line-height: 1.7;
-            height: 400px; /* Altura fixa para alinhar com o form */
+            height: 520px;
             font-family: 'Menlo', 'Courier New', monospace;
             font-size: 0.95rem;
             color: #212529;
@@ -133,9 +263,8 @@
             resize: vertical;
         }
 
-        /* --- Botão de Copiar --- */
         .button-container {
-            text-align: right; /* Alinhado à direita */
+            text-align: right;
             margin-top: 1.5rem;
         }
 
@@ -154,9 +283,9 @@
             align-items: center;
             gap: 0.75rem;
         }
-        
+
         #btn-copiar:hover {
-            background-color: #0056b3;
+            background-color: #038c4c;
             transform: translateY(-2px);
         }
 
@@ -164,139 +293,321 @@
             background-color: var(--cor-sucesso);
         }
 
-        /* NOVO: Responsividade para telas menores */
+        .placeholder-panel {
+            border: 1px dashed #d7dce2;
+            border-radius: var(--borda-raio);
+            padding: 2rem;
+            background-color: #fbfcfd;
+            text-align: center;
+        }
+
+        .placeholder-panel h2 {
+            color: var(--cor-texto);
+            margin-bottom: 0.75rem;
+        }
+
+        .placeholder-panel p {
+            color: #6c757d;
+            max-width: 520px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
         @media (max-width: 900px) {
             main {
-                grid-template-columns: 1fr; /* Muda para uma coluna só */
+                grid-template-columns: 1fr;
             }
 
             #mensagem-gerada {
-                height: 300px; /* Reduz altura no mobile */
+                height: 320px;
             }
+
             .button-container {
-                text-align: center; /* Centraliza o botão no mobile */
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
-
     <div class="container">
         <header>
             <h1>Gerador de Mensagem de Implantação</h1>
             <p>Preencha os dados e copie sua mensagem personalizada instantaneamente.</p>
         </header>
 
-        <main>
-            <!-- Seção de Controles (Esquerda) -->
-            <section class="controls-section">
-                <h2>Dados Variáveis</h2>
-                <div class="input-group">
-                    <label for="seu-nome">Seu Nome</label>
-                    <select id="seu-nome">
-                        <option value="Luiz">Luiz</option>
-                        <option value="Everton">Everton</option>
-                        <option value="Abner">Abner</option>
-                    </select>
-                </div>
+        <nav class="tab-nav" aria-label="Ferramentas disponíveis">
+            <button class="tab-button ativa" type="button" data-tab="tab-mensagem">Mensagem para Contadores</button>
+            <button class="tab-button" type="button" data-tab="tab-futuro-1">Futuras Ferramentas 1</button>
+            <button class="tab-button" type="button" data-tab="tab-futuro-2">Futuras Ferramentas 2</button>
+        </nav>
 
-                <div class="input-group">
-                    <label for="nome-cliente">Nome do Cliente</label>
-                    <input type="text" id="nome-cliente" placeholder="Ex: Contabilidade Exemplo">
-                </div>
-            </section>
-            
-            <!-- Seção da Mensagem Gerada (Direita) -->
-            <section class="message-section">
-                <h2>Mensagem Pronta</h2>
-                <pre id="mensagem-gerada"></pre>
-                
-                <div class="button-container">
-                    <button id="btn-copiar">
-                        <!-- Ícone SVG de prancheta -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
-                          <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
-                          <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Z"/>
-                          <path d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793 6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3Z"/>
-                        </svg>
-                        <span id="btn-texto">Copiar Mensagem</span>
-                    </button>
-                </div>
-            </section>
-        </main>
-        
+        <section class="tab-panel ativa" id="tab-mensagem">
+            <main>
+                <section class="controls-section">
+                    <div class="section-card">
+                        <h2>Dados Variáveis</h2>
+
+                        <div class="input-group">
+                            <label for="nome-implantador">Nome do implantador</label>
+                            <input type="text" id="nome-implantador" list="lista-implantadores" placeholder="Ex: Luiz">
+                            <datalist id="lista-implantadores">
+                                <option value="Luiz"></option>
+                                <option value="Everton"></option>
+                                <option value="Abner"></option>
+                            </datalist>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="nome-cliente">Nome do cliente</label>
+                            <input type="text" id="nome-cliente" placeholder="Ex: Contabilidade Exemplo">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="empresa-principal">Empresa principal do cliente</label>
+                            <input type="text" id="empresa-principal" placeholder="Ex: Empresa Matriz LTDA">
+                        </div>
+                    </div>
+
+                    <div class="section-card">
+                        <h3>Empresas relacionadas</h3>
+                        <p class="helper-text">Adicione quantas empresas forem necessárias para gerar a mensagem completa sem retrabalho.</p>
+                        <div class="companies-list" id="companies-list"></div>
+                        <div class="actions-row">
+                            <button class="secondary-button" type="button" id="btn-adicionar-empresa">Adicionar empresa</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="message-section">
+                    <h2>Mensagem Pronta</h2>
+                    <pre id="mensagem-gerada"></pre>
+
+                    <div class="button-container">
+                        <button id="btn-copiar" type="button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+                                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Z"/>
+                                <path d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793 6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3Z"/>
+                            </svg>
+                            <span id="btn-texto">Copiar mensagem</span>
+                        </button>
+                    </div>
+                </section>
+            </main>
+        </section>
+
+        <section class="tab-panel" id="tab-futuro-1">
+            <div class="placeholder-panel">
+                <h2>Espaço reservado</h2>
+                <p>Esta aba está pronta para receber futuras ferramentas internas, sem alterar a identidade visual da página.</p>
+            </div>
+        </section>
+
+        <section class="tab-panel" id="tab-futuro-2">
+            <div class="placeholder-panel">
+                <h2>Espaço reservado</h2>
+                <p>Esta aba também foi preparada para expansões futuras, mantendo a navegação organizada desde agora.</p>
+            </div>
+        </section>
     </div>
 
     <script>
-        // --- SCRIPT DE INTERATIVIDADE (JAVASCRIPT) ---
-
-        // 1. Seleciona os elementos do HTML que vamos manipular
-        const seuNomeSelect = document.getElementById('seu-nome');
+        const nomeImplantadorInput = document.getElementById('nome-implantador');
         const nomeClienteInput = document.getElementById('nome-cliente');
+        const empresaPrincipalInput = document.getElementById('empresa-principal');
+        const companiesList = document.getElementById('companies-list');
+        const btnAdicionarEmpresa = document.getElementById('btn-adicionar-empresa');
         const mensagemGeradaPre = document.getElementById('mensagem-gerada');
         const btnCopiar = document.getElementById('btn-copiar');
         const btnTexto = document.getElementById('btn-texto');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabPanels = document.querySelectorAll('.tab-panel');
 
-        // 2. Função que cria o template da mensagem
+        let companyId = 0;
+
+        const formatarCnpj = (valor) => {
+            const numeros = valor.replace(/\D/g, '').slice(0, 14);
+
+            return numeros
+                .replace(/^(\d{2})(\d)/, '$1.$2')
+                .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+                .replace(/\.(\d{3})(\d)/, '.$1/$2')
+                .replace(/(\d{4})(\d)/, '$1-$2');
+        };
+
+        const obterEmpresasRelacionadas = () => {
+            return Array.from(companiesList.querySelectorAll('.company-card')).map((card) => {
+                const razaoSocial = card.querySelector('[data-field="razao-social"]').value.trim();
+                const cnpj = card.querySelector('[data-field="cnpj"]').value.trim();
+
+                return { razaoSocial, cnpj };
+            });
+        };
+
+        const gerarListaEmpresas = () => {
+            const empresasPreenchidas = obterEmpresasRelacionadas().filter((empresa) => empresa.razaoSocial || empresa.cnpj);
+
+            if (!empresasPreenchidas.length) {
+                return '- [Razão social] - [CNPJ]';
+            }
+
+            return empresasPreenchidas
+                .map((empresa) => {
+                    const razaoSocial = empresa.razaoSocial || '[Razão social]';
+                    const cnpj = empresa.cnpj || '[CNPJ]';
+
+                    return `- ${razaoSocial} - ${cnpj}`;
+                })
+                .join('\n');
+        };
+
         const gerarMensagem = () => {
-            const seuNome = seuNomeSelect.value;
-            // O nome da empresa agora é fixo
-            const suaEmpresa = 'KM Sistemas';
-            const nomeCliente = nomeClienteInput.value.trim() || '[Nome do Cliente]';
+            const implantador = nomeImplantadorInput.value.trim() || '[Nome do implantador]';
+            const nomeCliente = nomeClienteInput.value.trim() || '[Nome do cliente]';
+            const empresaPrincipal = empresaPrincipalInput.value.trim() || '[Empresa principal do cliente]';
+            const listaEmpresas = gerarListaEmpresas();
 
-            // Template literal para facilitar a inserção das variáveis
-            const mensagem = `Olá, tudo bem? Me chamo ${seuNome}, sou responsável pela implantação do sistema ERP da ${suaEmpresa} na empresa ${nomeCliente}.
+            return `Olá, tudo bem?
 
-Estamos na fase de configuração da emissão de notas fiscais e gostaríamos de contar com o apoio de vocês para validar a tributação utilizada atualmente.
+Me chamo ${implantador} e sou responsável pela implantação do sistema ERP da KM Sistemas no cliente ${nomeCliente}.
 
-Encaminhei em anexo alguns arquivos PDF e XML de notas fiscais recentes. Poderiam, por gentileza, verificar se os dados tributários (CFOP, CST, CSOSN, alíquotas, etc.) estão corretos e se há algo que precise de ajuste?
+Para seguirmos com a implantação, preciso do apoio de vocês na validação cadastral e tributária das empresas abaixo:
 
-Isso nos ajuda a garantir que o sistema seja configurado corretamente e evite qualquer problema na emissão de NF-e.
+Empresa principal do cliente:
+- ${empresaPrincipal}
 
-Fico à disposição para qualquer dúvida. Desde já, agradeço a atenção e o suporte! 🙏
+Empresas relacionadas:
+${listaEmpresas}
+
+Se identificarem qualquer ponto que precise de ajuste, por favor me avisem para que possamos configurar o sistema corretamente.
+
+Fico à disposição para qualquer dúvida.
 
 Atenciosamente,
-${seuNome}
+${implantador}
 Implantação KM Sistemas`;
-
-            return mensagem;
         };
-        
-        // 3. Função para atualizar o campo de texto com a mensagem gerada
+
         const atualizarVisualizacao = () => {
             mensagemGeradaPre.textContent = gerarMensagem();
         };
 
-        // 4. Lógica para copiar a mensagem para a área de transferência
+        const atualizarTitulosEmpresas = () => {
+            Array.from(companiesList.querySelectorAll('.company-card')).forEach((card, index) => {
+                card.querySelector('.company-card-title').textContent = `Empresa relacionada ${index + 1}`;
+            });
+        };
+
+        const removerEmpresa = (id) => {
+            const card = companiesList.querySelector(`[data-company-id="${id}"]`);
+
+            if (!card) {
+                return;
+            }
+
+            if (companiesList.children.length === 1) {
+                card.querySelector('[data-field="razao-social"]').value = '';
+                card.querySelector('[data-field="cnpj"]').value = '';
+                atualizarVisualizacao();
+                return;
+            }
+
+            card.remove();
+            atualizarTitulosEmpresas();
+            atualizarVisualizacao();
+        };
+
+        const criarEmpresaRelacionada = () => {
+            companyId += 1;
+
+            const companyCard = document.createElement('div');
+            companyCard.className = 'company-card';
+            companyCard.dataset.companyId = String(companyId);
+            companyCard.innerHTML = `
+                <div class="company-card-header">
+                    <span class="company-card-title">Empresa relacionada</span>
+                    <button class="ghost-button" type="button" data-action="remove-company">Remover</button>
+                </div>
+                <div class="input-group">
+                    <label>Razão Social</label>
+                    <input type="text" data-field="razao-social" placeholder="Ex: Filial Centro LTDA">
+                </div>
+                <div class="input-group">
+                    <label>CNPJ</label>
+                    <input type="text" data-field="cnpj" placeholder="00.000.000/0000-00" inputmode="numeric">
+                </div>
+            `;
+
+            companiesList.appendChild(companyCard);
+            atualizarTitulosEmpresas();
+            atualizarVisualizacao();
+        };
+
+        const alternarTab = (tabId) => {
+            tabButtons.forEach((button) => {
+                button.classList.toggle('ativa', button.dataset.tab === tabId);
+            });
+
+            tabPanels.forEach((panel) => {
+                panel.classList.toggle('ativa', panel.id === tabId);
+            });
+        };
+
         const copiarMensagem = () => {
             const textoParaCopiar = mensagemGeradaPre.textContent;
-            
+
             navigator.clipboard.writeText(textoParaCopiar).then(() => {
-                // Feedback visual para o usuário
-                btnTexto.textContent = 'Copiado! ✅';
+                btnTexto.textContent = 'Copiado com sucesso';
                 btnCopiar.classList.add('sucesso');
-                
-                // Retorna ao estado original após 2 segundos
+
                 setTimeout(() => {
-                    btnTexto.textContent = 'Copiar Mensagem';
+                    btnTexto.textContent = 'Copiar mensagem';
                     btnCopiar.classList.remove('sucesso');
                 }, 2000);
-
-            }).catch(err => {
-                console.error('Falha ao copiar a mensagem: ', err);
+            }).catch((err) => {
+                console.error('Falha ao copiar a mensagem:', err);
                 btnTexto.textContent = 'Erro ao copiar!';
                 alert('Não foi possível copiar a mensagem. Por favor, copie manualmente.');
             });
         };
 
-        // 5. Adiciona os "escutadores de eventos" aos elementos
-        seuNomeSelect.addEventListener('change', atualizarVisualizacao);
-        nomeClienteInput.addEventListener('input', atualizarVisualizacao);
+        tabButtons.forEach((button) => {
+            button.addEventListener('click', () => alternarTab(button.dataset.tab));
+        });
+
+        [nomeImplantadorInput, nomeClienteInput, empresaPrincipalInput].forEach((input) => {
+            input.addEventListener('input', atualizarVisualizacao);
+        });
+
+        btnAdicionarEmpresa.addEventListener('click', criarEmpresaRelacionada);
+
+        companiesList.addEventListener('input', (event) => {
+            const target = event.target;
+
+            if (target.matches('[data-field="cnpj"]')) {
+                target.value = formatarCnpj(target.value);
+            }
+
+            atualizarVisualizacao();
+        });
+
+        companiesList.addEventListener('click', (event) => {
+            const removeButton = event.target.closest('[data-action="remove-company"]');
+
+            if (!removeButton) {
+                return;
+            }
+
+            const companyCard = removeButton.closest('.company-card');
+            removerEmpresa(companyCard.dataset.companyId);
+        });
+
         btnCopiar.addEventListener('click', copiarMensagem);
 
-        // 6. Chama a função de atualizar na carga inicial da página
-        document.addEventListener('DOMContentLoaded', atualizarVisualizacao);
+        document.addEventListener('DOMContentLoaded', () => {
+            criarEmpresaRelacionada();
+            atualizarVisualizacao();
+        });
     </script>
-
 </body>
 </html>
