@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cronograma de Implantação - KM Sistemas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green: #07AF59;
+  --green-light: #e8f9f1;
+  --green-mid: #d1fae5;
+  --green-text: #065f35;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --bg: #f9fafb;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding: 40px 32px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.wrapper { max-width: 900px; margin: 0 auto; }
+
+/* ── FORMULÁRIO ── */
+.form-section { margin-bottom: 48px; }
+.form-section h1 { font-size: 26px; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.5px; }
+.form-section p { color: var(--muted); margin-bottom: 28px; font-size: 14px; }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 13px; font-weight: 600; color: var(--muted); }
+.field input { padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; background: white; transition: border-color .15s; }
+.field input:focus { outline: none; border-color: var(--green); }
+.days-label { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 10px; display: block; }
+.days-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.day-item { padding: 8px 18px; border: 1px solid var(--border); border-radius: 99px; font-size: 13px; font-weight: 600; cursor: pointer; user-select: none; transition: all .15s; background: white; }
+.day-item input { display: none; }
+.day-item:has(input:checked) { background: var(--green); color: white; border-color: var(--green); }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn { padding: 11px 28px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: opacity .15s; }
+.btn:hover { opacity: 0.85; }
+.btn-primary { background: var(--green); color: white; }
+.btn-secondary { background: white; border: 1px solid var(--border); color: var(--text); }
+
+/* ── CAPA ── */
+.cover { margin-bottom: 40px; }
+.cover-logo { display: flex; justify-content: center; margin-bottom: 36px; padding-bottom: 36px; border-bottom: 1px solid var(--border); }
+.cover-logo img { max-width: 180px; height: auto; }
+.cover-heading { margin-bottom: 32px; }
+.cover-heading h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 4px; }
+.cover-heading p { color: var(--muted); font-size: 14px; }
+
+.meta-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 36px; }
+.meta-item { padding: 16px 20px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.meta-item:nth-child(3n) { border-right: none; }
+.meta-item span { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); margin-bottom: 5px; }
+.meta-item strong { font-size: 14px; font-weight: 600; }
+
+.policy { border-top: 1px solid var(--border); padding-top: 28px; }
+.policy-block { margin-bottom: 22px; }
+.policy-block h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--green); margin-bottom: 8px; }
+.policy-block p { font-size: 14px; color: #374151; line-height: 1.75; }
+
+/* ── BANNER DE FASE ── */
+.phase-group { margin-bottom: 40px; }
+
+.phase-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 22px;
+  border-radius: 10px;
+  background: var(--green-light);
+  border: 1px solid var(--green-mid);
+  border-left: 4px solid var(--green);
+  margin-bottom: 20px;
+}
+.phase-banner-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--green-text);
+  letter-spacing: -0.3px;
+}
+.phase-banner-dates {
+  font-size: 13px;
+  color: var(--green-text);
+  opacity: 0.75;
+  font-weight: 500;
+}
+.phase-banner-dates strong {
+  color: var(--green-text);
+  font-weight: 700;
+  opacity: 1;
+}
+
+/* ── MÓDULO ── */
+.module-block { margin-bottom: 20px; }
+.module-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--green-text);
+  letter-spacing: -0.1px;
+}
+.module-obs {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 10px;
+  white-space: pre-line;
+  padding-left: 12px;
+  border-left: 2px solid var(--border);
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); padding: 8px 12px; border-bottom: 1px solid var(--border); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tbody tr:last-child td { border-bottom: none; }
+td.col-date { white-space: nowrap; color: var(--muted); font-size: 13px; width: 110px; }
+td.col-time { white-space: nowrap; color: var(--muted); font-size: 13px; width: 80px; }
+td.col-content { font-weight: 500; }
+
+/* ── PRINT ── */
+@media print {
+  @page { size: A4; margin: 14mm 14mm; }
+
+  body {
+    background: white;
+    padding: 0;
+    font-size: 13px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .form-section { display: none !important; }
+  .wrapper { max-width: 100%; }
+
+  /* ── CAPA: tudo na primeira página ── */
+  .cover {
+    break-after: page;
+    break-inside: avoid-page; /* força a capa a não ser cortada */
+  }
+
+  /* Reduz espaçamentos da capa para caber numa página só */
+  .cover-logo { margin-bottom: 18px; padding-bottom: 18px; }
+  .cover-logo img { max-width: 130px; }
+
+  .cover-heading { margin-bottom: 18px; }
+  .cover-heading h2 { font-size: 18px; }
+  .cover-heading p { font-size: 12px; }
+
+  /* Grid de meta sempre 3 colunas e compacto */
+  .meta-grid { grid-template-columns: repeat(3, 1fr); margin-bottom: 20px; }
+  .meta-item { padding: 10px 14px; }
+  .meta-item span { font-size: 10px; margin-bottom: 3px; }
+  .meta-item strong { font-size: 12px; }
+
+  /* Políticas compactas mas legíveis */
+  .policy { padding-top: 16px; }
+  .policy-block { margin-bottom: 12px; }
+  .policy-block h3 { font-size: 11px; margin-bottom: 4px; }
+  .policy-block p { font-size: 12px; line-height: 1.55; }
+
+  /* ── FASES: cada grupo numa nova página, sem espaço excessivo ── */
+  .phase-group {
+    break-before: page;
+    margin-bottom: 0;
+  }
+
+  .phase-banner {
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    border-radius: 7px;
+  }
+  .phase-banner-name { font-size: 16px; }
+  .phase-banner-dates { font-size: 12px; }
+
+  /* Módulos grudados, sem espaço excessivo entre eles */
+  .module-block {
+    break-inside: avoid;
+    margin-bottom: 14px; /* reduzido: menos espaço entre módulos */
+  }
+
+  .module-title { font-size: 13px; margin-bottom: 4px; }
+  .module-obs { font-size: 11px; margin-bottom: 8px; line-height: 1.5; padding-left: 10px; }
+
+  table { font-size: 12px; }
+  th { font-size: 10px; padding: 6px 10px; }
+  td { padding: 7px 10px; }
+  td.col-date, td.col-time { font-size: 11px; }
+
+  tbody tr { break-inside: avoid; page-break-inside: avoid; }
+  thead { display: table-header-group; }
+}
+
+@media (max-width: 600px) {
+  body { padding: 24px 18px; }
+  .phase-banner { flex-direction: column; gap: 4px; }
+  .meta-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- FORMULÁRIO -->
+  <div class="form-section">
+    <h1>Cronograma de Implantação</h1>
+    <p>Preencha as informações abaixo para gerar o cronograma.</p>
+    <div class="form-grid">
+      <div class="field"><label>Cliente</label><input type="text" id="cliente" /></div>
+      <div class="field"><label>Consultor de Implantação</label><input type="text" id="consultor" /></div>
+      <div class="field"><label>Patrocinador</label><strong></strong><input type="text" id="patrocinador" /></div>
+      <div class="field"><label>Adm do Projeto</label><input type="text" id="admProjeto" /></div>
+      <div class="field"><label>Data Inicial</label><input type="date" id="dataInicial" /></div>
+      <div class="field"><label>Horário</label><input type="time" id="horario" /></div>
+    </div>
+    <span class="days-label">Dias permitidos</span>
+    <div class="days-grid">
+      <label class="day-item"><input type="checkbox" value="1"><span>Segunda</span></label>
+      <label class="day-item"><input type="checkbox" value="2"><span>Terça</span></label>
+      <label class="day-item"><input type="checkbox" value="3"><span>Quarta</span></label>
+      <label class="day-item"><input type="checkbox" value="4"><span>Quinta</span></label>
+      <label class="day-item"><input type="checkbox" value="5"><span>Sexta</span></label>
+      <label class="day-item"><input type="checkbox" value="6"><span>Sábado</span></label>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="gerarCronograma()">Gerar Cronograma</button>
+      <button class="btn btn-secondary" onclick="window.print()">Exportar PDF</button>
+    </div>
+  </div>
+
+  <!-- CAPA -->
+  <div class="cover">
+    <div class="cover-logo">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3oeA5mjSBl0SiKXRkerD1pLwtOOziMPva7A&s" alt="KM Sistemas" />
+    </div>
+    <div class="cover-heading">
+      <h2>Cronograma de Implantação</h2>
+      <p>Planejamento oficial de implantação, treinamentos e acompanhamento operacional.</p>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-item"><span>Cliente</span><strong id="pdfCliente">—</strong></div>
+      <div class="meta-item"><span>Consultor</span><strong id="pdfConsultor">—</strong></div>
+      <div class="meta-item"><span>Patrocinador</span><strong id="pdfPatrocinador">—</strong></div>
+      <div class="meta-item"><span>Adm do Projeto</span><strong id="pdfAdm">—</strong></div>
+      <div class="meta-item"><span>Previsão de Início</span><strong id="pdfInicio">—</strong></div>
+      <div class="meta-item"><span>Previsão de Conclusão</span><strong id="pdfConclusao">—</strong></div>
+    </div>
+    <div class="policy">
+      <div class="policy-block">
+        <h3>Dias de Agenda Fixa</h3>
+        <p>Definido os melhores dias e horários da agenda com o cliente para criação do cronograma, serão preferencialmente nestes dias e horários, quarta e sexta às 08:15 às 09:15, podendo ser alocado em quaisquer dias com um dia de intervalo. Agendas têm tempo de duração de 1 hora, não podendo ser prorrogadas. Consultor possui outros agendamentos na sequência.</p>
+      </div>
+      <div class="policy-block">
+        <h3>Cronograma e Políticas de Cancelamento</h3>
+        <p>O cronograma de implantação foi cuidadosamente planejado para garantir que todas as etapas sejam cumpridas de forma eficiente e dentro dos prazos estabelecidos. Cada etapa do processo depende da realização dos treinamentos agendados, que são essenciais para a conclusão das atividades previstas.</p>
+      </div>
+      <div class="policy-block">
+        <h3>Cancelamentos e Impacto no Cronograma</h3>
+        <p>Caso haja cancelamento de uma agenda de treinamento, o cronograma poderá sofrer atrasos. O treinamento não realizado será remarcado para a próxima agenda disponível. Se o cancelamento ocorrer por ambas as partes, a nova data será remarcada para um próximo período, impactando diretamente o andamento da implantação.</p>
+      </div>
+      <div class="policy-block">
+        <h3>Política de Cancelamentos Repetidos</h3>
+        <p>Se houver dois cancelamentos consecutivos, o agendamento fixo será retirado. Futuras agendas poderão ser alteradas, com comunicado por e-mail e novas datas reagendadas conforme disponibilidade de ambas as partes. O compromisso e a participação ativa são fundamentais para a execução pontual dos treinamentos e conclusão da implantação.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div id="resultado"></div>
+
+</div>
+<script>
+const fases = [
+  {
+    fase:"Fase 1", titulo:"Cadastros Básicos — Comercial e Estoque",
+    observacao:`Para avançar para a inserção de pedidos é necessário ter cadastros de clientes e produtos de venda.\nNão somente o produto feito nos treinamentos.`,
+    blocos:[
+      ["Funcionalidade Geral do Comercial","Fornecedores","Representante","Configurar Comissão","Cliente"],
+      ["Grupo / Subgrupo","Produto Matéria Prima / Produto de Venda"],
+      ["Produto Matéria Prima / Produto de Venda","Ficha Técnica — Apresentação"]
+    ]
+  },
+  {
+    fase:"Fase 1", titulo:"Comercial / Desenvolvimento de Produtos",
+    observacao:`É de extrema importância lançar pedidos em teste, com situações reais do dia a dia da sua empresa, para encontrar gaps de usabilidade e ajustes finos de parametrização.\n\nReportar as situações encontradas ao Consultor o mais breve possível.`,
+    blocos:[
+      ["Orçamento / Layout Produto"],
+      ["Pedido de Venda / Layout Produto","Mostrar Impressão do Pedido","Comunicação com Cliente — CRM"],
+      ["Grupo e Itens de Detalhes — Ordem de Produção","Pedido com Detalhes — Ordem de Produção","Recebimentos do Pedido — (Fechar Pedido)","Mostrar Ordem de Produção"]
+    ]
+  },
+  {
+    fase:"Fase 1", titulo:"Financeiro — Pagar",
+    observacao:`Treinamentos voltados para rotinas financeiras de contas a pagar.`,
+    blocos:[
+      ["Tipo de Fornecedor","Cadastro de Fornecedor","Condição de Pagamento","Lançamento de Títulos a Pagar (Manutenção de Parcelas)","Operação de Pagamento — Pagar rápido","Adiantamento à Fornecedores"],
+      ["Operação de Pagamento — Várias formas","Estornar Operação de Pagamento","Agrupamento de Títulos (Fechamento de Títulos)","Cartão de Crédito Empresa — Lançamento de Despesas","Baixa de Títulos gerando novos Documentos","Posição Geral de Títulos (Títulos a pagar)","Extrato de Movimento Financeiro (Débito) — Tesouraria"]
+    ]
+  },
+  {
+    fase:"Fase 1", titulo:"Financeiro — Receber",
+    observacao:`É de extrema importância lançar títulos a pagar e receber e fazer suas liquidações em teste, com situações reais do dia a dia da sua empresa, para encontrar gaps de usabilidade e ajustes finos de parametrização.\n\nReportar as situações encontradas ao Consultor o mais breve possível.`,
+    blocos:[
+      ["Lançamento de Títulos a Receber (Manutenção de Parcelas)","Cadastro Contas Financeiras","Títulos a Receber — Pedido / Faturamento","Gerar um boleto — Remessa / API","Parcial de Títulos e Cancelamento"],
+      ["Adiantamento de Clientes","Operação de Recebimento — Receber Rápido","Estornar Operações de Recebimento","Posição Geral de Títulos (Crédito)","Extrato de Movimento Financeiro (Crédito) — Tesouraria","Retorno — Boletos"]
+    ]
+  },
+  {
+    fase:"Fase 2", titulo:"Produção / PCP / Industrial",
+    observacao:`É de extrema importância adicionar programações de produção e passagens dos setores, gerar ordem de terceiros, gerar estoque e etiquetas em teste, com situações reais do dia a dia da sua empresa, para encontrar gaps de usabilidade e ajustes finos de parametrização.\n\nReportar as situações encontradas ao Consultor o mais breve possível.`,
+    blocos:[
+      ["Funcionalidade Geral do Industrial","Cadastro de Setores","Rota Produtiva (Setup)","Unidade Produtiva","Programação PCP / Passagem"],
+      ["Passagem / Ocorrência PCP / OS de Terceiros","OS de Terceiros / Envio e Retorno"],
+      ["Fechamento Ordem de Serviço","Dúvidas Gerais — Industrial"]
+    ]
+  },
+  {
+    fase:"Fase 2", titulo:"Faturamento / Expedição",
+    observacao:`É de extrema importância emitir notas com situações reais do dia a dia da sua empresa, para encontrar gaps de usabilidade e ajustes finos de parametrização.\n\nReportar as situações encontradas ao Consultor o mais breve possível.`,
+    blocos:[
+      ["Abertura de Faturamento — (Faturamento origem pedido)"],
+      ["Faturamento Manual — (lançando manualmente)","Devolução de Venda — Faturamento Manual","Entrada de Nota — Devolução","Devolução de Compra — Faturamento Manual"],
+      ["Relatório de Saída","XML de Saída — Envio ao Contador","Dúvidas Gerais — Faturamento"]
+    ]
+  },
+  {
+    fase:"Fase 3", titulo:"Ficha Técnica",
+    observacao:`Treinamentos voltados para estruturação técnica de produtos, requisições e processos produtivos.`,
+    blocos:[
+      ["Ficha Técnica (essencial o cadastro de matérias-primas, sem este cadastro não poderá ser feito este treinamento)","Ficha Técnica — pedido e gerar requisição"]
+    ]
+  },
+  {
+    fase:"Fase 3", titulo:"Financeiro / Controladoria / Gestores",
+    observacao:`Treinamentos voltados para gestão financeira, movimentações bancárias e análises gerenciais.`,
+    blocos:[
+      ["Cadastro de Agências e Contas Financeiras","Movimento Financeiro (tarifas)","Transferência entre Contas Financeiras","Relatório Extrato Movimento Financeiro","Relatório Posição Financeira"]
+    ]
+  },
+  {
+    fase:"Fase 3", titulo:"Estoque",
+    observacao:`Treinamentos voltados para controle de estoque, movimentações, inventários e análises de produtos.`,
+    blocos:[
+      ["Funcionalidade Geral do Estoque","Entrada por Nota Fiscal","Movimentações de Estoque","Posição de Estoque","Extrato de Produto"],
+      ["Inventário de Custo","Requisição de Estoque","Transferência de Estoque","Inventário de Produtos"]
+    ]
+  },
+  {
+    fase:"Fase 3", titulo:"Financeiro / Gestores",
+    observacao:`Treinamentos voltados para visão gerencial, rateios financeiros, DRG e fechamento geral do projeto.`,
+    blocos:[
+      ["Cadastro de Contas Rateio — Receitas e Despesas","Vincular as contas ao Tipo de Fornecimento","Cadastro de Tipo de Fornecimento","Validação do Plano de Contas — DRG","Visão Geral Financeiro — Título / Liquidação e DRG"],
+      ["Dúvidas Gerais Financeiro"],
+      ["Dúvidas Gerais"],
+      ["Dúvidas Gerais"]
+    ]
+  }
+];
+
+function fmt(d){ return d.toLocaleDateString('pt-BR'); }
+
+function proximaData(d, dias){
+  const r = new Date(d);
+  while(!dias.includes(r.getDay())) r.setDate(r.getDate()+1);
+  return r;
+}
+
+function gerarCronograma(){
+  const resultado     = document.getElementById('resultado');
+  resultado.innerHTML = '';
+  const horario       = document.getElementById('horario').value;
+  const dataInicial   = document.getElementById('dataInicial').value;
+  const dias          = Array.from(document.querySelectorAll('.day-item input:checked')).map(c=>Number(c.value));
+
+  if(!dataInicial){ alert('Informe a data inicial.'); return; }
+  if(!horario)    { alert('Informe o horário.'); return; }
+  if(!dias.length){ alert('Selecione ao menos um dia.'); return; }
+
+  const v = id => document.getElementById(id).value || '—';
+  document.getElementById('pdfCliente').innerText      = v('cliente');
+  document.getElementById('pdfConsultor').innerText    = v('consultor');
+  document.getElementById('pdfPatrocinador').innerText = v('patrocinador');
+  document.getElementById('pdfAdm').innerText          = v('admProjeto');
+  document.getElementById('pdfInicio').innerText       = fmt(new Date(dataInicial+'T00:00:00'));
+
+  let dataAtual = new Date(dataInicial+'T00:00:00');
+
+  const grupos = {}, ordem = [];
+  fases.forEach(f => {
+    if(!grupos[f.fase]){ grupos[f.fase]=[]; ordem.push(f.fase); }
+    grupos[f.fase].push(f);
+  });
+
+  ordem.forEach(nomeFase => {
+    const modulos = grupos[nomeFase];
+    const dataInicioGrupo = proximaData(dataAtual, dias);
+    let dataFimGrupo = new Date(dataInicioGrupo);
+    let modulosHTML = '';
+
+    modulos.forEach(fase => {
+      let linhas = '';
+      fase.blocos.forEach(bloco => {
+        dataAtual    = proximaData(dataAtual, dias);
+        dataFimGrupo = new Date(dataAtual);
+        bloco.forEach(modulo => {
+          linhas += `<tr>
+            <td class="col-date">${fmt(dataAtual)}</td>
+            <td class="col-time">${horario}</td>
+            <td class="col-content">${modulo}</td>
+          </tr>`;
+        });
+        dataAtual.setDate(dataAtual.getDate()+2);
+      });
+
+      modulosHTML += `
+        <div class="module-block">
+          <div class="module-title">${fase.titulo}</div>
+          <div class="module-obs">${fase.observacao}</div>
+          <table>
+            <thead><tr><th>Data</th><th>Horário</th><th>Conteúdo</th></tr></thead>
+            <tbody>${linhas}</tbody>
+          </table>
+        </div>`;
+    });
+
+    const grupo = document.createElement('div');
+    grupo.className = 'phase-group';
+    grupo.innerHTML = `
+      <div class="phase-banner">
+        <span class="phase-banner-name">${nomeFase}</span>
+        <span class="phase-banner-dates">
+          <strong>${fmt(dataInicioGrupo)}</strong> &nbsp;→&nbsp; <strong>${fmt(dataFimGrupo)}</strong>
+        </span>
+      </div>
+      ${modulosHTML}`;
+
+    resultado.appendChild(grupo);
+  });
+
+  document.getElementById('pdfConclusao').innerText = fmt(dataAtual);
+}
+</script>
+</body>
+</html>
