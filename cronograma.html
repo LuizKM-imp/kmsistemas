@@ -18,6 +18,10 @@
   --muted: #6b7280;
   --border: #e5e7eb;
   --bg: #f9fafb;
+  --orange: #f59e0b;
+  --orange-light: #fffbeb;
+  --blue: #3b82f6;
+  --blue-light: #eff6ff;
 }
 
 body {
@@ -40,6 +44,25 @@ body {
 .field label { font-size: 13px; font-weight: 600; color: var(--muted); }
 .field input { padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; background: white; transition: border-color .15s; }
 .field input:focus { outline: none; border-color: var(--green); }
+
+/* Toggle switches */
+.toggle-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.toggle-item { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.toggle-item input[type="checkbox"] { display: none; }
+.toggle-switch {
+  width: 42px; height: 24px; background: var(--border); border-radius: 99px;
+  position: relative; transition: background .2s; flex-shrink: 0;
+}
+.toggle-switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 18px; height: 18px; background: white; border-radius: 50%;
+  transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.toggle-item input:checked + .toggle-switch { background: var(--green); }
+.toggle-item input:checked + .toggle-switch::after { transform: translateX(18px); }
+.toggle-label { font-size: 14px; font-weight: 500; }
+.toggle-sub { font-size: 12px; color: var(--muted); }
+
 .days-label { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 10px; display: block; }
 .days-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
 .day-item { padding: 8px 18px; border: 1px solid var(--border); border-radius: 99px; font-size: 13px; font-weight: 600; cursor: pointer; user-select: none; transition: all .15s; background: white; }
@@ -84,122 +107,98 @@ body {
   border-left: 4px solid var(--green);
   margin-bottom: 20px;
 }
-.phase-banner-name {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--green-text);
-  letter-spacing: -0.3px;
-}
-.phase-banner-dates {
-  font-size: 13px;
-  color: var(--green-text);
-  opacity: 0.75;
-  font-weight: 500;
-}
-.phase-banner-dates strong {
-  color: var(--green-text);
-  font-weight: 700;
-  opacity: 1;
-}
+.phase-banner-name { font-size: 18px; font-weight: 700; color: var(--green-text); letter-spacing: -0.3px; }
+.phase-banner-dates { font-size: 13px; color: var(--green-text); opacity: 0.75; font-weight: 500; }
+.phase-banner-dates strong { color: var(--green-text); font-weight: 700; opacity: 1; }
 
 /* ── MÓDULO ── */
 .module-block { margin-bottom: 20px; }
-.module-title {
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 6px;
-  color: var(--green-text);
-  letter-spacing: -0.1px;
-}
-.module-obs {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.7;
-  margin-bottom: 10px;
-  white-space: pre-line;
-  padding-left: 12px;
-  border-left: 2px solid var(--border);
-}
+.module-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--green-text); letter-spacing: -0.1px; }
+.module-obs { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 10px; white-space: pre-line; padding-left: 12px; border-left: 2px solid var(--border); }
+
+/* Módulo de app extra */
+.module-block.app-extra .module-title { color: #b45309; }
+.module-block.app-extra { border: 1px dashed #fbbf24; border-radius: 8px; padding: 14px; background: var(--orange-light); }
 
 table { width: 100%; border-collapse: collapse; font-size: 14px; }
 th { text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); padding: 8px 12px; border-bottom: 1px solid var(--border); }
-td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 tbody tr:last-child td { border-bottom: none; }
-td.col-date { white-space: nowrap; color: var(--muted); font-size: 13px; width: 110px; }
+td.col-date { white-space: nowrap; color: var(--muted); font-size: 13px; width: 130px; }
 td.col-time { white-space: nowrap; color: var(--muted); font-size: 13px; width: 80px; }
 td.col-content { font-weight: 500; }
+td.col-actions { width: 40px; text-align: right; padding-right: 8px; }
+
+/* ── EDIÇÃO DE DATA INLINE ── */
+.date-display { display: flex; align-items: center; gap: 6px; }
+.btn-edit-date {
+  background: none; border: none; cursor: pointer; padding: 3px 6px;
+  border-radius: 6px; color: var(--muted); font-size: 12px; transition: all .15s;
+  opacity: 0; font-family: inherit;
+}
+tr:hover .btn-edit-date { opacity: 1; }
+.btn-edit-date:hover { background: var(--border); color: var(--text); }
+.date-input-wrap { display: none; align-items: center; gap: 6px; }
+.date-input-wrap.visible { display: flex; }
+.date-input-wrap input[type="date"] {
+  padding: 4px 8px; border: 1px solid var(--green); border-radius: 6px;
+  font-size: 12px; font-family: inherit; color: var(--text);
+}
+.btn-confirm-date, .btn-cancel-date {
+  padding: 3px 10px; border: none; border-radius: 6px; font-size: 12px;
+  font-weight: 600; cursor: pointer; font-family: inherit;
+}
+.btn-confirm-date { background: var(--green); color: white; }
+.btn-cancel-date { background: var(--border); color: var(--text); }
+
+/* Badge de data alterada */
+.date-changed { font-size: 11px; font-weight: 600; color: var(--orange); background: var(--orange-light); padding: 2px 6px; border-radius: 4px; }
+
+/* ── AVISO DE REORDENAÇÃO ── */
+.reorder-notice {
+  background: var(--blue-light); border: 1px solid #bfdbfe; border-radius: 8px;
+  padding: 10px 14px; font-size: 13px; color: #1d4ed8; margin-bottom: 12px;
+  display: none; align-items: center; gap: 8px;
+}
+.reorder-notice.visible { display: flex; }
+.reorder-notice svg { flex-shrink: 0; }
 
 /* ── PRINT ── */
 @media print {
   @page { size: A4; margin: 14mm 14mm; }
-
-  body {
-    background: white;
-    padding: 0;
-    font-size: 13px;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
+  body { background: white; padding: 0; font-size: 13px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .form-section { display: none !important; }
   .wrapper { max-width: 100%; }
-
-  /* ── CAPA: tudo na primeira página ── */
-  .cover {
-    break-after: page;
-    break-inside: avoid-page; /* força a capa a não ser cortada */
-  }
-
-  /* Reduz espaçamentos da capa para caber numa página só */
+  .cover { break-after: page; break-inside: avoid-page; }
   .cover-logo { margin-bottom: 18px; padding-bottom: 18px; }
   .cover-logo img { max-width: 130px; }
-
   .cover-heading { margin-bottom: 18px; }
   .cover-heading h2 { font-size: 18px; }
   .cover-heading p { font-size: 12px; }
-
-  /* Grid de meta sempre 3 colunas e compacto */
   .meta-grid { grid-template-columns: repeat(3, 1fr); margin-bottom: 20px; }
   .meta-item { padding: 10px 14px; }
   .meta-item span { font-size: 10px; margin-bottom: 3px; }
   .meta-item strong { font-size: 12px; }
-
-  /* Políticas compactas mas legíveis */
   .policy { padding-top: 16px; }
   .policy-block { margin-bottom: 12px; }
   .policy-block h3 { font-size: 11px; margin-bottom: 4px; }
   .policy-block p { font-size: 12px; line-height: 1.55; }
-
-  /* ── FASES: cada grupo numa nova página, sem espaço excessivo ── */
-  .phase-group {
-    break-before: page;
-    margin-bottom: 0;
-  }
-
-  .phase-banner {
-    padding: 12px 18px;
-    margin-bottom: 14px;
-    border-radius: 7px;
-  }
+  .phase-group { break-before: page; margin-bottom: 0; }
+  .phase-banner { padding: 12px 18px; margin-bottom: 14px; border-radius: 7px; }
   .phase-banner-name { font-size: 16px; }
   .phase-banner-dates { font-size: 12px; }
-
-  /* Módulos grudados, sem espaço excessivo entre eles */
-  .module-block {
-    break-inside: avoid;
-    margin-bottom: 14px; /* reduzido: menos espaço entre módulos */
-  }
-
+  .module-block { break-inside: avoid; margin-bottom: 14px; }
   .module-title { font-size: 13px; margin-bottom: 4px; }
   .module-obs { font-size: 11px; margin-bottom: 8px; line-height: 1.5; padding-left: 10px; }
-
   table { font-size: 12px; }
   th { font-size: 10px; padding: 6px 10px; }
   td { padding: 7px 10px; }
   td.col-date, td.col-time { font-size: 11px; }
-
+  td.col-actions { display: none !important; }
   tbody tr { break-inside: avoid; page-break-inside: avoid; }
   thead { display: table-header-group; }
+  .btn-edit-date, .date-input-wrap, .reorder-notice { display: none !important; }
+  .date-changed { display: inline; }
 }
 
 @media (max-width: 600px) {
@@ -219,11 +218,12 @@ td.col-content { font-weight: 500; }
     <div class="form-grid">
       <div class="field"><label>Cliente</label><input type="text" id="cliente" /></div>
       <div class="field"><label>Consultor de Implantação</label><input type="text" id="consultor" /></div>
-      <div class="field"><label>Patrocinador</label><strong></strong><input type="text" id="patrocinador" /></div>
+      <div class="field"><label>Patrocinador</label><input type="text" id="patrocinador" /></div>
       <div class="field"><label>Adm do Projeto</label><input type="text" id="admProjeto" /></div>
       <div class="field"><label>Data Inicial</label><input type="date" id="dataInicial" /></div>
       <div class="field"><label>Horário</label><input type="time" id="horario" /></div>
     </div>
+
     <span class="days-label">Dias permitidos</span>
     <div class="days-grid">
       <label class="day-item"><input type="checkbox" value="1"><span>Segunda</span></label>
@@ -233,9 +233,25 @@ td.col-content { font-weight: 500; }
       <label class="day-item"><input type="checkbox" value="5"><span>Sexta</span></label>
       <label class="day-item"><input type="checkbox" value="6"><span>Sábado</span></label>
     </div>
+
+    <span class="days-label">Opções do cliente</span>
+    <div class="toggle-group" style="margin-bottom:24px">
+      <label class="toggle-item">
+        <input type="checkbox" id="temAppIndustrial">
+        <span class="toggle-switch"></span>
+        <span>
+          <span class="toggle-label">Possui KM Industrial App</span><br>
+          <span class="toggle-sub">Adiciona treinamento extra ao final da Fase 2 — Produção/PCP</span>
+        </span>
+      </label>
+    </div>
+
     <div class="actions">
       <button class="btn btn-primary" onclick="gerarCronograma()">Gerar Cronograma</button>
       <button class="btn btn-secondary" onclick="window.print()">Exportar PDF</button>
+      <button class="btn btn-secondary" onclick="baixarCronograma()">Baixar Projeto</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('uploadCronograma').click()">Carregar Projeto</button>
+      <input type="file" id="uploadCronograma" accept=".json" style="display:none" onchange="carregarCronograma(event)" />
     </div>
   </div>
 
@@ -281,6 +297,7 @@ td.col-content { font-weight: 500; }
 
 </div>
 <script>
+// ── DEFINIÇÃO DAS FASES ──────────────────────────────────────────
 const fases = [
   {
     fase:"Fase 1", titulo:"Cadastros Básicos — Comercial e Estoque",
@@ -323,7 +340,14 @@ const fases = [
       ["Funcionalidade Geral do Industrial","Cadastro de Setores","Rota Produtiva (Setup)","Unidade Produtiva","Programação PCP / Passagem"],
       ["Passagem / Ocorrência PCP / OS de Terceiros","OS de Terceiros / Envio e Retorno"],
       ["Fechamento Ordem de Serviço","Dúvidas Gerais — Industrial"]
-    ]
+    ],
+    appExtra: {
+      titulo: "KM Industrial App",
+      observacao: "Treinamento complementar para clientes com o módulo KM Industrial App.",
+      blocos:[
+        ["Configuração do App Industrial","Lançamento via App — Passagem de Setor","Consulta e Relatórios no App"]
+      ]
+    }
   },
   {
     fase:"Fase 2", titulo:"Faturamento / Expedição",
@@ -368,7 +392,26 @@ const fases = [
   }
 ];
 
+// ── ESTADO GLOBAL ────────────────────────────────────────────────
+// Cada entrada: { date: Date, originalDate: Date, changed: bool, content: string, time: string, rowEl: HTMLElement }
+let sessoes = [];
+let diasPermitidos = [];
+let horarioGlobal = '';
+
 function fmt(d){ return d.toLocaleDateString('pt-BR'); }
+
+function toDateStr(d){
+  // YYYY-MM-DD for input[type=date]
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+
+function fromDateStr(s){
+  const [y,m,d] = s.split('-').map(Number);
+  return new Date(y, m-1, d);
+}
 
 function proximaData(d, dias){
   const r = new Date(d);
@@ -376,16 +419,18 @@ function proximaData(d, dias){
   return r;
 }
 
+// ── GERAÇÃO DO CRONOGRAMA ────────────────────────────────────────
 function gerarCronograma(){
-  const resultado     = document.getElementById('resultado');
+  const resultado = document.getElementById('resultado');
   resultado.innerHTML = '';
-  const horario       = document.getElementById('horario').value;
-  const dataInicial   = document.getElementById('dataInicial').value;
-  const dias          = Array.from(document.querySelectorAll('.day-item input:checked')).map(c=>Number(c.value));
+  horarioGlobal = document.getElementById('horario').value;
+  const dataInicial = document.getElementById('dataInicial').value;
+  diasPermitidos = Array.from(document.querySelectorAll('.day-item input:checked')).map(c=>Number(c.value));
+  const temApp = document.getElementById('temAppIndustrial').checked;
 
   if(!dataInicial){ alert('Informe a data inicial.'); return; }
-  if(!horario)    { alert('Informe o horário.'); return; }
-  if(!dias.length){ alert('Selecione ao menos um dia.'); return; }
+  if(!horarioGlobal){ alert('Informe o horário.'); return; }
+  if(!diasPermitidos.length){ alert('Selecione ao menos um dia.'); return; }
 
   const v = id => document.getElementById(id).value || '—';
   document.getElementById('pdfCliente').innerText      = v('cliente');
@@ -394,39 +439,124 @@ function gerarCronograma(){
   document.getElementById('pdfAdm').innerText          = v('admProjeto');
   document.getElementById('pdfInicio').innerText       = fmt(new Date(dataInicial+'T00:00:00'));
 
+  // Montar lista plana de sessões
+  sessoes = [];
   let dataAtual = new Date(dataInicial+'T00:00:00');
 
-  const grupos = {}, ordem = [];
-  fases.forEach(f => {
-    if(!grupos[f.fase]){ grupos[f.fase]=[]; ordem.push(f.fase); }
-    grupos[f.fase].push(f);
-  });
+  fases.forEach(fase => {
+    fase.blocos.forEach(bloco => {
+      dataAtual = proximaData(dataAtual, diasPermitidos);
+      const dataBloco = new Date(dataAtual);
+      bloco.forEach(modulo => {
+        sessoes.push({
+          fase: fase.fase,
+          modulo: fase.titulo,
+          content: modulo,
+          date: new Date(dataBloco),
+          originalDate: new Date(dataBloco),
+          changed: false,
+          isApp: false,
+          obsGrupo: fase.observacao
+        });
+      });
+      dataAtual.setDate(dataAtual.getDate()+2);
+    });
 
-  ordem.forEach(nomeFase => {
-    const modulos = grupos[nomeFase];
-    const dataInicioGrupo = proximaData(dataAtual, dias);
-    let dataFimGrupo = new Date(dataInicioGrupo);
-    let modulosHTML = '';
-
-    modulos.forEach(fase => {
-      let linhas = '';
-      fase.blocos.forEach(bloco => {
-        dataAtual    = proximaData(dataAtual, dias);
-        dataFimGrupo = new Date(dataAtual);
+    // App extra ao final do bloco de PCP
+    if(temApp && fase.appExtra){
+      fase.appExtra.blocos.forEach(bloco => {
+        dataAtual = proximaData(dataAtual, diasPermitidos);
+        const dataBloco = new Date(dataAtual);
         bloco.forEach(modulo => {
-          linhas += `<tr>
-            <td class="col-date">${fmt(dataAtual)}</td>
-            <td class="col-time">${horario}</td>
-            <td class="col-content">${modulo}</td>
-          </tr>`;
+          sessoes.push({
+            fase: fase.fase,
+            modulo: fase.appExtra.titulo,
+            content: modulo,
+            date: new Date(dataBloco),
+            originalDate: new Date(dataBloco),
+            changed: false,
+            isApp: true,
+            obsGrupo: fase.appExtra.observacao
+          });
         });
         dataAtual.setDate(dataAtual.getDate()+2);
       });
+    }
+  });
+
+  document.getElementById('pdfConclusao').innerText = fmt(sessoes[sessoes.length-1].date);
+  renderCronograma();
+}
+
+// ── RENDERIZAÇÃO ─────────────────────────────────────────────────
+function renderCronograma(){
+  const resultado = document.getElementById('resultado');
+  resultado.innerHTML = '';
+
+  // Agrupar por fase
+  const grupos = {};
+  const ordemFases = [];
+  sessoes.forEach(s => {
+    if(!grupos[s.fase]){ grupos[s.fase]=[]; ordemFases.push(s.fase); }
+    grupos[s.fase].push(s);
+  });
+
+  // Deduplicar ordem
+  const fasesUnicas = [...new Set(ordemFases)];
+
+  fasesUnicas.forEach(nomeFase => {
+    const sessFase = grupos[nomeFase];
+    const datas = sessFase.map(s=>s.date);
+    const dataMin = new Date(Math.min(...datas));
+    const dataMax = new Date(Math.max(...datas));
+
+    // Agrupar por módulo dentro da fase
+    const modulos = {};
+    const ordemMod = [];
+    sessFase.forEach(s => {
+      const key = s.modulo;
+      if(!modulos[key]){ modulos[key]=[]; ordemMod.push(key); }
+      modulos[key].push(s);
+    });
+    const modulosUnicos = [...new Set(ordemMod)];
+
+    let modulosHTML = '';
+    modulosUnicos.forEach(nomeModulo => {
+      const sessMod = modulos[nomeModulo];
+      const isApp = sessMod[0].isApp;
+
+      let linhas = '';
+      sessMod.forEach((s, idx) => {
+        const globalIdx = sessoes.indexOf(s);
+        const changedBadge = s.changed ? `<span class="date-changed">alterado</span>` : '';
+        linhas += `
+          <tr id="row-${globalIdx}">
+            <td class="col-date">
+              <div class="date-display" id="display-${globalIdx}">
+                <span class="date-text">${fmt(s.date)}</span>
+                ${changedBadge}
+                <button class="btn-edit-date" onclick="abrirEdicaoData(${globalIdx})" title="Alterar data">✎</button>
+              </div>
+              <div class="date-input-wrap" id="edit-${globalIdx}">
+                <input type="date" id="dateinput-${globalIdx}" value="${toDateStr(s.date)}" />
+                <button class="btn-confirm-date" onclick="confirmarData(${globalIdx})">✓</button>
+                <button class="btn-cancel-date" onclick="cancelarEdicaoData(${globalIdx})">✕</button>
+              </div>
+            </td>
+            <td class="col-time">${s.time || horarioGlobal}</td>
+            <td class="col-content">${s.content}</td>
+          </tr>`;
+      });
 
       modulosHTML += `
-        <div class="module-block">
-          <div class="module-title">${fase.titulo}</div>
-          <div class="module-obs">${fase.observacao}</div>
+        <div class="module-block${isApp ? ' app-extra' : ''}">
+          ${isApp ? `<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#b45309;margin-bottom:4px;">★ KM Industrial App</div>` : ''}
+          <div class="module-title">${nomeModulo}</div>
+          <div class="module-obs">${sessMod[0].obsGrupo}</div>
+          <div class="reorder-notice" id="notice-${nomeModulo.replace(/\W/g,'_')}">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#3b82f6" stroke-width="2"/><path d="M12 8v4m0 4h.01" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/></svg>
+            As datas seguintes foram recalculadas automaticamente.
+          </div>
           <table>
             <thead><tr><th>Data</th><th>Horário</th><th>Conteúdo</th></tr></thead>
             <tbody>${linhas}</tbody>
@@ -436,11 +566,12 @@ function gerarCronograma(){
 
     const grupo = document.createElement('div');
     grupo.className = 'phase-group';
+    grupo.id = `fase-${nomeFase.replace(/\s/g,'')}`;
     grupo.innerHTML = `
       <div class="phase-banner">
         <span class="phase-banner-name">${nomeFase}</span>
         <span class="phase-banner-dates">
-          <strong>${fmt(dataInicioGrupo)}</strong> &nbsp;→&nbsp; <strong>${fmt(dataFimGrupo)}</strong>
+          <strong>${fmt(dataMin)}</strong> &nbsp;→&nbsp; <strong>${fmt(dataMax)}</strong>
         </span>
       </div>
       ${modulosHTML}`;
@@ -448,8 +579,141 @@ function gerarCronograma(){
     resultado.appendChild(grupo);
   });
 
-  document.getElementById('pdfConclusao').innerText = fmt(dataAtual);
+  // Atualizar data de conclusão
+  document.getElementById('pdfConclusao').innerText = fmt(sessoes[sessoes.length-1].date);
 }
+
+// ── EDIÇÃO DE DATA ────────────────────────────────────────────────
+function abrirEdicaoData(idx){
+  document.getElementById(`display-${idx}`).style.display = 'none';
+  document.getElementById(`edit-${idx}`).classList.add('visible');
+  document.getElementById(`dateinput-${idx}`).focus();
+}
+
+function cancelarEdicaoData(idx){
+  document.getElementById(`display-${idx}`).style.display = '';
+  document.getElementById(`edit-${idx}`).classList.remove('visible');
+}
+
+function confirmarData(idx){
+  const input = document.getElementById(`dateinput-${idx}`);
+  if(!input.value){ cancelarEdicaoData(idx); return; }
+
+  const novaData = fromDateStr(input.value);
+  const dataAnterior = new Date(sessoes[idx].date);
+
+  // Marca como alterada
+  sessoes[idx].date = novaData;
+  sessoes[idx].changed = true;
+
+  // Recalcular todas as datas seguintes mantendo o intervalo lógico
+  // Estratégia: a partir do próximo bloco, avançar a partir da nova data
+  // Identificar o "bloco" ao qual pertence idx (todas as sessões com mesma data original compartilham bloco)
+  // Simplesmente: propagamos o delta para as sessões seguintes que não foram manualmente alteradas
+  const delta = novaData - dataAnterior; // ms
+  for(let i = idx+1; i < sessoes.length; i++){
+    if(!sessoes[i].changed){
+      sessoes[i].date = new Date(sessoes[i].date.getTime() + delta);
+    }
+  }
+
+  // Re-render
+  renderCronograma();
+}
+
+// ── SALVAR / CARREGAR PROJETO ────────────────────────────────────
+function baixarCronograma(){
+  const dados = {
+    campos: {
+      cliente: document.getElementById('cliente').value,
+      consultor: document.getElementById('consultor').value,
+      patrocinador: document.getElementById('patrocinador').value,
+      admProjeto: document.getElementById('admProjeto').value,
+      dataInicial: document.getElementById('dataInicial').value,
+      horario: document.getElementById('horario').value,
+      temAppIndustrial: document.getElementById('temAppIndustrial').checked
+    },
+    diasPermitidos: Array.from(document.querySelectorAll('.day-item input:checked')).map(c => c.value),
+    sessoes: sessoes.map(s => ({
+      ...s,
+      date: s.date.toISOString(),
+      originalDate: s.originalDate.toISOString()
+    }))
+  };
+
+  const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'cronograma-km.json';
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+function carregarCronograma(event){
+  const file = event.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+    try {
+      const dados = JSON.parse(e.target.result);
+
+      // Restaurar campos
+      document.getElementById('cliente').value = dados.campos.cliente || '';
+      document.getElementById('consultor').value = dados.campos.consultor || '';
+      document.getElementById('patrocinador').value = dados.campos.patrocinador || '';
+      document.getElementById('admProjeto').value = dados.campos.admProjeto || '';
+      document.getElementById('dataInicial').value = dados.campos.dataInicial || '';
+      document.getElementById('horario').value = dados.campos.horario || '';
+      document.getElementById('temAppIndustrial').checked = !!dados.campos.temAppIndustrial;
+
+      // Restaurar dias permitidos
+      document.querySelectorAll('.day-item input').forEach(input => {
+        input.checked = dados.diasPermitidos.includes(input.value);
+      });
+
+      // Restaurar sessões
+      sessoes = (dados.sessoes || []).map(s => ({
+        ...s,
+        date: new Date(s.date),
+        originalDate: new Date(s.originalDate)
+      }));
+
+      horarioGlobal = dados.campos.horario || '';
+
+      // Atualizar capa
+      const v = valor => valor || '—';
+      document.getElementById('pdfCliente').innerText      = v(dados.campos.cliente);
+      document.getElementById('pdfConsultor').innerText    = v(dados.campos.consultor);
+      document.getElementById('pdfPatrocinador').innerText = v(dados.campos.patrocinador);
+      document.getElementById('pdfAdm').innerText          = v(dados.campos.admProjeto);
+
+      if(dados.campos.dataInicial){
+        document.getElementById('pdfInicio').innerText =
+          new Date(dados.campos.dataInicial + 'T00:00:00').toLocaleDateString('pt-BR');
+      }
+
+      if(sessoes.length){
+        document.getElementById('pdfConclusao').innerText =
+          sessoes[sessoes.length - 1].date.toLocaleDateString('pt-BR');
+      }
+
+      renderCronograma();
+
+      alert('Projeto carregado com sucesso!');
+    } catch(err){
+      alert('Erro ao carregar o arquivo.');
+      console.error(err);
+    }
+  };
+
+  reader.readAsText(file);
+}
+
 </script>
 </body>
 </html>
